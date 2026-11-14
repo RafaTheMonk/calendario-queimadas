@@ -1,0 +1,21 @@
+# Lista de permissão: tudo fica fora do repositório, menos o que está liberado abaixo.
+# Material interno (anotações, conversas, gravações, transcrições e documentos da equipe) nunca entra.
+/*
+!/.gitignore
+!/README.md
+!/site/
+!/Scripts/
+!/Dados/
+
+# Dados: só os derivados e pequenos
+/Dados/*
+!/Dados/site/
+!/Dados/harmonizado/
+!/Dados/nasa_power/
+!/Dados/firms_bahia/
+/Dados/firms_bahia/*_bahia.csv
+
+# gerados
+__pycache__/
+*.pyc
+.vercel
