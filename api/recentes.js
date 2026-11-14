@@ -3,11 +3,24 @@
 // baixa, filtra e devolve só a contagem por dia. Resposta guardada em cache por 1 hora.
 
 const URL_FIRMS = 'https://firms.modaps.eosdis.nasa.gov/data/active_fire/noaa-20-viirs-c2/csv/J1_VIIRS_C2_South_America_7d.csv';
-const AREA = { lonMin: -46.62, lonMax: -37.34, latMin: -18.35, latMax: -8.53 };
+const AREA_PADRAO = { lonMin: -46.62, lonMax: -37.34, latMin: -18.35, latMax: -8.53 };
+// o arquivo cobre a América do Sul: retângulos fora disso não fazem sentido
+const LIMITES = { lonMin: -82, lonMax: -34, latMin: -56, latMax: 13 };
+
+function areaDaUrl(url) {
+  const q = new URL(url).searchParams;
+  const n = (k) => parseFloat(q.get(k));
+  const a = { lonMin: n('lonMin'), lonMax: n('lonMax'), latMin: n('latMin'), latMax: n('latMax') };
+  const ok = Object.values(a).every(Number.isFinite) && a.lonMin < a.lonMax && a.latMin < a.latMax
+    && a.lonMin >= LIMITES.lonMin && a.lonMax <= LIMITES.lonMax && a.latMin >= LIMITES.latMin && a.latMax <= LIMITES.latMax
+    && (a.lonMax - a.lonMin) <= 20 && (a.latMax - a.latMin) <= 20;
+  return ok ? a : AREA_PADRAO;
+}
 // NOAA-20 para a régua do Suomi NPP (razão medida nos meses em que os dois estavam completos)
 const FATOR_NOAA20_PARA_SNPP = 1.0547;
 
-export async function GET() {
+export async function GET(request) {
+  const AREA = request && request.url ? areaDaUrl(request.url) : AREA_PADRAO;
   try {
     const resp = await fetch(URL_FIRMS, { headers: { 'User-Agent': 'calendario-queimadas' } });
     if (!resp.ok) throw new Error('FIRMS respondeu ' + resp.status);
