@@ -14,23 +14,91 @@ const css = (nome) => getComputedStyle(document.documentElement).getPropertyValu
 
 let DADOS = null;
 const graficos = {};
+const estado = { modo: 'focos', brutos: false, mes: 9 };
+
+function aplicarTemaSalvo() {
+  try {
+    const t = localStorage.getItem('tema');
+    if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) { /* sem armazenamento: segue o tema do sistema */ }
+}
+
+function temaAtual() {
+  const t = document.documentElement.getAttribute('data-theme');
+  if (t) return t;
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+function corInferno(t) {
+  const x = Math.max(0, Math.min(1, t)) * (INFERNO.length - 1);
+  const i = Math.floor(x);
+  const f = x - i;
+  const a = INFERNO[i];
+  const b = INFERNO[Math.min(i + 1, INFERNO.length - 1)];
+  const c = (h, k) => parseInt(h.slice(k, k + 2), 16);
+  const mix = (k) => Math.round(c(a, k) + (c(b, k) - c(a, k)) * f).toString(16).padStart(2, '0');
+  return '#' + mix(1) + mix(3) + mix(5);
+}
+
+function desenharTudo() {
+  heroGrafico();
+  calendario(estado.modo);
+  serie(estado.brutos);
+  mesAoLongoDosAnos(estado.mes);
+}
 
 async function iniciar() {
+  aplicarTemaSalvo();
   const resp = await fetch('data/calendario_bahia.json');
   DADOS = await resp.json();
   document.getElementById('periodo-ini').textContent = DADOS.periodo.inicio.slice(0, 4);
   document.getElementById('periodo-fim').textContent = DADOS.periodo.fim.slice(0, 4);
   cartoes();
-  calendario('focos');
-  serie(false);
   montarSeletorMes();
-  mesAoLongoDosAnos(9);
+  desenharTudo();
   mapa();
   topDez();
   metodo();
   rodape();
   ligarControles();
   window.addEventListener('resize', () => Object.values(graficos).forEach((g) => g.resize()));
+}
+
+function heroGrafico() {
+  const el = document.getElementById('graf-hero');
+  const g = graficos.hero || echarts.init(el);
+  graficos.hero = g;
+  const med = DADOS.normal_por_mes.mediana;
+  const vals = MESES.map((_, i) => med[String(i + 1).padStart(2, '0')]);
+  const lmin = Math.log10(Math.min(...vals));
+  const lmax = Math.log10(Math.max(...vals));
+  const total = vals.reduce((s, v) => s + v, 0);
+  const ordem = vals.map((v, i) => [v, i]).sort((a, b) => b[0] - a[0]);
+  const top2 = ordem.slice(0, 2).map((x) => x[1]).sort((a, b) => a - b);
+  const nome = (i) => MESES_LONGO[i].charAt(0).toUpperCase() + MESES_LONGO[i].slice(1);
+  document.getElementById('hero-meses').textContent = nome(top2[0]) + ' e ' + MESES_LONGO[top2[1]];
+  document.getElementById('hero-pct').textContent = Math.round((vals[top2[0]] + vals[top2[1]]) / total * 100) + '%';
+  g.setOption({
+    animationDuration: 900,
+    animationEasing: 'cubicOut',
+    grid: { left: 8, right: 8, top: 18, bottom: 22, containLabel: false },
+    tooltip: { trigger: 'item', confine: true, formatter: (p) => `<strong>${MESES_LONGO[p.dataIndex]}</strong><br>mediana de ${fmt(p.value)} focos<br><span style="opacity:.75">clique para ver o mês ao longo dos anos</span>` },
+    xAxis: { type: 'category', data: MESES.map((m) => m.charAt(0).toUpperCase()), axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: css('--texto-suave'), fontSize: 11 } },
+    yAxis: { type: 'value', show: false },
+    series: [{
+      type: 'bar', barWidth: '62%',
+      data: vals.map((v) => ({ value: v, itemStyle: { color: corInferno(0.18 + 0.8 * (Math.log10(v) - lmin) / (lmax - lmin)), borderRadius: [6, 6, 2, 2] } })),
+      emphasis: { itemStyle: { shadowBlur: 12, shadowColor: 'rgba(255,140,40,.6)' } },
+      label: { show: true, position: 'top', fontSize: 10, color: css('--texto-suave'), formatter: (p) => (p.value >= 10000 ? Math.round(p.value / 1000) + ' mil' : '') },
+    }],
+  }, true);
+  g.off('click');
+  g.on('click', (p) => {
+    estado.mes = p.dataIndex + 1;
+    document.getElementById('sel-mes').value = String(estado.mes);
+    mesAoLongoDosAnos(estado.mes);
+    document.getElementById('por-mes').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 }
 
 function porMes() {
@@ -210,7 +278,7 @@ function mesAoLongoDosAnos(numMes) {
       type: 'bar',
       data: ms.map((m) => ({ value: m.focos, itemStyle: { color: cor(m), decal: m.faixa_inferior ? { symbol: 'rect', dashArrayX: [1, 0], dashArrayY: [2, 4], rotation: Math.PI / 4, color: 'rgba(255,255,255,.35)' } : undefined } })),
       markArea: { silent: true, itemStyle: { color: 'rgba(148,163,184,.18)' }, data: [[{ yAxis: normal.p25[chave] }, { yAxis: normal.p75[chave] }]] },
-      markLine: { silent: true, symbol: 'none', lineStyle: { color: css('--texto'), type: 'dashed' }, label: { formatter: 'mediana ' + fmt(normal.mediana[chave]), color: css('--texto-suave') }, data: [{ yAxis: normal.mediana[chave] }] },
+      markLine: { silent: true, symbol: 'none', lineStyle: { color: css('--texto'), type: 'dashed' }, label: { position: 'insideEndTop', formatter: 'mediana ' + fmt(normal.mediana[chave]), color: css('--texto-suave') }, data: [{ yAxis: normal.mediana[chave] }] },
     }],
     aria: { enabled: true, decal: { show: false } },
   }, true);
@@ -270,7 +338,7 @@ function metodo() {
     return `<li><strong>${p.fator}</strong>: ${firme ? `${efeito > 0 ? '+' : ''}${efeito.toLocaleString('pt-BR')}% na razão VIIRS/MODIS a cada variação típica` : 'sem efeito firme depois dos outros fatores (intervalo de confiança cruza zero)'}</li>`;
   }).join('') : '';
   const descartados = f ? f.triagem.filter((t) => !t.mantido).map((t) => t.fator).join(', ') : '';
-  document.getElementById('metodo').innerHTML = `
+  document.getElementById('metodo-conteudo').innerHTML = `
     <p>Os satélites MODIS (2000 em diante) e VIIRS (2012 em diante) não se comparam direto: o VIIRS tem pixel de 375 m, contra 1 km do MODIS, e enxerga fogo menor. Na Bahia ele conta cerca de 6 vezes mais focos. Sem harmonizar, a série dá um salto falso em 2012.</p>
     <h3>O que fazemos</h3>
     <p>${me.como_funciona}</p>
@@ -306,10 +374,24 @@ function ligarControles() {
     document.querySelectorAll('.alternar button').forEach((x) => { x.classList.remove('ativo'); x.setAttribute('aria-pressed', 'false'); });
     b.classList.add('ativo');
     b.setAttribute('aria-pressed', 'true');
-    calendario(b.dataset.modo);
+    estado.modo = b.dataset.modo;
+    calendario(estado.modo);
   }));
-  document.getElementById('mostrar-brutos').addEventListener('change', (e) => serie(e.target.checked));
-  document.getElementById('sel-mes').addEventListener('change', (e) => mesAoLongoDosAnos(Number(e.target.value)));
+  const caixa = document.getElementById('mostrar-brutos');
+  caixa.addEventListener('change', (e) => { estado.brutos = e.target.checked; serie(estado.brutos); });
+  document.getElementById('sel-mes').addEventListener('change', (e) => { estado.mes = Number(e.target.value); mesAoLongoDosAnos(estado.mes); });
+  document.getElementById('cta-salto').addEventListener('click', () => {
+    caixa.checked = true;
+    estado.brutos = true;
+    serie(true);
+    document.getElementById('por-ano').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  document.getElementById('botao-tema').addEventListener('click', () => {
+    const novo = temaAtual() === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', novo);
+    try { localStorage.setItem('tema', novo); } catch (e) { /* sem armazenamento */ }
+    desenharTudo();
+  });
 }
 
 iniciar().catch((e) => {
