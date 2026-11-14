@@ -337,12 +337,70 @@ def main():
         for nome in ("calendario_bahia.json", "calendario_bahia.csv"):
             shutil.copy(os.path.join(SAIDA, nome), os.path.join(pasta_site, nome))
 
+    gerar_celulas(serie, razao, razao_snpp_n20)
     print("razao S-NPP/NOAA-20:", round(razao_snpp_n20, 4))
     print("taxa por mes:", {k: round(v, 2) for k, v in razao.items()})
     print("meses excluidos da calibracao:", excluidos)
     print("corrigidos:", [(s["mes"], s["origem"], s["focos"]) for s in serie if s["qualidade"] != "completo"])
     print("meses com dia degradado do Aqua:", {m: v for m, v in degr.items() if v})
     print("meses:", len(serie), "| arquivos em", SAIDA)
+
+
+def gerar_celulas(serie, razao, razao_snpp_n20):
+    """Serie harmonizada por celula da grade NASA POWER (0,5 x 0,625 grau), para o site somar
+    so as celulas perto do usuario. Mesmas regras da serie da Bahia: VIIRS real a partir de 2012-02,
+    NOAA-20 ajustado nos meses de falha do S-NPP e, antes, Aqua x taxa do mes (faixa ate a leitura do Terra)."""
+    arq_tab = os.path.join(RAIZ, "Dados", "harmonizado", "fatores", "tabela_celula_mes.csv")
+    arq_v2 = os.path.join(RAIZ, "Dados", "harmonizado", "fatores_v2", "resultados_v2.json")
+    if not (os.path.exists(arq_tab) and os.path.exists(arq_v2)):
+        print("sem tabela por celula: celulas_bahia.json nao foi gerado")
+        return
+    r_terra = {int(k): v for k, v in json.load(open(arq_v2, encoding="utf-8"))["pre_2012"]["razoes_producao_t1_terra"].items()}
+    meses = [s["mes"] for s in serie]
+    idx = {m: i for i, m in enumerate(meses)}
+    ajustados = {s["mes"] for s in serie if s["origem"] == "VIIRS NOAA-20 ajustado"}
+    pre = [m for m in meses if m < comum.PRIMEIRO_MES_VIIRS]
+    cel = {}
+    with open(arq_tab, newline="", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            c = cel.setdefault(r["celula"], {"lon": float(r["lon"]), "lat": float(r["lat"]),
+                                             "V": [0.0] * len(meses), "A": [0.0] * len(meses),
+                                             "T": [0.0] * len(meses), "N": [0.0] * len(meses)})
+            i = idx.get(r["mes"])
+            if i is None:
+                continue
+            c["V"][i] = float(r["V_snpp"] or 0)
+            c["A"][i] = float(r["A_aqua"] or 0)
+            c["T"][i] = float(r["T_terra"] or 0)
+            c["N"][i] = float(r["N20"] or 0)
+    saida = []
+    for nome, c in sorted(cel.items()):
+        f, ii, ss, aa = [], [], [], []
+        for i, m in enumerate(meses):
+            k = int(m[5:7])
+            if m < comum.PRIMEIRO_MES_VIIRS:
+                ca, ct = razao[k] * c["A"][i], r_terra[k] * c["T"][i]
+                f.append(round(ca))
+                ii.append(round(min(ca, ct)))
+                ss.append(round(max(ca, ct)))
+                aa.append(round(c["A"][i]))
+            elif m in ajustados:
+                f.append(round(c["N"][i] * razao_snpp_n20))
+            else:
+                f.append(round(c["V"][i]))
+        saida.append({"id": nome, "lon": c["lon"], "lat": c["lat"], "f": f, "i": ii, "s": ss, "a": aa})
+    corpo = {"meses": meses, "n_pre": len(pre), "grade": "NASA POWER 0,5 x 0,625 grau",
+             "nota": "f = focos harmonizados por mes; i e s = faixa de 2003-01 a 2012-01 (leituras do Aqua e do Terra); a = focos MODIS Aqua sem harmonizar no mesmo periodo",
+             "celulas": saida}
+    texto = json.dumps(corpo, ensure_ascii=False, separators=(",", ":"))
+    for pasta in (SAIDA, os.path.join(RAIZ, "site", "data")):
+        if os.path.isdir(os.path.dirname(pasta)):
+            os.makedirs(pasta, exist_ok=True)
+            with open(os.path.join(pasta, "celulas_bahia.json"), "w", encoding="utf-8") as fo:
+                fo.write(texto)
+    soma = [sum(c["f"][i] for c in saida) for i in range(len(meses))]
+    dif = max(abs(soma[i] - s["focos"]) / max(s["focos"], 1) for i, s in enumerate(serie))
+    print("celulas:", len(saida), "| tamanho %.0f KB" % (len(texto) / 1024), "| maior diferenca da soma contra a Bahia: %.2f%%" % (dif * 100))
 
 
 if __name__ == "__main__":
