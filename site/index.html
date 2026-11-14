@@ -5,25 +5,70 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Calendário de Queimadas</title>
   <meta name="description" content="Calendário harmonizado de focos de calor MODIS e VIIRS (NASA FIRMS) para a Bahia, 2003 a 2025.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="topo">
-    <div class="wrap">
-      <p class="selo">NASA Space Apps 2026 · Timeout Zero</p>
-      <h1>Calendário de Queimadas</h1>
-      <p class="sub">Focos de calor detectados por satélite na <strong id="nome-area">Bahia</strong>, de <span id="periodo-ini">2003</span> a <span id="periodo-fim">2025</span>, numa única régua: MODIS (desde 2000) convertido para a escala do VIIRS (desde 2012).</p>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="marca" href="#inicio" aria-label="Calendário de Queimadas, início">
+        <svg class="chama" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c.6 3.2-1 5.1-2.5 6.9C8 10.6 6.5 12.4 6.5 15a5.5 5.5 0 0 0 11 0c0-2-1-3.6-2-4.8-.3 1.4-1 2.4-2.1 2.9.4-3.6-.4-7.6-1.4-11.1z"/></svg>
+        <span>Calendário de Queimadas</span>
+      </a>
+      <nav class="links" aria-label="Seções">
+        <a href="#calendario">Calendário</a>
+        <a href="#por-ano">Por ano</a>
+        <a href="#por-mes">Por mês</a>
+        <a href="#area">Área</a>
+        <a href="#metodo">Como funciona</a>
+      </nav>
+      <div class="acoes">
+        <span class="chip" title="Área processada nesta versão">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+          <span id="nome-area">Bahia</span>
+        </span>
+        <a class="icone" href="https://github.com/RafaTheMonk/calendario-queimadas" target="_blank" rel="noopener" aria-label="Código no GitHub">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.9 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A11.5 11.5 0 0 0 12 .5z"/></svg>
+        </a>
+        <button class="icone" id="botao-tema" type="button" aria-label="Alternar tema claro ou escuro">
+          <svg class="sol" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg>
+          <svg class="lua" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>
+        </button>
+      </div>
     </div>
   </header>
 
+  <section class="hero" id="inicio">
+    <div class="wrap hero-grid">
+      <div class="hero-texto">
+        <p class="eyebrow"><span class="pulso" aria-hidden="true"></span> NASA FIRMS · <span id="periodo-ini">2003</span> a <span id="periodo-fim">2025</span></p>
+        <h1>Quando a Bahia<br><span class="grad">pega fogo?</span></h1>
+        <p class="lead">Mais de duas décadas de focos de calor vistos do espaço, numa régua só. Explore mês a mês, compare com o normal e veja o que muda quando o satélite muda.</p>
+        <div class="ctas">
+          <a class="botao" href="#calendario">Explorar o calendário</a>
+          <button class="botao fantasma" type="button" id="cta-salto">Ver o salto de 2012</button>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-top">
+          <span class="hero-card-titulo">Um ano típico</span>
+          <span class="hero-card-sub">mediana de focos por mês · toque num mês</span>
+        </div>
+        <div id="graf-hero" class="grafico-hero" role="img" aria-label="Mediana de focos por mês do ano na Bahia"></div>
+        <p class="hero-foot"><strong id="hero-meses">Setembro e outubro</strong> concentram <strong id="hero-pct">60%</strong> dos focos de um ano típico.</p>
+      </div>
+    </div>
+  </section>
+
   <main class="wrap">
-    <section aria-labelledby="t-resumo" class="bloco">
-      <h2 id="t-resumo" class="visualmente-oculto">Resumo</h2>
+    <section aria-label="Resumo" class="faixa-cartoes">
       <div class="cartoes" id="cartoes"></div>
     </section>
 
-    <section aria-labelledby="t-calendario" class="bloco">
+    <section aria-labelledby="t-calendario" class="bloco" id="calendario">
       <div class="cabeca-bloco">
         <div>
           <h2 id="t-calendario">Calendário do fogo</h2>
@@ -38,7 +83,7 @@
       <p class="nota legenda-extra"><span class="amostra tracejada" aria-hidden="true"></span> Borda tracejada: de 2003 a 2011 o valor é uma estimativa (só existia o MODIS). O detalhe mostra a faixa entre as leituras dos dois satélites MODIS.</p>
     </section>
 
-    <section aria-labelledby="t-serie" class="bloco">
+    <section aria-labelledby="t-serie" class="bloco" id="por-ano">
       <div class="cabeca-bloco">
         <div>
           <h2 id="t-serie">Focos por ano</h2>
@@ -50,7 +95,7 @@
       <p class="nota" id="nota-brutos" hidden>Sem harmonizar, a contagem salta em 2012, quando o VIIRS entra. Não houve mais fogo: o VIIRS enxerga fogo menor e conta cerca de 6 vezes mais focos.</p>
     </section>
 
-    <section aria-labelledby="t-mes" class="bloco">
+    <section aria-labelledby="t-mes" class="bloco" id="por-mes">
       <div class="cabeca-bloco">
         <div>
           <h2 id="t-mes">Um mês ao longo dos anos</h2>
@@ -63,7 +108,7 @@
       <div id="graf-mes" class="grafico" role="img" aria-label="Focos do mês escolhido em cada ano"></div>
     </section>
 
-    <section aria-labelledby="t-area" class="bloco duas-colunas">
+    <section aria-labelledby="t-area" class="bloco duas-colunas" id="area">
       <div>
         <h2 id="t-area">Área de interesse</h2>
         <p class="nota">Nesta primeira versão os dados estão processados para a Bahia. O método vale para qualquer área: basta processar os focos do FIRMS e o clima da NASA POWER da nova região.</p>
@@ -87,9 +132,9 @@
       <ol id="lista-top" class="lista-top"></ol>
     </section>
 
-    <section aria-labelledby="t-metodo" class="bloco metodo">
+    <section aria-labelledby="t-metodo" class="bloco metodo" id="metodo">
       <h2 id="t-metodo">Como funciona</h2>
-      <div id="metodo"></div>
+      <div id="metodo-conteudo"></div>
       <div class="baixar">
         <a class="botao" href="data/calendario_bahia.csv" download>Baixar CSV</a>
         <a class="botao secundario" href="data/calendario_bahia.json" download>Baixar JSON</a>
@@ -102,6 +147,7 @@
       <p><strong>Focos de calor detectados por satélite, não incêndios confirmados.</strong> Um foco é um pixel onde o satélite viu temperatura alta; um incêndio grande pode gerar muitos focos.</p>
       <p id="fonte"></p>
       <p id="citacao" class="citacao"></p>
+      <p class="assinatura">NASA Space Apps Challenge 2026 · equipe Timeout Zero · Salvador</p>
     </div>
   </footer>
 
