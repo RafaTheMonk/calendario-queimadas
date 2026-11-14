@@ -2,7 +2,7 @@
 
 Calendário harmonizado de focos de calor por satélite para a Bahia, de 2003 a 2025, feito para o desafio **Harmonization of MODIS and VIIRS Hot Spots** do NASA Space Apps Challenge 2026 (equipe Timeout Zero, Salvador).
 
-Site: _(link da Vercel)_
+Site: https://calendario-queimadas.vercel.app
 
 ## O problema
 
