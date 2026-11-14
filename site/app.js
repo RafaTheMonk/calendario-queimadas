@@ -119,8 +119,7 @@ async function agora() {
     const r = await fetch('api/recentes');
     if (!r.ok) throw new Error('sem dados');
     const j = await r.json();
-    // o primeiro dia da janela de 7 dias vem incompleto: a média usa os dias seguintes
-    const dias = j.dias.length > 2 ? j.dias.slice(1) : j.dias;
+    const dias = j.dias;
     const media = dias.reduce((s, d) => s + d.focos_equivalentes, 0) / dias.length;
     const lo = porDia(nm.p25[chave]);
     const hi = porDia(nm.p75[chave]);
@@ -130,8 +129,8 @@ async function agora() {
     tag.textContent = classe;
     tag.className = 'tag ' + classeTag(classe);
     document.getElementById('agora-comparacao').textContent = `${pct(Math.round((media - med) / med * 1000) / 10)} em relação à mediana de ${nomeMes}`;
-    const ultimo = dias[dias.length - 1].data.split('-').reverse().join('/');
-    document.getElementById('agora-fonte').textContent = `Últimos dias: NASA FIRMS, VIIRS NOAA-20 em quase tempo real, convertido para a régua do histórico (até ${ultimo}). Dado provisório.`;
+    const dm = (d) => d.data.slice(8, 10) + '/' + d.data.slice(5, 7);
+    document.getElementById('agora-fonte').textContent = `Média de ${dias.length} dias (${dm(dias[0])} a ${dm(dias[dias.length - 1])}). Fonte: NASA FIRMS, VIIRS NOAA-20 em quase tempo real, convertido para a régua do histórico. Dado provisório.`;
   } catch (e) {
     document.getElementById('agora-valor').textContent = fmt(porDia(nm.mediana[chave]));
     document.getElementById('agora-unidade').textContent = 'focos por dia num ' + nomeMes + ' típico';
