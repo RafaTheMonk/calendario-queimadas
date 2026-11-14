@@ -52,13 +52,19 @@
           <button class="botao fantasma" type="button" id="cta-salto">Ver o salto de 2012</button>
         </div>
       </div>
-      <div class="hero-card">
+      <div class="hero-card" aria-live="polite">
         <div class="hero-card-top">
-          <span class="hero-card-titulo">Um ano típico</span>
-          <span class="hero-card-sub">mediana de focos por mês · toque num mês</span>
+          <span class="hero-card-titulo" id="agora-titulo">Agora</span>
+          <span class="ao-vivo"><span class="pulso" aria-hidden="true"></span> últimos 7 dias</span>
         </div>
-        <div id="graf-hero" class="grafico-hero" role="img" aria-label="Mediana de focos por mês do ano na Bahia"></div>
-        <p class="hero-foot"><strong id="hero-meses">Setembro e outubro</strong> concentram <strong id="hero-pct">60%</strong> dos focos de um ano típico.</p>
+        <div class="agora">
+          <p class="agora-valor"><strong id="agora-valor">carregando</strong> <span id="agora-unidade">focos por dia</span></p>
+          <p class="agora-status"><span class="tag normal" id="agora-tag">...</span> <span id="agora-comparacao"></span></p>
+          <p class="agora-normal" id="agora-normal"></p>
+        </div>
+        <div id="graf-hero" class="grafico-hero" role="img" aria-label="Mediana de focos por mês do ano na Bahia, com o mês atual destacado"></div>
+        <p class="hero-foot"><strong id="hero-meses">Setembro e outubro</strong> concentram <strong id="hero-pct">60%</strong> dos focos de um ano típico. Toque num mês para ver todos os anos.</p>
+        <p class="agora-fonte" id="agora-fonte"></p>
       </div>
     </div>
   </section>

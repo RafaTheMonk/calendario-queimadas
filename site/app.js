@@ -14,7 +14,10 @@ const css = (nome) => getComputedStyle(document.documentElement).getPropertyValu
 
 let DADOS = null;
 const graficos = {};
-const estado = { modo: 'focos', brutos: false, mes: 9 };
+const HOJE = new Date();
+const MES_ATUAL = HOJE.getMonth() + 1;
+const ANO_ATUAL = HOJE.getFullYear();
+const estado = { modo: 'focos', brutos: false, mes: MES_ATUAL };
 
 function aplicarTemaSalvo() {
   try {
@@ -53,6 +56,7 @@ async function iniciar() {
   DADOS = await resp.json();
   document.getElementById('periodo-ini').textContent = DADOS.periodo.inicio.slice(0, 4);
   document.getElementById('periodo-fim').textContent = DADOS.periodo.fim.slice(0, 4);
+  agora();
   cartoes();
   montarSeletorMes();
   desenharTudo();
@@ -87,9 +91,9 @@ function heroGrafico() {
     yAxis: { type: 'value', show: false },
     series: [{
       type: 'bar', barWidth: '62%',
-      data: vals.map((v) => ({ value: v, itemStyle: { color: corInferno(0.18 + 0.8 * (Math.log10(v) - lmin) / (lmax - lmin)), borderRadius: [6, 6, 2, 2] } })),
+      data: vals.map((v, i) => ({ value: v, itemStyle: { color: corInferno(0.18 + 0.8 * (Math.log10(v) - lmin) / (lmax - lmin)), borderRadius: [6, 6, 2, 2], borderColor: i + 1 === MES_ATUAL ? css('--texto') : 'transparent', borderWidth: i + 1 === MES_ATUAL ? 2 : 0 } })),
       emphasis: { itemStyle: { shadowBlur: 12, shadowColor: 'rgba(255,140,40,.6)' } },
-      label: { show: true, position: 'top', fontSize: 10, color: css('--texto-suave'), formatter: (p) => (p.value >= 10000 ? Math.round(p.value / 1000) + ' mil' : '') },
+      label: { show: true, position: 'top', fontSize: 10, color: css('--texto-suave'), formatter: (p) => (p.dataIndex + 1 === MES_ATUAL ? 'agora' : (p.value >= 10000 ? Math.round(p.value / 1000) + ' mil' : '')) },
     }],
   }, true);
   g.off('click');
@@ -99,6 +103,43 @@ function heroGrafico() {
     mesAoLongoDosAnos(estado.mes);
     document.getElementById('por-mes').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
+}
+
+async function agora() {
+  const chave = String(MES_ATUAL).padStart(2, '0');
+  const nm = DADOS.normal_por_mes;
+  const diasNoMes = new Date(ANO_ATUAL, MES_ATUAL, 0).getDate();
+  const porDia = (v) => v / diasNoMes;
+  const nomeMes = MESES_LONGO[MES_ATUAL - 1];
+  document.getElementById('agora-titulo').textContent = `Agora: ${nomeMes} de ${ANO_ATUAL}`;
+  document.getElementById('agora-normal').textContent =
+    `Normal de ${nomeMes}: ${fmt(porDia(nm.mediana[chave]))} focos por dia (mediana de 2003 a 2025; faixa normal de ${fmt(porDia(nm.p25[chave]))} a ${fmt(porDia(nm.p75[chave]))}). Esperado para o mês inteiro: cerca de ${fmt(nm.mediana[chave])} focos.`;
+  const tag = document.getElementById('agora-tag');
+  try {
+    const r = await fetch('api/recentes');
+    if (!r.ok) throw new Error('sem dados');
+    const j = await r.json();
+    // o primeiro dia da janela de 7 dias vem incompleto: a média usa os dias seguintes
+    const dias = j.dias.length > 2 ? j.dias.slice(1) : j.dias;
+    const media = dias.reduce((s, d) => s + d.focos_equivalentes, 0) / dias.length;
+    const lo = porDia(nm.p25[chave]);
+    const hi = porDia(nm.p75[chave]);
+    const med = porDia(nm.mediana[chave]);
+    const classe = media > hi ? 'acima do normal' : (media < lo ? 'abaixo do normal' : 'normal');
+    document.getElementById('agora-valor').textContent = fmt(media);
+    tag.textContent = classe;
+    tag.className = 'tag ' + classeTag(classe);
+    document.getElementById('agora-comparacao').textContent = `${pct(Math.round((media - med) / med * 1000) / 10)} em relação à mediana de ${nomeMes}`;
+    const ultimo = dias[dias.length - 1].data.split('-').reverse().join('/');
+    document.getElementById('agora-fonte').textContent = `Últimos dias: NASA FIRMS, VIIRS NOAA-20 em quase tempo real, convertido para a régua do histórico (até ${ultimo}). Dado provisório.`;
+  } catch (e) {
+    document.getElementById('agora-valor').textContent = fmt(porDia(nm.mediana[chave]));
+    document.getElementById('agora-unidade').textContent = 'focos por dia num ' + nomeMes + ' típico';
+    tag.textContent = 'esperado';
+    tag.className = 'tag normal';
+    document.getElementById('agora-comparacao').textContent = 'Os dados dos últimos dias não carregaram agora.';
+    document.getElementById('agora-fonte').textContent = '';
+  }
 }
 
 function porMes() {
@@ -257,7 +298,7 @@ function serie(brutos) {
 
 function montarSeletorMes() {
   const sel = document.getElementById('sel-mes');
-  sel.innerHTML = MESES_LONGO.map((m, i) => `<option value="${i + 1}" ${i === 8 ? 'selected' : ''}>${m}</option>`).join('');
+  sel.innerHTML = MESES_LONGO.map((m, i) => `<option value="${i + 1}" ${i + 1 === estado.mes ? 'selected' : ''}>${m}</option>`).join('');
 }
 
 function mesAoLongoDosAnos(numMes) {

@@ -126,7 +126,14 @@ h1 { margin: 0 0 16px; font-size: clamp(40px, 6.5vw, 72px); line-height: 1.02; l
 .hero-card-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
 .hero-card-titulo { font-weight: 700; font-size: 17px; }
 .hero-card-sub { font-size: 12px; color: var(--texto-suave); }
-.grafico-hero { width: 100%; height: 230px; cursor: pointer; }
+.grafico-hero { width: 100%; height: 170px; cursor: pointer; margin-top: 4px; }
+.ao-vivo { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--texto-suave); }
+.agora { margin: 10px 0 2px; }
+.agora-valor { margin: 0; font-size: 15px; color: var(--texto-suave); }
+.agora-valor strong { font-family: "Space Grotesk", system-ui, sans-serif; font-size: 44px; line-height: 1; color: var(--texto); font-variant-numeric: tabular-nums; margin-right: 4px; }
+.agora-status { margin: 6px 0 0; font-size: 14px; color: var(--texto); }
+.agora-normal { margin: 4px 0 0; font-size: 13px; color: var(--texto-suave); }
+.agora-fonte { margin: 6px 0 0; font-size: 11px; color: var(--texto-suave); opacity: .85; }
 .hero-foot { margin: 6px 0 0; font-size: 14px; color: var(--texto-suave); }
 .hero-foot strong { color: var(--texto); }
 
