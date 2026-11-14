@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calendário de Queimadas</title>
+  <meta name="description" content="Calendário harmonizado de focos de calor MODIS e VIIRS (NASA FIRMS) para a Bahia, 2003 a 2025.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topo">
+    <div class="wrap">
+      <p class="selo">NASA Space Apps 2026 · Timeout Zero</p>
+      <h1>Calendário de Queimadas</h1>
+      <p class="sub">Focos de calor detectados por satélite na <strong id="nome-area">Bahia</strong>, de <span id="periodo-ini">2003</span> a <span id="periodo-fim">2025</span>, numa única régua: MODIS (desde 2000) convertido para a escala do VIIRS (desde 2012).</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section aria-labelledby="t-resumo" class="bloco">
+      <h2 id="t-resumo" class="visualmente-oculto">Resumo</h2>
+      <div class="cartoes" id="cartoes"></div>
+    </section>
+
+    <section aria-labelledby="t-calendario" class="bloco">
+      <div class="cabeca-bloco">
+        <div>
+          <h2 id="t-calendario">Calendário do fogo</h2>
+          <p class="nota">Cada quadrado é um mês. Passe o mouse ou toque para ver os detalhes.</p>
+        </div>
+        <div class="alternar" role="group" aria-label="O que colorir">
+          <button type="button" class="ativo" data-modo="focos" aria-pressed="true">Focos</button>
+          <button type="button" data-modo="anomalia" aria-pressed="false">Acima ou abaixo do normal</button>
+        </div>
+      </div>
+      <div id="graf-calendario" class="grafico alto" role="img" aria-label="Calendário de meses por anos colorido pela quantidade de focos"></div>
+      <p class="nota legenda-extra"><span class="amostra tracejada" aria-hidden="true"></span> Borda tracejada: de 2003 a 2011 o valor é uma estimativa (só existia o MODIS). O detalhe mostra a faixa entre as leituras dos dois satélites MODIS.</p>
+    </section>
+
+    <section aria-labelledby="t-serie" class="bloco">
+      <div class="cabeca-bloco">
+        <div>
+          <h2 id="t-serie">Focos por ano</h2>
+          <p class="nota">Série harmonizada. A área sombreada é a faixa de 2003 a 2011, quando os dois satélites MODIS discordam entre si.</p>
+        </div>
+        <label class="chave"><input type="checkbox" id="mostrar-brutos"> Mostrar os dados sem harmonizar</label>
+      </div>
+      <div id="graf-serie" class="grafico" role="img" aria-label="Total de focos por ano"></div>
+      <p class="nota" id="nota-brutos" hidden>Sem harmonizar, a contagem salta em 2012, quando o VIIRS entra. Não houve mais fogo: o VIIRS enxerga fogo menor e conta cerca de 6 vezes mais focos.</p>
+    </section>
+
+    <section aria-labelledby="t-mes" class="bloco">
+      <div class="cabeca-bloco">
+        <div>
+          <h2 id="t-mes">Um mês ao longo dos anos</h2>
+          <p class="nota">Compare o mesmo mês em todos os anos. A faixa clara vai do 25º ao 75º percentil; a linha é a mediana.</p>
+        </div>
+        <label class="seletor">Mês
+          <select id="sel-mes"></select>
+        </label>
+      </div>
+      <div id="graf-mes" class="grafico" role="img" aria-label="Focos do mês escolhido em cada ano"></div>
+    </section>
+
+    <section aria-labelledby="t-area" class="bloco duas-colunas">
+      <div>
+        <h2 id="t-area">Área de interesse</h2>
+        <p class="nota">Nesta primeira versão os dados estão processados para a Bahia. O método vale para qualquer área: basta processar os focos do FIRMS e o clima da NASA POWER da nova região.</p>
+        <form id="form-area" class="form-area">
+          <fieldset>
+            <legend>Retângulo (graus decimais)</legend>
+            <label>Latitude sul <input type="number" step="0.01" id="lat-min"></label>
+            <label>Latitude norte <input type="number" step="0.01" id="lat-max"></label>
+            <label>Longitude oeste <input type="number" step="0.01" id="lon-min"></label>
+            <label>Longitude leste <input type="number" step="0.01" id="lon-max"></label>
+          </fieldset>
+          <button type="submit">Ver no mapa</button>
+          <p class="nota" id="msg-area" aria-live="polite"></p>
+        </form>
+      </div>
+      <div id="mapa" class="mapa" role="region" aria-label="Mapa da área de interesse"></div>
+    </section>
+
+    <section aria-labelledby="t-top" class="bloco">
+      <h2 id="t-top">Os 10 meses com mais fogo</h2>
+      <ol id="lista-top" class="lista-top"></ol>
+    </section>
+
+    <section aria-labelledby="t-metodo" class="bloco metodo">
+      <h2 id="t-metodo">Como funciona</h2>
+      <div id="metodo"></div>
+      <div class="baixar">
+        <a class="botao" href="data/calendario_bahia.csv" download>Baixar CSV</a>
+        <a class="botao secundario" href="data/calendario_bahia.json" download>Baixar JSON</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <div class="wrap">
+      <p><strong>Focos de calor detectados por satélite, não incêndios confirmados.</strong> Um foco é um pixel onde o satélite viu temperatura alta; um incêndio grande pode gerar muitos focos.</p>
+      <p id="fonte"></p>
+      <p id="citacao" class="citacao"></p>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
