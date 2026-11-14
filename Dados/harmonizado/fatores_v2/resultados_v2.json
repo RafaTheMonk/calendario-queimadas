@@ -1,0 +1,907 @@
+{
+ "versao": 2,
+ "correcoes": [
+  "sem log(T+1) do Terra na formula do Aqua",
+  "triagem condicionada ao modelo base (log(A+1), [A==0], mes)",
+  "sinal comparado com a hipotese",
+  "erro com 48 meses",
+  "referencia de anomalia so com a calibracao",
+  "triagem refeita em cada dobra espacial",
+  "faixa de 2003-2011 entre tres leituras"
+ ],
+ "periodos": {
+  "calibracao": [
+   "2012-02",
+   "2019-12"
+  ],
+  "teste": [
+   "2020-01",
+   "2023-12"
+  ],
+  "producao": [
+   "2012-02",
+   "2021-12"
+  ]
+ },
+ "meses_validos": {
+  "calibracao": 95,
+  "teste": 44,
+  "deriva": 20
+ },
+ "triagem": [
+  {
+   "fator": "frp_medio_log",
+   "nome": "intensidade do fogo (FRP médio, log)",
+   "efeito_pct": 13.201097288018616,
+   "ic95_pct": [
+    2.2108299974150487,
+    25.575145669330695
+   ],
+   "razao_rel_baixo": 0.8938368899613274,
+   "razao_rel_alto": 1.0118331674013221,
+   "n_por_grupo": 1409,
+   "mantido": true,
+   "sinal_vs_hipotese": "contrário à hipótese"
+  },
+  {
+   "fator": "frac_noturna",
+   "nome": "fração de focos noturnos",
+   "efeito_pct": 56.873296960571636,
+   "ic95_pct": [
+    47.190279952561575,
+    67.7819749430997
+   ],
+   "razao_rel_baixo": 0.8453933168061629,
+   "razao_rel_alto": 1.3261963683581581,
+   "n_por_grupo": 1409,
+   "mantido": true,
+   "sinal_vs_hipotese": "esperado"
+  },
+  {
+   "fator": "scan_medio",
+   "nome": "tamanho do pixel (scan)",
+   "efeito_pct": 7.596102661930582,
+   "ic95_pct": [
+    -6.0957785322562,
+    19.173847488946215
+   ],
+   "razao_rel_baixo": 0.8993865305850136,
+   "razao_rel_alto": 0.9677048547758269,
+   "n_por_grupo": 1409,
+   "mantido": false,
+   "sinal_vs_hipotese": "esperado"
+  },
+  {
+   "fator": "hora_dia",
+   "nome": "hora de passagem diurna",
+   "efeito_pct": 3.9946918009140298,
+   "ic95_pct": [
+    -3.5155724470767584,
+    12.291551615896216
+   ],
+   "razao_rel_baixo": 1.0406547546955487,
+   "razao_rel_alto": 1.0822257048571937,
+   "n_por_grupo": 1375,
+   "mantido": false,
+   "sinal_vs_hipotese": "contrário à hipótese"
+  },
+  {
+   "fator": "chuva",
+   "nome": "chuva (mm/dia)",
+   "efeito_pct": -17.76101436079307,
+   "ic95_pct": [
+    -29.553858892149787,
+    -7.792943541800848
+   ],
+   "razao_rel_baixo": 1.0226291706562773,
+   "razao_rel_alto": 0.8409998567983569,
+   "n_por_grupo": 1409,
+   "mantido": true,
+   "sinal_vs_hipotese": "contrário à hipótese"
+  },
+  {
+   "fator": "vento",
+   "nome": "vento a 10 m (m/s)",
+   "efeito_pct": -6.130008397862074,
+   "ic95_pct": [
+    -12.877063466859855,
+    0.678206566345021
+   ],
+   "razao_rel_baixo": 1.0317633547490315,
+   "razao_rel_alto": 0.9685161744568523,
+   "n_por_grupo": 1409,
+   "mantido": false,
+   "sinal_vs_hipotese": "esperado"
+  },
+  {
+   "fator": "umidade",
+   "nome": "umidade relativa (%)",
+   "efeito_pct": -28.964780084783538,
+   "ic95_pct": [
+    -39.29830950947416,
+    -18.402646932394457
+   ],
+   "razao_rel_baixo": 1.1023277021278315,
+   "razao_rel_alto": 0.7830409073928574,
+   "n_por_grupo": 1409,
+   "mantido": true,
+   "sinal_vs_hipotese": "contrário à hipótese"
+  },
+  {
+   "fator": "temperatura",
+   "nome": "temperatura (°C)",
+   "efeito_pct": 35.33849577066779,
+   "ic95_pct": [
+    25.39635280931618,
+    49.68500103831403
+   ],
+   "razao_rel_baixo": 0.8178742366312255,
+   "razao_rel_alto": 1.1068986891525325,
+   "n_por_grupo": 1409,
+   "mantido": true,
+   "sinal_vs_hipotese": "contrário à hipótese"
+  },
+  {
+   "fator": "altitude",
+   "nome": "altitude (m)",
+   "efeito_pct": -21.592365819173075,
+   "ic95_pct": [
+    -28.142889030345113,
+    -12.609045440724648
+   ],
+   "razao_rel_baixo": 1.1492016966186644,
+   "razao_rel_alto": 0.9010618622846189,
+   "n_por_grupo": 1409,
+   "mantido": true,
+   "sinal_vs_hipotese": "sem efeito direto esperado"
+  }
+ ],
+ "fatores_mantidos": [
+  "frp_medio_log",
+  "frac_noturna",
+  "chuva",
+  "umidade",
+  "temperatura",
+  "altitude"
+ ],
+ "pesos": [
+  {
+   "termo": "intercepto",
+   "peso": 1.681223104323711,
+   "ic95": [
+    1.551049869434638,
+    1.7784195516656993
+   ]
+  },
+  {
+   "termo": "log_n_mais_1",
+   "peso": 0.9547126700706742,
+   "ic95": [
+    0.9335314181452303,
+    0.9718001245288991
+   ]
+  },
+  {
+   "termo": "indicador_n_zero",
+   "peso": -0.26475171928293934,
+   "ic95": [
+    -0.3246689174270165,
+    -0.17678468713978876
+   ]
+  },
+  {
+   "termo": "frp_medio_log",
+   "peso": -0.022513520128081038,
+   "ic95": [
+    -0.045733618138595514,
+    -0.004595533023207516
+   ],
+   "desvio_padrao_treino": 0.797572860899893,
+   "multiplica_razao_por_1_desvio": 0.9777380179607412,
+   "nome": "intensidade do fogo (FRP médio, log)"
+  },
+  {
+   "termo": "frac_noturna",
+   "peso": 0.14144706362186332,
+   "ic95": [
+    0.12898900430519455,
+    0.1565575101417403
+   ],
+   "desvio_padrao_treino": 0.19515744858816889,
+   "multiplica_razao_por_1_desvio": 1.1519395231405753,
+   "nome": "fração de focos noturnos"
+  },
+  {
+   "termo": "chuva",
+   "peso": -0.03863302692595587,
+   "ic95": [
+    -0.06835790009008869,
+    -0.010125632527684413
+   ],
+   "desvio_padrao_treino": 2.3501126969910353,
+   "multiplica_razao_por_1_desvio": 0.9621037105276058,
+   "nome": "chuva (mm/dia)"
+  },
+  {
+   "termo": "umidade",
+   "peso": -0.21349886160278772,
+   "ic95": [
+    -0.3510479290581355,
+    -0.09894192262030754
+   ],
+   "desvio_padrao_treino": 13.111795861073059,
+   "multiplica_razao_por_1_desvio": 0.8077530796938935,
+   "nome": "umidade relativa (%)"
+  },
+  {
+   "termo": "temperatura",
+   "peso": -0.058999360132081284,
+   "ic95": [
+    -0.17919180163441273,
+    0.04350315998142206
+   ],
+   "desvio_padrao_treino": 2.351028088988968,
+   "multiplica_razao_por_1_desvio": 0.942707372365111,
+   "nome": "temperatura (°C)"
+  },
+  {
+   "termo": "altitude",
+   "peso": -0.1026578561785775,
+   "ic95": [
+    -0.1669214295357536,
+    -0.049290459495312654
+   ],
+   "desvio_padrao_treino": 223.8124463527467,
+   "multiplica_razao_por_1_desvio": 0.9024356834602262,
+   "nome": "altitude (m)"
+  },
+  {
+   "termo": "mes_02",
+   "peso": -0.01948525159259428,
+   "ic95": [
+    -0.2225744730768494,
+    0.1264242122011167
+   ]
+  },
+  {
+   "termo": "mes_03",
+   "peso": -0.0239432536773003,
+   "ic95": [
+    -0.14571031175586838,
+    0.07851534889262098
+   ]
+  },
+  {
+   "termo": "mes_04",
+   "peso": -0.26008014463812973,
+   "ic95": [
+    -0.39782080048697854,
+    -0.18056107302907617
+   ]
+  },
+  {
+   "termo": "mes_05",
+   "peso": -0.32312227494871143,
+   "ic95": [
+    -0.4020231980985867,
+    -0.23414982899991707
+   ]
+  },
+  {
+   "termo": "mes_06",
+   "peso": -0.360774429377344,
+   "ic95": [
+    -0.5203123897870139,
+    -0.1939754329541493
+   ]
+  },
+  {
+   "termo": "mes_07",
+   "peso": -0.3329394296010726,
+   "ic95": [
+    -0.5480317688210058,
+    -0.12899003815285487
+   ]
+  },
+  {
+   "termo": "mes_08",
+   "peso": -0.23942474481507206,
+   "ic95": [
+    -0.5072007180711234,
+    -0.022621954047026698
+   ]
+  },
+  {
+   "termo": "mes_09",
+   "peso": -0.09177171710688502,
+   "ic95": [
+    -0.2856467909999685,
+    0.06548495733461504
+   ]
+  },
+  {
+   "termo": "mes_10",
+   "peso": 0.1117754315775869,
+   "ic95": [
+    -0.008605642687148704,
+    0.24472498679691146
+   ]
+  },
+  {
+   "termo": "mes_11",
+   "peso": 0.2241732847495061,
+   "ic95": [
+    0.15559380581566437,
+    0.31697856069325964
+   ]
+  },
+  {
+   "termo": "mes_12",
+   "peso": 0.06410742329229377,
+   "ic95": [
+    -0.08174794627584578,
+    0.1882862995517097
+   ]
+  }
+ ],
+ "bootstrap_nao_convergiu": 0,
+ "colinearidade": {
+  "vif_maximo": 3.944920092021781,
+  "ridge": 0.0
+ },
+ "sobredispersao_pearson_gl": 9.53390702272889,
+ "metricas": {
+  "modelo_v2": {
+   "teste_validos": {
+    "n_meses": 44,
+    "wape_pct": 7.9195425269245545,
+    "vies_pct": -5.393699313375208,
+    "spearman": 0.9897110641296686,
+    "erro_anual": {
+     "2020": {
+      "erro_pct": -1.4183833276298583,
+      "n_meses": 11,
+      "total_prev": 89835.45564119746,
+      "total_real": 91128.0
+     },
+     "2021": {
+      "erro_pct": -10.45657192431774,
+      "n_meses": 12,
+      "total_prev": 159487.59061415918,
+      "total_real": 178112.0
+     },
+     "2022": {
+      "erro_pct": -5.673468137327383,
+      "n_meses": 9,
+      "total_prev": 98922.12049502203,
+      "total_real": 104872.0
+     },
+     "2023": {
+      "erro_pct": -1.2866120906352094,
+      "n_meses": 12,
+      "total_prev": 136719.02938834933,
+      "total_real": 138501.0
+     }
+    },
+    "pico": {
+     "concordam": "4 de 4",
+     "por_ano": {
+      "2020": {
+       "prev": "2020-10",
+       "real": "2020-10",
+       "concorda": true
+      },
+      "2021": {
+       "prev": "2021-09",
+       "real": "2021-09",
+       "concorda": true
+      },
+      "2022": {
+       "prev": "2022-10",
+       "real": "2022-10",
+       "concorda": true
+      },
+      "2023": {
+       "prev": "2023-10",
+       "real": "2023-10",
+       "concorda": true
+      }
+     }
+    },
+    "anomalia_2classes_pct": 95.45454545454545,
+    "anomalia_3classes_pct": 90.9090909090909
+   },
+   "teste_48_meses": {
+    "n_meses": 48,
+    "wape_pct": 8.932514289077503,
+    "vies_pct": -5.473455702184707,
+    "spearman": 0.9711246200607903,
+    "erro_anual": {
+     "2020": {
+      "erro_pct": -4.3137601636593415,
+      "n_meses": 12,
+      "total_prev": 93685.44056136278,
+      "total_real": 97909.0
+     },
+     "2021": {
+      "erro_pct": -10.45657192431774,
+      "n_meses": 12,
+      "total_prev": 159487.59061415918,
+      "total_real": 178112.0
+     },
+     "2022": {
+      "erro_pct": -3.9398315985991577,
+      "n_meses": 12,
+      "total_prev": 121592.96116249319,
+      "total_real": 126580.0
+     },
+     "2023": {
+      "erro_pct": -1.2866120906352094,
+      "n_meses": 12,
+      "total_prev": 136719.02938834933,
+      "total_real": 138501.0
+     }
+    },
+    "pico": {
+     "concordam": "4 de 4",
+     "por_ano": {
+      "2020": {
+       "prev": "2020-10",
+       "real": "2020-10",
+       "concorda": true
+      },
+      "2021": {
+       "prev": "2021-09",
+       "real": "2021-09",
+       "concorda": true
+      },
+      "2022": {
+       "prev": "2022-10",
+       "real": "2022-10",
+       "concorda": true
+      },
+      "2023": {
+       "prev": "2023-10",
+       "real": "2023-10",
+       "concorda": true
+      }
+     }
+    },
+    "anomalia_2classes_pct": 95.83333333333334,
+    "anomalia_3classes_pct": 87.5
+   },
+   "deriva": {
+    "n_meses": 20,
+    "wape_pct": 11.267514654728767,
+    "vies_pct": 9.421314166692627,
+    "spearman": 0.9879699248120299,
+    "erro_anual": {
+     "2024": {
+      "erro_pct": 14.860967596562292,
+      "n_meses": 8,
+      "total_prev": 78791.17794221384,
+      "total_real": 68597.0
+     },
+     "2025": {
+      "erro_pct": 6.447842711936752,
+      "n_meses": 12,
+      "total_prev": 133582.46229763655,
+      "total_real": 125491.0
+     }
+    },
+    "pico": {
+     "concordam": "2 de 2",
+     "por_ano": {
+      "2024": {
+       "prev": "2024-09",
+       "real": "2024-09",
+       "concorda": true
+      },
+      "2025": {
+       "prev": "2025-10",
+       "real": "2025-10",
+       "concorda": true
+      }
+     }
+    },
+    "anomalia_2classes_pct": 90.0,
+    "anomalia_3classes_pct": 85.0
+   }
+  },
+  "base_sem_fatores": {
+   "teste_validos": {
+    "n_meses": 44,
+    "wape_pct": 8.413330241347428,
+    "vies_pct": -0.9057341368311804,
+    "spearman": 0.9884425651867512,
+    "erro_anual": {
+     "2020": {
+      "erro_pct": 8.845887777604243,
+      "n_meses": 11,
+      "total_prev": 99189.0806139752,
+      "total_real": 91128.0
+     },
+     "2021": {
+      "erro_pct": -6.665602143452337,
+      "n_meses": 12,
+      "total_prev": 166239.76271025417,
+      "total_real": 178112.0
+     },
+     "2022": {
+      "erro_pct": -0.31297415108106125,
+      "n_meses": 9,
+      "total_prev": 104543.77774827827,
+      "total_real": 104872.0
+     },
+     "2023": {
+      "erro_pct": -0.3635583882730504,
+      "n_meses": 12,
+      "total_prev": 137997.46799665794,
+      "total_real": 138501.0
+     }
+    },
+    "pico": {
+     "concordam": "3 de 4",
+     "por_ano": {
+      "2020": {
+       "prev": "2020-10",
+       "real": "2020-10",
+       "concorda": true
+      },
+      "2021": {
+       "prev": "2021-09",
+       "real": "2021-09",
+       "concorda": true
+      },
+      "2022": {
+       "prev": "2022-10",
+       "real": "2022-10",
+       "concorda": true
+      },
+      "2023": {
+       "prev": "2023-09",
+       "real": "2023-10",
+       "concorda": false
+      }
+     }
+    },
+    "anomalia_2classes_pct": 95.45454545454545,
+    "anomalia_3classes_pct": 79.54545454545455
+   },
+   "teste_48_meses": {
+    "n_meses": 48,
+    "wape_pct": 9.537090534990945,
+    "vies_pct": -1.1180816542360656,
+    "spearman": 0.9674337820234477,
+    "erro_anual": {
+     "2020": {
+      "erro_pct": 5.149864566839824,
+      "n_meses": 12,
+      "total_prev": 102951.1808987472,
+      "total_real": 97909.0
+     },
+     "2021": {
+      "erro_pct": -6.665602143452337,
+      "n_meses": 12,
+      "total_prev": 166239.76271025417,
+      "total_real": 178112.0
+     },
+     "2022": {
+      "erro_pct": 1.0140829527857609,
+      "n_meses": 12,
+      "total_prev": 127863.62620163622,
+      "total_real": 126580.0
+     },
+     "2023": {
+      "erro_pct": -0.3635583882730504,
+      "n_meses": 12,
+      "total_prev": 137997.46799665794,
+      "total_real": 138501.0
+     }
+    },
+    "pico": {
+     "concordam": "3 de 4",
+     "por_ano": {
+      "2020": {
+       "prev": "2020-10",
+       "real": "2020-10",
+       "concorda": true
+      },
+      "2021": {
+       "prev": "2021-09",
+       "real": "2021-09",
+       "concorda": true
+      },
+      "2022": {
+       "prev": "2022-10",
+       "real": "2022-10",
+       "concorda": true
+      },
+      "2023": {
+       "prev": "2023-09",
+       "real": "2023-10",
+       "concorda": false
+      }
+     }
+    },
+    "anomalia_2classes_pct": 95.83333333333334,
+    "anomalia_3classes_pct": 77.08333333333334
+   },
+   "deriva": {
+    "n_meses": 20,
+    "wape_pct": 11.382909193340879,
+    "vies_pct": 10.021599487816282,
+    "spearman": 0.9849624060150375,
+    "erro_anual": {
+     "2024": {
+      "erro_pct": 16.272638752848625,
+      "n_meses": 8,
+      "total_prev": 79759.54200529157,
+      "total_real": 68597.0
+     },
+     "2025": {
+      "erro_pct": 6.604601133644067,
+      "n_meses": 12,
+      "total_prev": 133779.18000862128,
+      "total_real": 125491.0
+     }
+    },
+    "pico": {
+     "concordam": "2 de 2",
+     "por_ano": {
+      "2024": {
+       "prev": "2024-09",
+       "real": "2024-09",
+       "concorda": true
+      },
+      "2025": {
+       "prev": "2025-10",
+       "real": "2025-10",
+       "concorda": true
+      }
+     }
+    },
+    "anomalia_2classes_pct": 90.0,
+    "anomalia_3classes_pct": 80.0
+   }
+  },
+  "T1": {
+   "teste_validos": {
+    "n_meses": 44,
+    "wape_pct": 7.195205712422867,
+    "vies_pct": 0.22953828509744706,
+    "spearman": 0.9881954972835786,
+    "erro_anual": {
+     "2020": {
+      "erro_pct": 5.401539819417043,
+      "n_meses": 11,
+      "total_prev": 96050.31520663836,
+      "total_real": 91128.0
+     },
+     "2021": {
+      "erro_pct": -5.14470528692834,
+      "n_meses": 12,
+      "total_prev": 168948.6625193462,
+      "total_real": 178112.0
+     },
+     "2022": {
+      "erro_pct": -0.52769173299096,
+      "n_meses": 9,
+      "total_prev": 104318.59912577772,
+      "total_real": 104872.0
+     },
+     "2023": {
+      "erro_pct": 4.311208032883732,
+      "n_meses": 12,
+      "total_prev": 144472.0662376243,
+      "total_real": 138501.0
+     }
+    },
+    "pico": {
+     "concordam": "3 de 4",
+     "por_ano": {
+      "2020": {
+       "prev": "2020-10",
+       "real": "2020-10",
+       "concorda": true
+      },
+      "2021": {
+       "prev": "2021-09",
+       "real": "2021-09",
+       "concorda": true
+      },
+      "2022": {
+       "prev": "2022-10",
+       "real": "2022-10",
+       "concorda": true
+      },
+      "2023": {
+       "prev": "2023-09",
+       "real": "2023-10",
+       "concorda": false
+      }
+     }
+    },
+    "anomalia_2classes_pct": 93.18181818181817,
+    "anomalia_3classes_pct": 77.27272727272727
+   },
+   "teste_48_meses": {
+    "n_meses": 48,
+    "wape_pct": 8.710628577098765,
+    "vies_pct": -0.12373464587753208,
+    "spearman": 0.9660487967299624,
+    "erro_anual": {
+     "2020": {
+      "erro_pct": 0.9598155977662353,
+      "n_meses": 12,
+      "total_prev": 98848.74585361694,
+      "total_real": 97909.0
+     },
+     "2021": {
+      "erro_pct": -5.14470528692834,
+      "n_meses": 12,
+      "total_prev": 168948.6625193462,
+      "total_real": 178112.0
+     },
+     "2022": {
+      "erro_pct": 1.2505883598327237,
+      "n_meses": 12,
+      "total_prev": 128162.99474587626,
+      "total_real": 126580.0
+     },
+     "2023": {
+      "erro_pct": 4.311208032883732,
+      "n_meses": 12,
+      "total_prev": 144472.0662376243,
+      "total_real": 138501.0
+     }
+    },
+    "pico": {
+     "concordam": "3 de 4",
+     "por_ano": {
+      "2020": {
+       "prev": "2020-10",
+       "real": "2020-10",
+       "concorda": true
+      },
+      "2021": {
+       "prev": "2021-09",
+       "real": "2021-09",
+       "concorda": true
+      },
+      "2022": {
+       "prev": "2022-10",
+       "real": "2022-10",
+       "concorda": true
+      },
+      "2023": {
+       "prev": "2023-09",
+       "real": "2023-10",
+       "concorda": false
+      }
+     }
+    },
+    "anomalia_2classes_pct": 91.66666666666666,
+    "anomalia_3classes_pct": 75.0
+   },
+   "deriva": {
+    "n_meses": 20,
+    "wape_pct": 13.48902865504355,
+    "vies_pct": 12.55923961474035,
+    "spearman": 0.9804511278195487,
+    "erro_anual": {
+     "2024": {
+      "erro_pct": 17.355507067906213,
+      "n_meses": 8,
+      "total_prev": 80502.35718337163,
+      "total_real": 68597.0
+     },
+     "2025": {
+      "erro_pct": 9.937461491330565,
+      "n_meses": 12,
+      "total_prev": 137961.61980008564,
+      "total_real": 125491.0
+     }
+    },
+    "pico": {
+     "concordam": "2 de 2",
+     "por_ano": {
+      "2024": {
+       "prev": "2024-09",
+       "real": "2024-09",
+       "concorda": true
+      },
+      "2025": {
+       "prev": "2025-10",
+       "real": "2025-10",
+       "concorda": true
+      }
+     }
+    },
+    "anomalia_2classes_pct": 90.0,
+    "anomalia_3classes_pct": 75.0
+   }
+  }
+ },
+ "faixa_previsao": {
+  "metodo": "quantis 2,5% e 97,5% de log(real/previsto) deixando um ano de fora",
+  "fator_inferior": 0.6806496652207893,
+  "fator_superior": 1.2964532574737835,
+  "cobertura_teste": "42 de 44",
+  "wape_loyo": 8.829024447258508
+ },
+ "espaco": {
+  "oeste": {
+   "celulas": 63,
+   "fatores_da_dobra": [
+    "frac_noturna",
+    "chuva",
+    "umidade",
+    "temperatura",
+    "altitude"
+   ],
+   "wape_modelo_v2": 16.799095547989072,
+   "wape_T1": 14.96767032968631
+  },
+  "centro": {
+   "celulas": 63,
+   "fatores_da_dobra": [
+    "frac_noturna",
+    "chuva",
+    "umidade",
+    "temperatura",
+    "altitude"
+   ],
+   "wape_modelo_v2": 14.282473661127849,
+   "wape_T1": 12.154055401499102
+  },
+  "leste": {
+   "celulas": 183,
+   "fatores_da_dobra": [
+    "frp_medio_log",
+    "frac_noturna",
+    "chuva",
+    "vento",
+    "umidade"
+   ],
+   "wape_modelo_v2": 21.038230363010435,
+   "wape_T1": 29.53075665014558
+  }
+ },
+ "pre_2012": {
+  "media_anual_2003_2011": {
+   "t1_aqua": 203816.88888888888,
+   "fatores_aqua": 179218.33333333334,
+   "t1_terra": 132033.33333333334
+  },
+  "viirs_real_media_anual_2012_2021": 123674.3,
+  "razoes_producao_t1_aqua": {
+   "2": 8.466122738559774,
+   "3": 7.482246285570385,
+   "4": 7.2425499811391925,
+   "5": 6.56617463097323,
+   "6": 5.781667727562063,
+   "7": 5.714408890592067,
+   "8": 5.706209035873318,
+   "9": 5.838667452999813,
+   "10": 6.38938561649624,
+   "11": 7.562203913491246,
+   "12": 8.235609965635739,
+   "1": 9.572052401746724
+  },
+  "razoes_producao_t1_terra": {
+   "2": 10.119959677419354,
+   "3": 8.697892271662763,
+   "4": 7.535321821036106,
+   "5": 6.071015498496415,
+   "6": 6.049284049284049,
+   "7": 7.025559481743227,
+   "8": 8.089375376581643,
+   "9": 9.203264935948305,
+   "10": 9.03076923076923,
+   "11": 9.533757465593352,
+   "12": 9.259840618208163,
+   "1": 8.82253933406513
+  }
+ }
+}

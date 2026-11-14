@@ -1,0 +1,176 @@
+{
+ "sensor": "aqua",
+ "metodo": "razao soma V / soma n no decimo mais alto e no mais baixo de cada fator (celulas-mes de calibracao com n > 0); bootstrap por ano com 500 reamostragens",
+ "regra": "mantem se |efeito| >= 10% e o IC 95% nao cruza zero",
+ "periodo": [
+  "2012-02",
+  "2019-12"
+ ],
+ "fatores": [
+  {
+   "fator": "log_n_mais_1",
+   "efeito_pct": -38.801943769768435,
+   "ic95_pct": [
+    -42.975802067531006,
+    -33.93860227107913
+   ],
+   "razao_decil_baixo": 9.319989032081162,
+   "razao_decil_alto": 5.703652128504444,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "termo base do modelo, entra sempre; efeito mostrado so como informacao",
+   "n_celulas_mes": 14094
+  },
+  {
+   "fator": "frp_medio_log",
+   "efeito_pct": -13.407069966895602,
+   "ic95_pct": [
+    -19.343385151186585,
+    -6.1558137416447725
+   ],
+   "razao_decil_baixo": 6.8101442531409955,
+   "razao_decil_alto": 5.897103448275862,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "mantido: efeito de -13.4% com intervalo [-19.3; -6.2]",
+   "n_celulas_mes": 14094
+  },
+  {
+   "fator": "frac_noturna",
+   "efeito_pct": 47.212927294487514,
+   "ic95_pct": [
+    37.93972775711539,
+    56.39619731711787
+   ],
+   "razao_decil_baixo": 5.2734786376058125,
+   "razao_decil_alto": 7.763242272668975,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "mantido: efeito de 47.2% com intervalo [37.9; 56.4]",
+   "n_celulas_mes": 14094
+  },
+  {
+   "fator": "scan_medio",
+   "efeito_pct": -17.29643505868751,
+   "ic95_pct": [
+    -27.845346653590532,
+    -8.09662373762096
+   ],
+   "razao_decil_baixo": 7.104907539118066,
+   "razao_decil_alto": 5.876011820634717,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "mantido: efeito de -17.3% com intervalo [-27.8; -8.1]",
+   "n_celulas_mes": 14094
+  },
+  {
+   "fator": "hora_dia",
+   "efeito_pct": -6.919301899873975,
+   "ic95_pct": [
+    -14.501344577371768,
+    0.015029676154298954
+   ],
+   "razao_decil_baixo": 6.8710217755443885,
+   "razao_decil_alto": 6.395595035288391,
+   "ic_cruza_zero": true,
+   "n_boot": 500,
+   "mantido": false,
+   "nota": "descartado: efeito de -6.9%, abaixo de 10%; intervalo de 95% [-14.5; 0.0] cruza zero",
+   "n_celulas_mes": 13752
+  },
+  {
+   "fator": "log_terra_mais_1",
+   "efeito_pct": 30.748456233895993,
+   "ic95_pct": [
+    22.1470105942713,
+    39.466217890287204
+   ],
+   "razao_decil_baixo": 4.820156059039203,
+   "razao_decil_alto": 6.302279635258358,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "mantido: efeito de 30.7% com intervalo [22.1; 39.5]",
+   "n_celulas_mes": 14094
+  },
+  {
+   "fator": "chuva",
+   "efeito_pct": 7.632396332314917,
+   "ic95_pct": [
+    -5.505031352051981,
+    19.75001445206439
+   ],
+   "razao_decil_baixo": 5.5175666622001875,
+   "razao_decil_alto": 5.938689217758985,
+   "ic_cruza_zero": true,
+   "n_boot": 500,
+   "mantido": false,
+   "nota": "descartado: efeito de 7.6%, abaixo de 10%; intervalo de 95% [-5.5; 19.8] cruza zero",
+   "n_celulas_mes": 14094
+  },
+  {
+   "fator": "vento",
+   "efeito_pct": -8.952964928578977,
+   "ic95_pct": [
+    -13.2595913543717,
+    -5.327373064479024
+   ],
+   "razao_decil_baixo": 6.322730609248838,
+   "razao_decil_alto": 5.756658755274262,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": false,
+   "nota": "descartado: efeito de -9.0%, abaixo de 10%",
+   "n_celulas_mes": 14094
+  },
+  {
+   "fator": "umidade",
+   "efeito_pct": -20.674557210541412,
+   "ic95_pct": [
+    -29.19918081177567,
+    -7.97471442812735
+   ],
+   "razao_decil_baixo": 6.346065699006876,
+   "razao_decil_alto": 5.034044715447155,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "mantido: efeito de -20.7% com intervalo [-29.2; -8.0]",
+   "n_celulas_mes": 14094
+  },
+  {
+   "fator": "temperatura",
+   "efeito_pct": 39.69138542473198,
+   "ic95_pct": [
+    27.28296953494849,
+    54.497275038071486
+   ],
+   "razao_decil_baixo": 4.781556683587141,
+   "razao_decil_alto": 6.679422776171745,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "mantido: efeito de 39.7% com intervalo [27.3; 54.5]",
+   "n_celulas_mes": 14094
+  },
+  {
+   "fator": "altitude",
+   "efeito_pct": -20.95988639032067,
+   "ic95_pct": [
+    -27.01269297284538,
+    -15.07835284954346
+   ],
+   "razao_decil_baixo": 6.8801216389244555,
+   "razao_decil_alto": 5.438055959890021,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "mantido: efeito de -21.0% com intervalo [-27.0; -15.1]",
+   "n_celulas_mes": 14094
+  }
+ ]
+}

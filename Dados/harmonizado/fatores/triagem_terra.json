@@ -1,0 +1,161 @@
+{
+ "sensor": "terra",
+ "metodo": "razao soma V / soma n no decimo mais alto e no mais baixo de cada fator (celulas-mes de calibracao com n > 0); bootstrap por ano com 500 reamostragens",
+ "regra": "mantem se |efeito| >= 10% e o IC 95% nao cruza zero",
+ "periodo": [
+  "2012-02",
+  "2019-12"
+ ],
+ "fatores": [
+  {
+   "fator": "log_n_mais_1",
+   "efeito_pct": -38.3901196008429,
+   "ic95_pct": [
+    -43.01728473075496,
+    -34.55580142693245
+   ],
+   "razao_decil_baixo": 12.507132867132867,
+   "razao_decil_alto": 7.705629600804229,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "termo base do modelo, entra sempre; efeito mostrado so como informacao",
+   "n_celulas_mes": 12598
+  },
+  {
+   "fator": "frp_medio_log",
+   "efeito_pct": -26.45475524022708,
+   "ic95_pct": [
+    -32.312227356814745,
+    -23.254755496255076
+   ],
+   "razao_decil_baixo": 9.822563559322035,
+   "razao_decil_alto": 7.224028411387653,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "mantido: efeito de -26.5% com intervalo [-32.3; -23.3]",
+   "n_celulas_mes": 12598
+  },
+  {
+   "fator": "frac_noturna",
+   "efeito_pct": 18.382066433580135,
+   "ic95_pct": [
+    5.056533105436055,
+    22.91703138667262
+   ],
+   "razao_decil_baixo": 7.595401975932949,
+   "razao_decil_alto": 8.991593813046402,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "mantido: efeito de 18.4% com intervalo [5.1; 22.9]",
+   "n_celulas_mes": 12598
+  },
+  {
+   "fator": "scan_medio",
+   "efeito_pct": -25.050657840255052,
+   "ic95_pct": [
+    -28.126820404373106,
+    -22.847880304534385
+   ],
+   "razao_decil_baixo": 9.303158705701078,
+   "razao_decil_alto": 6.97265625,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "mantido: efeito de -25.1% com intervalo [-28.1; -22.8]",
+   "n_celulas_mes": 12598
+  },
+  {
+   "fator": "hora_dia",
+   "efeito_pct": -36.4502975981363,
+   "ic95_pct": [
+    -43.18558563131017,
+    -28.408656253988777
+   ],
+   "razao_decil_baixo": 9.472986748216107,
+   "razao_decil_alto": 6.02005488705932,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "mantido: efeito de -36.5% com intervalo [-43.2; -28.4]",
+   "n_celulas_mes": 11323
+  },
+  {
+   "fator": "chuva",
+   "efeito_pct": -25.818338092410453,
+   "ic95_pct": [
+    -34.58893354055787,
+    -15.8553524041024
+   ],
+   "razao_decil_baixo": 7.837346153846154,
+   "razao_decil_alto": 5.813873626373627,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "mantido: efeito de -25.8% com intervalo [-34.6; -15.9]",
+   "n_celulas_mes": 12598
+  },
+  {
+   "fator": "vento",
+   "efeito_pct": -19.38525505175376,
+   "ic95_pct": [
+    -27.233761303032548,
+    -8.464777349481075
+   ],
+   "razao_decil_baixo": 10.194959383461779,
+   "razao_decil_alto": 8.21864050455501,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "mantido: efeito de -19.4% com intervalo [-27.2; -8.5]",
+   "n_celulas_mes": 12598
+  },
+  {
+   "fator": "umidade",
+   "efeito_pct": -17.634837768572563,
+   "ic95_pct": [
+    -30.38239855370795,
+    -3.797098312856437
+   ],
+   "razao_decil_baixo": 8.367345512163295,
+   "razao_decil_alto": 6.891777705557361,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "mantido: efeito de -17.6% com intervalo [-30.4; -3.8]",
+   "n_celulas_mes": 12598
+  },
+  {
+   "fator": "temperatura",
+   "efeito_pct": 15.054271369591676,
+   "ic95_pct": [
+    4.896197671439248,
+    32.29581443883424
+   ],
+   "razao_decil_baixo": 7.329929802169751,
+   "razao_decil_alto": 8.43339732578896,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "mantido: efeito de 15.1% com intervalo [4.9; 32.3]",
+   "n_celulas_mes": 12598
+  },
+  {
+   "fator": "altitude",
+   "efeito_pct": -38.61921347245183,
+   "ic95_pct": [
+    -44.28912329386995,
+    -29.63131933964144
+   ],
+   "razao_decil_baixo": 10.888004109940919,
+   "razao_decil_alto": 6.683142559833507,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "mantido: efeito de -38.6% com intervalo [-44.3; -29.6]",
+   "n_celulas_mes": 12598
+  }
+ ]
+}

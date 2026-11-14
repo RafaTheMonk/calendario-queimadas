@@ -1,0 +1,1626 @@
+{
+ "sensor": "aqua",
+ "versao": "fase A, 14/11/2026",
+ "formula": "log E[V] = b0 + b1*log(n+1) + b2*[n==0] + soma bk*zk + mes do ano, com n = focos MODIS Aqua na celula e mes e zk = (fator - media) / desvio. A razao VIIRS/MODIS e E[V]/n.",
+ "como_replicar": "1) pegue as celulas da grade NASA POWER (0,5 x 0,625 grau) da area; 2) conte os focos MODIS Aqua (type 0, confianca >= 30) por celula e mes; 3) calcule os fatores (chuva, vento, umidade, temperatura e altitude da NASA POWER; FRP, fracao noturna, scan e hora dos focos); 4) padronize com media e desvio abaixo; 5) aplique os pesos; 6) some E[V] das celulas da area.",
+ "termos": [
+  "intercepto",
+  "log_n_mais_1",
+  "indicador_n_zero",
+  "frp_medio_log",
+  "frac_noturna",
+  "scan_medio",
+  "log_terra_mais_1",
+  "umidade",
+  "temperatura",
+  "altitude",
+  "mes_02",
+  "mes_03",
+  "mes_04",
+  "mes_05",
+  "mes_06",
+  "mes_07",
+  "mes_08",
+  "mes_09",
+  "mes_10",
+  "mes_11",
+  "mes_12"
+ ],
+ "fatores_mantidos": [
+  "frp_medio_log",
+  "frac_noturna",
+  "scan_medio",
+  "log_terra_mais_1",
+  "umidade",
+  "temperatura",
+  "altitude"
+ ],
+ "mes_do_ano_incluido": true,
+ "ridge": 0.0,
+ "preenchimento": "fator do sensor sem foco no mes recebe a media do treino (z = 0); o indicador n == 0 marca esses casos",
+ "periodo_ajuste_validacao": [
+  "2012-02",
+  "2019-12"
+ ],
+ "padronizacao_treino": {
+  "frp_medio_log": {
+   "media": 3.374574317184963,
+   "desvio": 0.797572860899893
+  },
+  "frac_noturna": {
+   "media": 0.07251105223149319,
+   "desvio": 0.19515744858816889
+  },
+  "scan_medio": {
+   "media": 1.57989612614691,
+   "desvio": 0.5663721258923591
+  },
+  "log_terra_mais_1": {
+   "media": 0.7074935502288708,
+   "desvio": 1.0282417849266732
+  },
+  "umidade": {
+   "media": 62.78294634644864,
+   "desvio": 13.111795861073059
+  },
+  "temperatura": {
+   "media": 25.356915005961504,
+   "desvio": 2.351028088988968
+  },
+  "altitude": {
+   "media": 530.6343689320388,
+   "desvio": 223.8124463527467
+  }
+ },
+ "pesos": [
+  {
+   "termo": "intercepto",
+   "rotulo": "intercepto",
+   "peso": 2.0206992015347844,
+   "ic95": [
+    1.9055700432295173,
+    2.1044006570907037
+   ],
+   "erro_padrao_quasi_poisson": 0.022164266734897534,
+   "efeito_multiplicativo": 7.543597585133434,
+   "ic95_multiplicativo": [
+    6.72323907240027,
+    8.202185614351327
+   ],
+   "ic_cruza_zero": false,
+   "leitura": "constante do modelo (log do esperado de V com todos os termos em zero); so faz sentido junto com os demais termos"
+  },
+  {
+   "termo": "log_n_mais_1",
+   "rotulo": "log(n+1) (n = focos do MODIS na celula e mes)",
+   "peso": 0.6550382401116152,
+   "ic95": [
+    0.6364790293980767,
+    0.6761173399214118
+   ],
+   "erro_padrao_quasi_poisson": 0.005050957765684475,
+   "efeito_multiplicativo": 1.925216136448694,
+   "ic95_multiplicativo": [
+    1.8898151676555524,
+    1.9662286948746248
+   ],
+   "ic_cruza_zero": false,
+   "leitura": "elasticidade: dobrar (n+1) multiplica o esperado de V por 1,575; se for menor que 2, a razao V/n cai quando o MODIS conta mais focos"
+  },
+  {
+   "termo": "indicador_n_zero",
+   "rotulo": "indicador n == 0",
+   "peso": -0.4635028179259084,
+   "ic95": [
+    -0.4974150413735065,
+    -0.3980646826423931
+   ],
+   "erro_padrao_quasi_poisson": 0.014728375305433087,
+   "efeito_multiplicativo": 0.6290762421601384,
+   "ic95_multiplicativo": [
+    0.6081005445431925,
+    0.6716185841922998
+   ],
+   "ic_cruza_zero": false,
+   "leitura": "celula-mes sem foco MODIS (n = 0): com todos os fatores na media, o esperado de V e exp(b0 + b2) = 4,75 focos VIIRS por celula-mes"
+  },
+  {
+   "termo": "frp_medio_log",
+   "rotulo": "FRP medio dos focos (log)",
+   "peso": -0.029619348478507425,
+   "ic95": [
+    -0.04747812989373747,
+    -0.011805830526609258
+   ],
+   "erro_padrao_quasi_poisson": 0.005223503034785256,
+   "efeito_multiplicativo": 0.9708150054329353,
+   "ic95_multiplicativo": [
+    0.9536313289230651,
+    0.9882635848533282
+   ],
+   "ic_cruza_zero": false,
+   "media_treino": 3.374574317184963,
+   "desvio_treino": 0.797572860899893,
+   "importancia_pct": 3.338580792290361,
+   "efeito_na_unidade_original": {
+    "passo": "dobrar o FRP medio (de x para 2x)",
+    "multiplicador": 0.9745871758559755,
+    "ic95": [
+     0.9595778314441124,
+     0.9897923542394738
+    ]
+   },
+   "leitura": "cada 1 desvio-padrao a mais de FRP medio dos focos (log) (1 desvio = 0,798) multiplica a razao VIIRS/MODIS por 0,971 (IC 95%: 0,954 a 0,988); em unidade original, dobrar o FRP medio (de x para 2x) multiplica por 0,975 (IC 95%: 0,960 a 0,990)"
+  },
+  {
+   "termo": "frac_noturna",
+   "rotulo": "fracao de focos noturnos",
+   "peso": 0.052823847028318785,
+   "ic95": [
+    0.03962696425900711,
+    0.06484754154322873
+   ],
+   "erro_padrao_quasi_poisson": 0.0036350712513649516,
+   "efeito_multiplicativo": 1.054243920562386,
+   "ic95_multiplicativo": [
+    1.0404225869823573,
+    1.0669963393678739
+   ],
+   "ic_cruza_zero": false,
+   "media_treino": 0.07251105223149319,
+   "desvio_treino": 0.19515744858816889,
+   "importancia_pct": 5.95410399359724,
+   "efeito_na_unidade_original": {
+    "passo": "cada +10 pontos percentuais de focos noturnos",
+    "multiplicador": 1.0274369442828564,
+    "ic95": [
+     1.02051267665329,
+     1.0337865464539093
+    ]
+   },
+   "leitura": "cada 1 desvio-padrao a mais de fracao de focos noturnos (1 desvio = 0,195) multiplica a razao VIIRS/MODIS por 1,054 (IC 95%: 1,040 a 1,067); em unidade original, cada +10 pontos percentuais de focos noturnos multiplica por 1,027 (IC 95%: 1,021 a 1,034)"
+  },
+  {
+   "termo": "scan_medio",
+   "rotulo": "scan medio (tamanho do pixel)",
+   "peso": 0.0005053474085359037,
+   "ic95": [
+    -0.01995041245942336,
+    0.01833951942919986
+   ],
+   "erro_padrao_quasi_poisson": 0.0051264587998500685,
+   "efeito_multiplicativo": 1.000505475118049,
+   "ic95_multiplicativo": [
+    0.9802472801533781,
+    1.0185087211925878
+   ],
+   "ic_cruza_zero": true,
+   "media_treino": 1.57989612614691,
+   "desvio_treino": 0.5663721258923591,
+   "importancia_pct": 0.056960846144064034,
+   "efeito_na_unidade_original": {
+    "passo": "cada +0,1 km de scan",
+    "multiplicador": 1.0000892293124959,
+    "ic95": [
+     0.9964837047611542,
+     1.003243317066173
+    ]
+   },
+   "leitura": "cada 1 desvio-padrao a mais de scan medio (tamanho do pixel) (1 desvio = 0,566) multiplica a razao VIIRS/MODIS por 1,001 (IC 95%: 0,980 a 1,019); em unidade original, cada +0,1 km de scan multiplica por 1,000 (IC 95%: 0,996 a 1,003). Atencao: o intervalo inclui 1, efeito nao distinguivel de zero"
+  },
+  {
+   "termo": "log_terra_mais_1",
+   "rotulo": "log(T+1) do Terra",
+   "peso": 0.3710765652685189,
+   "ic95": [
+    0.35634413365127093,
+    0.3839563996117061
+   ],
+   "erro_padrao_quasi_poisson": 0.004971663667993513,
+   "efeito_multiplicativo": 1.4492940347256296,
+   "ic95_multiplicativo": [
+    1.4280989206060406,
+    1.4680814313661075
+   ],
+   "ic_cruza_zero": false,
+   "media_treino": 0.7074935502288708,
+   "desvio_treino": 1.0282417849266732,
+   "importancia_pct": 41.82634517344342,
+   "efeito_na_unidade_original": {
+    "passo": "dobrar T+1 (focos do Terra na celula e mes)",
+    "multiplicador": 1.284213029792016,
+    "ic95": [
+     1.2715222895140663,
+     1.2954116441241446
+    ]
+   },
+   "leitura": "cada 1 desvio-padrao a mais de log(T+1) do Terra (1 desvio = 1,028) multiplica a razao VIIRS/MODIS por 1,449 (IC 95%: 1,428 a 1,468); em unidade original, dobrar T+1 (focos do Terra na celula e mes) multiplica por 1,284 (IC 95%: 1,272 a 1,295)"
+  },
+  {
+   "termo": "umidade",
+   "rotulo": "umidade relativa (%)",
+   "peso": -0.16114073775952403,
+   "ic95": [
+    -0.24861122627083576,
+    -0.10016081117781195
+   ],
+   "erro_padrao_quasi_poisson": 0.009889947031746484,
+   "efeito_multiplicativo": 0.8511722705987883,
+   "ic95_multiplicativo": [
+    0.779883112520583,
+    0.9046919217640639
+   ],
+   "ic_cruza_zero": false,
+   "media_treino": 62.78294634644864,
+   "desvio_treino": 13.111795861073059,
+   "importancia_pct": 18.163173721725126,
+   "efeito_na_unidade_original": {
+    "passo": "cada +10 pontos de umidade relativa",
+    "multiplicador": 0.8843542741663296,
+    "ic95": [
+     0.8272826794367432,
+     0.9264549581966499
+    ]
+   },
+   "leitura": "cada 1 desvio-padrao a mais de umidade relativa (%) (1 desvio = 13,112) multiplica a razao VIIRS/MODIS por 0,851 (IC 95%: 0,780 a 0,905); em unidade original, cada +10 pontos de umidade relativa multiplica por 0,884 (IC 95%: 0,827 a 0,926)"
+  },
+  {
+   "termo": "temperatura",
+   "rotulo": "temperatura a 2 m (C)",
+   "peso": -0.12516529078760402,
+   "ic95": [
+    -0.20553041100560918,
+    -0.06517462515569439
+   ],
+   "erro_padrao_quasi_poisson": 0.008999315158901356,
+   "efeito_multiplicativo": 0.8823510460312135,
+   "ic95_multiplicativo": [
+    0.8142153330835833,
+    0.9369038421123252
+   ],
+   "ic_cruza_zero": false,
+   "media_treino": 25.356915005961504,
+   "desvio_treino": 2.351028088988968,
+   "importancia_pct": 14.108157577745276,
+   "efeito_na_unidade_original": {
+    "passo": "cada +1 C",
+    "multiplicador": 0.948153817801758,
+    "ic95": [
+     0.9162907941772935,
+     0.972658966450789
+    ]
+   },
+   "leitura": "cada 1 desvio-padrao a mais de temperatura a 2 m (C) (1 desvio = 2,351) multiplica a razao VIIRS/MODIS por 0,882 (IC 95%: 0,814 a 0,937); em unidade original, cada +1 C multiplica por 0,948 (IC 95%: 0,916 a 0,973)"
+  },
+  {
+   "termo": "altitude",
+   "rotulo": "altitude (m)",
+   "peso": -0.14685267942542754,
+   "ic95": [
+    -0.1896998447445972,
+    -0.10817052835723025
+   ],
+   "erro_padrao_quasi_poisson": 0.006592112131132376,
+   "efeito_multiplicativo": 0.8634211677497438,
+   "ic95_multiplicativo": [
+    0.8272073873288341,
+    0.8974745385217389
+   ],
+   "ic_cruza_zero": false,
+   "media_treino": 530.6343689320388,
+   "desvio_treino": 223.8124463527467,
+   "importancia_pct": 16.55267789505451,
+   "efeito_na_unidade_original": {
+    "passo": "cada +100 m de altitude",
+    "multiplicador": 0.9364921211853942,
+    "ic95": [
+     0.9187342253322197,
+     0.9528184648557568
+    ]
+   },
+   "leitura": "cada 1 desvio-padrao a mais de altitude (m) (1 desvio = 223,812) multiplica a razao VIIRS/MODIS por 0,863 (IC 95%: 0,827 a 0,897); em unidade original, cada +100 m de altitude multiplica por 0,936 (IC 95%: 0,919 a 0,953)"
+  },
+  {
+   "termo": "mes_02",
+   "rotulo": "mes_02",
+   "peso": 0.0006223138000257663,
+   "ic95": [
+    -0.19763430182386788,
+    0.15291509723253602
+   ],
+   "erro_padrao_quasi_poisson": 0.0278003277710031,
+   "efeito_multiplicativo": 1.0006225074774326,
+   "ic95_multiplicativo": [
+    0.82066991575971,
+    1.1652260438270228
+   ],
+   "ic_cruza_zero": true,
+   "leitura": "efeito do mes do ano em relacao a janeiro: multiplica por 1,001"
+  },
+  {
+   "termo": "mes_03",
+   "rotulo": "mes_03",
+   "peso": -0.04843008697321981,
+   "ic95": [
+    -0.16556708653126523,
+    0.04748331641235504
+   ],
+   "erro_padrao_quasi_poisson": 0.02697950257327893,
+   "efeito_multiplicativo": 0.9527239447921786,
+   "ic95_multiplicativo": [
+    0.8474130112984684,
+    1.0486287060864206
+   ],
+   "ic_cruza_zero": true,
+   "leitura": "efeito do mes do ano em relacao a janeiro: multiplica por 0,953"
+  },
+  {
+   "termo": "mes_04",
+   "rotulo": "mes_04",
+   "peso": -0.25133460042120087,
+   "ic95": [
+    -0.426522483871218,
+    -0.1168443560163714
+   ],
+   "erro_padrao_quasi_poisson": 0.02956448331101232,
+   "efeito_multiplicativo": 0.77776208849357,
+   "ic95_multiplicativo": [
+    0.6527751884972826,
+    0.889723662522334
+   ],
+   "ic_cruza_zero": false,
+   "leitura": "efeito do mes do ano em relacao a janeiro: multiplica por 0,778"
+  },
+  {
+   "termo": "mes_05",
+   "rotulo": "mes_05",
+   "peso": -0.33801358623505845,
+   "ic95": [
+    -0.4222116075579289,
+    -0.23575314589428079
+   ],
+   "erro_padrao_quasi_poisson": 0.028514227275424266,
+   "efeito_multiplicativo": 0.7131855983252808,
+   "ic95_multiplicativo": [
+    0.6555952957948296,
+    0.7899756586001735
+   ],
+   "ic_cruza_zero": false,
+   "leitura": "efeito do mes do ano em relacao a janeiro: multiplica por 0,713"
+  },
+  {
+   "termo": "mes_06",
+   "rotulo": "mes_06",
+   "peso": -0.3918691379781865,
+   "ic95": [
+    -0.5039664723620337,
+    -0.26140623115018463
+   ],
+   "erro_padrao_quasi_poisson": 0.028577447800883348,
+   "efeito_multiplicativo": 0.6757925437530512,
+   "ic95_multiplicativo": [
+    0.6041296375560894,
+    0.7699680710598551
+   ],
+   "ic_cruza_zero": false,
+   "leitura": "efeito do mes do ano em relacao a janeiro: multiplica por 0,676"
+  },
+  {
+   "termo": "mes_07",
+   "rotulo": "mes_07",
+   "peso": -0.3466282329625607,
+   "ic95": [
+    -0.4684042422075788,
+    -0.23164586421887232
+   ],
+   "erro_padrao_quasi_poisson": 0.02946862925134985,
+   "efeito_multiplicativo": 0.7070681440307759,
+   "ic95_multiplicativo": [
+    0.6260004167123505,
+    0.7932269836298628
+   ],
+   "ic_cruza_zero": false,
+   "leitura": "efeito do mes do ano em relacao a janeiro: multiplica por 0,707"
+  },
+  {
+   "termo": "mes_08",
+   "rotulo": "mes_08",
+   "peso": -0.20531960649940553,
+   "ic95": [
+    -0.3964666292179266,
+    -0.0214597479108784
+   ],
+   "erro_padrao_quasi_poisson": 0.02794032520445365,
+   "efeito_multiplicativo": 0.814386991437359,
+   "ic95_multiplicativo": [
+    0.6726927246089967,
+    0.978768874168195
+   ],
+   "ic_cruza_zero": false,
+   "leitura": "efeito do mes do ano em relacao a janeiro: multiplica por 0,814"
+  },
+  {
+   "termo": "mes_09",
+   "rotulo": "mes_09",
+   "peso": -0.030602716774791393,
+   "ic95": [
+    -0.1539864394722958,
+    0.11293066937347727
+   ],
+   "erro_padrao_quasi_poisson": 0.024638488370455548,
+   "efeito_multiplicativo": 0.9698608059766762,
+   "ic95_multiplicativo": [
+    0.8572836461512697,
+    1.119554310856025
+   ],
+   "ic_cruza_zero": true,
+   "leitura": "efeito do mes do ano em relacao a janeiro: multiplica por 0,970"
+  },
+  {
+   "termo": "mes_10",
+   "rotulo": "mes_10",
+   "peso": 0.15739196229374866,
+   "ic95": [
+    0.07797751103697086,
+    0.2677981063414625
+   ],
+   "erro_padrao_quasi_poisson": 0.022412841062524082,
+   "efeito_multiplicativo": 1.1704542979529682,
+   "ic95_multiplicativo": [
+    1.081098345615971,
+    1.3070832215604875
+   ],
+   "ic_cruza_zero": false,
+   "leitura": "efeito do mes do ano em relacao a janeiro: multiplica por 1,170"
+  },
+  {
+   "termo": "mes_11",
+   "rotulo": "mes_11",
+   "peso": 0.21885214577808385,
+   "ic95": [
+    0.15038817705982935,
+    0.3074557013638706
+   ],
+   "erro_padrao_quasi_poisson": 0.023160309721623962,
+   "efeito_multiplicativo": 1.244647236733577,
+   "ic95_multiplicativo": [
+    1.1622853276733842,
+    1.3599605627694484
+   ],
+   "ic_cruza_zero": false,
+   "leitura": "efeito do mes do ano em relacao a janeiro: multiplica por 1,245"
+  },
+  {
+   "termo": "mes_12",
+   "rotulo": "mes_12",
+   "peso": 0.08260390750834351,
+   "ic95": [
+    -0.141282436737532,
+    0.1883701515902331
+   ],
+   "erro_padrao_quasi_poisson": 0.025272437137444183,
+   "efeito_multiplicativo": 1.0861115227181202,
+   "ic95_multiplicativo": [
+    0.8682440530465476,
+    1.2072803093801177
+   ],
+   "ic_cruza_zero": true,
+   "leitura": "efeito do mes do ano em relacao a janeiro: multiplica por 1,086"
+  }
+ ],
+ "sobredispersao": {
+  "qui2_pearson": 220403.44128901066,
+  "graus_liberdade": 29334,
+  "phi": 7.5135829170590664,
+  "tratamento": "coeficientes do Poisson mantidos (a media continua certa); erro padrao com escala quasi-Poisson e intervalos por bootstrap de anos"
+ },
+ "bootstrap": {
+  "reamostragens": 500,
+  "nao_convergiu": 0,
+  "unidade": "anos inteiros da calibracao"
+ },
+ "faixa_previsao": {
+  "quantis_log_erro_loyo": [
+   -0.4600829389031973,
+   0.23541418389927807
+  ],
+  "n_erros_loyo": 95,
+  "descricao": "faixa de 95% = previsao x exp(quantis 2,5% e 97,5% do log(real/previsto) deixando um ano da calibracao de fora)"
+ },
+ "colinearidade": {
+  "vif_maximo": 2.181061910767823,
+  "vif_por_coluna": [
+   1.6975825475645547,
+   1.0597883887319088,
+   1.4092220093441075,
+   1.5197626275472607,
+   2.181061910767823,
+   1.9102820665768299,
+   1.4764036851402211
+  ],
+  "ridge_usado": false,
+  "lambda": 0.0
+ },
+ "producao": {
+  "padronizacao_treino": {
+   "frp_medio_log": {
+    "media": 3.3594012109296707,
+    "desvio": 0.8032758690607337
+   },
+   "frac_noturna": {
+    "media": 0.07066923716552372,
+    "desvio": 0.1910070037820446
+   },
+   "scan_medio": {
+    "media": 1.5757203714068297,
+    "desvio": 0.5682078583516501
+   },
+   "log_terra_mais_1": {
+    "media": 0.7175661168375027,
+    "desvio": 1.0377320467949247
+   },
+   "umidade": {
+    "media": 63.24483489660468,
+    "desvio": 13.15386104955916
+   },
+   "temperatura": {
+    "media": 25.34502550600625,
+    "desvio": 2.3415239835357395
+   },
+   "altitude": {
+    "media": 530.6343689320388,
+    "desvio": 223.81244635274666
+   }
+  },
+  "periodo_ajuste": [
+   "2012-02",
+   "2021-12"
+  ],
+  "n_meses": 118,
+  "pesos": [
+   {
+    "termo": "intercepto",
+    "rotulo": "intercepto",
+    "peso": 2.022074842616544,
+    "ic95": [
+     1.9441653848184044,
+     2.0908891333105517
+    ],
+    "erro_padrao_quasi_poisson": 0.01939499291587133,
+    "efeito_multiplicativo": 7.553982008858135,
+    "ic95_multiplicativo": [
+     6.987797298855537,
+     8.092106928435362
+    ],
+    "ic_cruza_zero": false,
+    "leitura": "constante do modelo (log do esperado de V com todos os termos em zero); so faz sentido junto com os demais termos"
+   },
+   {
+    "termo": "log_n_mais_1",
+    "rotulo": "log(n+1) (n = focos do MODIS na celula e mes)",
+    "peso": 0.6575106103987036,
+    "ic95": [
+     0.6384251634323086,
+     0.6768333079521908
+    ],
+    "erro_padrao_quasi_poisson": 0.004550627936448064,
+    "efeito_multiplicativo": 1.9299818725252167,
+    "ic95_multiplicativo": [
+     1.893496582373045,
+     1.9676369558361118
+    ],
+    "ic_cruza_zero": false,
+    "leitura": "elasticidade: dobrar (n+1) multiplica o esperado de V por 1,577; se for menor que 2, a razao V/n cai quando o MODIS conta mais focos"
+   },
+   {
+    "termo": "indicador_n_zero",
+    "rotulo": "indicador n == 0",
+    "peso": -0.4604740883630313,
+    "ic95": [
+     -0.4938017782069816,
+     -0.4038269405193577
+    ],
+    "erro_padrao_quasi_poisson": 0.013281447349112045,
+    "efeito_multiplicativo": 0.6309844322091946,
+    "ic95_multiplicativo": [
+     0.6103017462079363,
+     0.6677596734122182
+    ],
+    "ic_cruza_zero": false,
+    "leitura": "celula-mes sem foco MODIS (n = 0): com todos os fatores na media, o esperado de V e exp(b0 + b2) = 4,77 focos VIIRS por celula-mes"
+   },
+   {
+    "termo": "frp_medio_log",
+    "rotulo": "FRP medio dos focos (log)",
+    "peso": -0.016479596328066407,
+    "ic95": [
+     -0.03675649630811888,
+     -0.000525690872417375
+    ],
+    "erro_padrao_quasi_poisson": 0.004603956171520114,
+    "efeito_multiplicativo": 0.9836554493690057,
+    "ic95_multiplicativo": [
+     0.9639108226182372,
+     0.99947444727882
+    ],
+    "ic_cruza_zero": false,
+    "media_treino": 3.3594012109296707,
+    "desvio_treino": 0.8032758690607337,
+    "importancia_pct": 1.9012597959223652,
+    "efeito_na_unidade_original": {
+     "passo": "dobrar o FRP medio (de x para 2x)",
+     "multiplicador": 0.9858803776732035,
+     "ic95": [
+      0.9687805140036018,
+      0.9995464839322398
+     ]
+    },
+    "leitura": "cada 1 desvio-padrao a mais de FRP medio dos focos (log) (1 desvio = 0,803) multiplica a razao VIIRS/MODIS por 0,984 (IC 95%: 0,964 a 0,999); em unidade original, dobrar o FRP medio (de x para 2x) multiplica por 0,986 (IC 95%: 0,969 a 1,000)"
+   },
+   {
+    "termo": "frac_noturna",
+    "rotulo": "fracao de focos noturnos",
+    "peso": 0.052132341712920145,
+    "ic95": [
+     0.04074050051426478,
+     0.06309812164583882
+    ],
+    "erro_padrao_quasi_poisson": 0.0032492588763716962,
+    "efeito_multiplicativo": 1.0535151572884691,
+    "ic95_multiplicativo": [
+     1.0415817805359957,
+     1.0651313465447643
+    ],
+    "ic_cruza_zero": false,
+    "media_treino": 0.07066923716552372,
+    "desvio_treino": 0.1910070037820446,
+    "importancia_pct": 6.014535999116383,
+    "efeito_na_unidade_original": {
+     "passo": "cada +10 pontos percentuais de focos noturnos",
+     "multiplicador": 1.027669296146618,
+     "ic95": [
+      1.0215584187838496,
+      1.033586150262122
+     ]
+    },
+    "leitura": "cada 1 desvio-padrao a mais de fracao de focos noturnos (1 desvio = 0,191) multiplica a razao VIIRS/MODIS por 1,054 (IC 95%: 1,042 a 1,065); em unidade original, cada +10 pontos percentuais de focos noturnos multiplica por 1,028 (IC 95%: 1,022 a 1,034)"
+   },
+   {
+    "termo": "scan_medio",
+    "rotulo": "scan medio (tamanho do pixel)",
+    "peso": -0.004913136601228676,
+    "ic95": [
+     -0.020170255086949664,
+     0.012191674083612956
+    ],
+    "erro_padrao_quasi_poisson": 0.004590350733720013,
+    "efeito_multiplicativo": 0.9950989131123625,
+    "ic95_multiplicativo": [
+     0.9800318037020062,
+     1.012266295487023
+    ],
+    "ic_cruza_zero": true,
+    "media_treino": 1.5757203714068297,
+    "desvio_treino": 0.5682078583516501,
+    "importancia_pct": 0.566831183594092,
+    "efeito_na_unidade_original": {
+     "passo": "cada +0,1 km de scan",
+     "multiplicador": 0.9991357013081926,
+     "ic95": [
+      0.9964564908938401,
+      1.0021479398274904
+     ]
+    },
+    "leitura": "cada 1 desvio-padrao a mais de scan medio (tamanho do pixel) (1 desvio = 0,568) multiplica a razao VIIRS/MODIS por 0,995 (IC 95%: 0,980 a 1,012); em unidade original, cada +0,1 km de scan multiplica por 0,999 (IC 95%: 0,996 a 1,002). Atencao: o intervalo inclui 1, efeito nao distinguivel de zero"
+   },
+   {
+    "termo": "log_terra_mais_1",
+    "rotulo": "log(T+1) do Terra",
+    "peso": 0.37445931447824693,
+    "ic95": [
+     0.3628457559973396,
+     0.38635169667218444
+    ],
+    "erro_padrao_quasi_poisson": 0.0045273868203469314,
+    "efeito_multiplicativo": 1.4542049344644183,
+    "ic95_multiplicativo": [
+     1.4374141296325829,
+     1.4716021373882724
+    ],
+    "ic_cruza_zero": false,
+    "media_treino": 0.7175661168375027,
+    "desvio_treino": 1.0377320467949247,
+    "importancia_pct": 43.201570332983685,
+    "efeito_na_unidade_original": {
+     "passo": "dobrar T+1 (focos do Terra na celula e mes)",
+     "multiplicador": 1.2841768836835115,
+     "ic95": [
+      1.2742537915490948,
+      1.2944182989959627
+     ]
+    },
+    "leitura": "cada 1 desvio-padrao a mais de log(T+1) do Terra (1 desvio = 1,038) multiplica a razao VIIRS/MODIS por 1,454 (IC 95%: 1,437 a 1,472); em unidade original, dobrar T+1 (focos do Terra na celula e mes) multiplica por 1,284 (IC 95%: 1,274 a 1,294)"
+   },
+   {
+    "termo": "umidade",
+    "rotulo": "umidade relativa (%)",
+    "peso": -0.16211538329914565,
+    "ic95": [
+     -0.22101683613268175,
+     -0.12504483413432832
+    ],
+    "erro_padrao_quasi_poisson": 0.008244646898007229,
+    "efeito_multiplicativo": 0.8503430834891978,
+    "ic95_multiplicativo": [
+     0.8017031825954175,
+     0.8824573374868607
+    ],
+    "ic_cruza_zero": false,
+    "media_treino": 63.24483489660468,
+    "desvio_treino": 13.15386104955916,
+    "importancia_pct": 18.70333802062094,
+    "efeito_na_unidade_original": {
+     "passo": "cada +10 pontos de umidade relativa",
+     "multiplicador": 0.8840466259319821,
+     "ic95": [
+      0.8453332885831694,
+      0.9093154488711914
+     ]
+    },
+    "leitura": "cada 1 desvio-padrao a mais de umidade relativa (%) (1 desvio = 13,154) multiplica a razao VIIRS/MODIS por 0,850 (IC 95%: 0,802 a 0,882); em unidade original, cada +10 pontos de umidade relativa multiplica por 0,884 (IC 95%: 0,845 a 0,909)"
+   },
+   {
+    "termo": "temperatura",
+    "rotulo": "temperatura a 2 m (C)",
+    "peso": -0.11949418497780168,
+    "ic95": [
+     -0.17666508364490932,
+     -0.08307280234597361
+    ],
+    "erro_padrao_quasi_poisson": 0.007726865694587435,
+    "efeito_multiplicativo": 0.8873691678754568,
+    "ic95_multiplicativo": [
+     0.8380604176664865,
+     0.9202841459364425
+    ],
+    "ic_cruza_zero": false,
+    "media_treino": 25.34502550600625,
+    "desvio_treino": 2.3415239835357395,
+    "importancia_pct": 13.786107694754518,
+    "efeito_na_unidade_original": {
+     "passo": "cada +1 C",
+     "multiplicador": 0.9502476399521563,
+     "ic95": [
+      0.9273272445441805,
+      0.9651438787670441
+     ]
+    },
+    "leitura": "cada 1 desvio-padrao a mais de temperatura a 2 m (C) (1 desvio = 2,342) multiplica a razao VIIRS/MODIS por 0,887 (IC 95%: 0,838 a 0,920); em unidade original, cada +1 C multiplica por 0,950 (IC 95%: 0,927 a 0,965)"
+   },
+   {
+    "termo": "altitude",
+    "rotulo": "altitude (m)",
+    "peso": -0.13717850386276248,
+    "ic95": [
+     -0.1740913258219786,
+     -0.1051131252976862
+    ],
+    "erro_padrao_quasi_poisson": 0.005785866384020541,
+    "efeito_multiplicativo": 0.8718145899697723,
+    "ic95_multiplicativo": [
+     0.8402201603576486,
+     0.900222678867293
+    ],
+    "ic_cruza_zero": false,
+    "media_treino": 530.6343689320388,
+    "desvio_treino": 223.81244635274666,
+    "importancia_pct": 15.826356973008021,
+    "efeito_na_unidade_original": {
+     "passo": "cada +100 m de altitude",
+     "multiplicador": 0.9405488203614659,
+     "ic95": [
+      0.9251638053502683,
+      0.9541209575483601
+     ]
+    },
+    "leitura": "cada 1 desvio-padrao a mais de altitude (m) (1 desvio = 223,812) multiplica a razao VIIRS/MODIS por 0,872 (IC 95%: 0,840 a 0,900); em unidade original, cada +100 m de altitude multiplica por 0,941 (IC 95%: 0,925 a 0,954)"
+   },
+   {
+    "termo": "mes_02",
+    "rotulo": "mes_02",
+    "peso": -0.03413493439803175,
+    "ic95": [
+     -0.20276880472005104,
+     0.103301819696513
+    ],
+    "erro_padrao_quasi_poisson": 0.025062941837775056,
+    "efeito_multiplicativo": 0.9664410896923027,
+    "ic95_multiplicativo": [
+     0.8164669829193831,
+     1.1088260241108459
+    ],
+    "ic_cruza_zero": true,
+    "leitura": "efeito do mes do ano em relacao a janeiro: multiplica por 0,966"
+   },
+   {
+    "termo": "mes_03",
+    "rotulo": "mes_03",
+    "peso": -0.06296706016257428,
+    "ic95": [
+     -0.17185580560520664,
+     0.014349395880496362
+    ],
+    "erro_padrao_quasi_poisson": 0.023812126328469078,
+    "efeito_multiplicativo": 0.9389744028439063,
+    "ic95_multiplicativo": [
+     0.8421005905994496,
+     1.0144528426689658
+    ],
+    "ic_cruza_zero": true,
+    "leitura": "efeito do mes do ano em relacao a janeiro: multiplica por 0,939"
+   },
+   {
+    "termo": "mes_04",
+    "rotulo": "mes_04",
+    "peso": -0.27878795483258023,
+    "ic95": [
+     -0.4139463287808917,
+     -0.16324045491387426
+    ],
+    "erro_padrao_quasi_poisson": 0.026531975699979927,
+    "efeito_multiplicativo": 0.7567003408548963,
+    "ic95_multiplicativo": [
+     0.6610364289448553,
+     0.8493869245976552
+    ],
+    "ic_cruza_zero": false,
+    "leitura": "efeito do mes do ano em relacao a janeiro: multiplica por 0,757"
+   },
+   {
+    "termo": "mes_05",
+    "rotulo": "mes_05",
+    "peso": -0.339453882648354,
+    "ic95": [
+     -0.41385155060602796,
+     -0.25916860069305087
+    ],
+    "erro_padrao_quasi_poisson": 0.025093897725792538,
+    "efeito_multiplicativo": 0.712159139046253,
+    "ic95_multiplicativo": [
+     0.6610990837402158,
+     0.7716929041164846
+    ],
+    "ic_cruza_zero": false,
+    "leitura": "efeito do mes do ano em relacao a janeiro: multiplica por 0,712"
+   },
+   {
+    "termo": "mes_06",
+    "rotulo": "mes_06",
+    "peso": -0.3987699350903118,
+    "ic95": [
+     -0.48381960022532194,
+     -0.31443524554477564
+    ],
+    "erro_padrao_quasi_poisson": 0.025108301374914557,
+    "efeito_multiplicativo": 0.6711450905276392,
+    "ic95_multiplicativo": [
+     0.6164243947043215,
+     0.7302011421912886
+    ],
+    "ic_cruza_zero": false,
+    "leitura": "efeito do mes do ano em relacao a janeiro: multiplica por 0,671"
+   },
+   {
+    "termo": "mes_07",
+    "rotulo": "mes_07",
+    "peso": -0.34646922550486436,
+    "ic95": [
+     -0.46639095841639094,
+     -0.26148659574890587
+    ],
+    "erro_padrao_quasi_poisson": 0.025749668878972336,
+    "efeito_multiplicativo": 0.7071805820777833,
+    "ic95_multiplicativo": [
+     0.627262002743815,
+     0.769906195371137
+    ],
+    "ic_cruza_zero": false,
+    "leitura": "efeito do mes do ano em relacao a janeiro: multiplica por 0,707"
+   },
+   {
+    "termo": "mes_08",
+    "rotulo": "mes_08",
+    "peso": -0.22108221745900716,
+    "ic95": [
+     -0.35896774086718425,
+     -0.10042842702232807
+    ],
+    "erro_padrao_quasi_poisson": 0.02452375336367112,
+    "efeito_multiplicativo": 0.8016507678915102,
+    "ic95_multiplicativo": [
+     0.6983968806659151,
+     0.9044498442647261
+    ],
+    "ic_cruza_zero": false,
+    "leitura": "efeito do mes do ano em relacao a janeiro: multiplica por 0,802"
+   },
+   {
+    "termo": "mes_09",
+    "rotulo": "mes_09",
+    "peso": -0.03834495030486313,
+    "ic95": [
+     -0.13559940286660296,
+     0.05621174367724993
+    ],
+    "erro_padrao_quasi_poisson": 0.021496936264433247,
+    "efeito_multiplicativo": 0.9623809100391076,
+    "ic95_multiplicativo": [
+     0.8731923607906017,
+     1.0578216470697897
+    ],
+    "ic_cruza_zero": true,
+    "leitura": "efeito do mes do ano em relacao a janeiro: multiplica por 0,962"
+   },
+   {
+    "termo": "mes_10",
+    "rotulo": "mes_10",
+    "peso": 0.1226050479607857,
+    "ic95": [
+     0.03932887999783064,
+     0.21844114194362294
+    ],
+    "erro_padrao_quasi_poisson": 0.019530669768018014,
+    "efeito_multiplicativo": 1.130437864029408,
+    "ic95_multiplicativo": [
+     1.0401124996025852,
+     1.244135787057817
+    ],
+    "ic_cruza_zero": false,
+    "leitura": "efeito do mes do ano em relacao a janeiro: multiplica por 1,130"
+   },
+   {
+    "termo": "mes_11",
+    "rotulo": "mes_11",
+    "peso": 0.19677902442839681,
+    "ic95": [
+     0.12849059723860912,
+     0.27931161709763624
+    ],
+    "erro_padrao_quasi_poisson": 0.020561993302376933,
+    "efeito_multiplicativo": 1.2174749787496018,
+    "ic95_multiplicativo": [
+     1.137110729260086,
+     1.3222193058215304
+    ],
+    "ic_cruza_zero": false,
+    "leitura": "efeito do mes do ano em relacao a janeiro: multiplica por 1,217"
+   },
+   {
+    "termo": "mes_12",
+    "rotulo": "mes_12",
+    "peso": 0.06450777075175036,
+    "ic95": [
+     -0.11284618286174572,
+     0.16753290050540245
+    ],
+    "erro_padrao_quasi_poisson": 0.022562276525903015,
+    "efeito_multiplicativo": 1.066633866759432,
+    "ic95_multiplicativo": [
+     0.89328805256097,
+     1.182384190582447
+    ],
+    "ic_cruza_zero": true,
+    "leitura": "efeito do mes do ano em relacao a janeiro: multiplica por 1,067"
+   }
+  ],
+  "quantis_log_erro_loyo": [
+   -0.45331522136883506,
+   0.23498546816739582
+  ],
+  "wape_loyo_pct": 7.330044982965246,
+  "bootstrap_nao_convergiu": 0
+ },
+ "triagem": [
+  {
+   "fator": "log_n_mais_1",
+   "efeito_pct": -38.801943769768435,
+   "ic95_pct": [
+    -42.975802067531006,
+    -33.93860227107913
+   ],
+   "razao_decil_baixo": 9.319989032081162,
+   "razao_decil_alto": 5.703652128504444,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "termo base do modelo, entra sempre; efeito mostrado so como informacao",
+   "n_celulas_mes": 14094
+  },
+  {
+   "fator": "frp_medio_log",
+   "efeito_pct": -13.407069966895602,
+   "ic95_pct": [
+    -19.343385151186585,
+    -6.1558137416447725
+   ],
+   "razao_decil_baixo": 6.8101442531409955,
+   "razao_decil_alto": 5.897103448275862,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "mantido: efeito de -13.4% com intervalo [-19.3; -6.2]",
+   "n_celulas_mes": 14094
+  },
+  {
+   "fator": "frac_noturna",
+   "efeito_pct": 47.212927294487514,
+   "ic95_pct": [
+    37.93972775711539,
+    56.39619731711787
+   ],
+   "razao_decil_baixo": 5.2734786376058125,
+   "razao_decil_alto": 7.763242272668975,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "mantido: efeito de 47.2% com intervalo [37.9; 56.4]",
+   "n_celulas_mes": 14094
+  },
+  {
+   "fator": "scan_medio",
+   "efeito_pct": -17.29643505868751,
+   "ic95_pct": [
+    -27.845346653590532,
+    -8.09662373762096
+   ],
+   "razao_decil_baixo": 7.104907539118066,
+   "razao_decil_alto": 5.876011820634717,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "mantido: efeito de -17.3% com intervalo [-27.8; -8.1]",
+   "n_celulas_mes": 14094
+  },
+  {
+   "fator": "hora_dia",
+   "efeito_pct": -6.919301899873975,
+   "ic95_pct": [
+    -14.501344577371768,
+    0.015029676154298954
+   ],
+   "razao_decil_baixo": 6.8710217755443885,
+   "razao_decil_alto": 6.395595035288391,
+   "ic_cruza_zero": true,
+   "n_boot": 500,
+   "mantido": false,
+   "nota": "descartado: efeito de -6.9%, abaixo de 10%; intervalo de 95% [-14.5; 0.0] cruza zero",
+   "n_celulas_mes": 13752
+  },
+  {
+   "fator": "log_terra_mais_1",
+   "efeito_pct": 30.748456233895993,
+   "ic95_pct": [
+    22.1470105942713,
+    39.466217890287204
+   ],
+   "razao_decil_baixo": 4.820156059039203,
+   "razao_decil_alto": 6.302279635258358,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "mantido: efeito de 30.7% com intervalo [22.1; 39.5]",
+   "n_celulas_mes": 14094
+  },
+  {
+   "fator": "chuva",
+   "efeito_pct": 7.632396332314917,
+   "ic95_pct": [
+    -5.505031352051981,
+    19.75001445206439
+   ],
+   "razao_decil_baixo": 5.5175666622001875,
+   "razao_decil_alto": 5.938689217758985,
+   "ic_cruza_zero": true,
+   "n_boot": 500,
+   "mantido": false,
+   "nota": "descartado: efeito de 7.6%, abaixo de 10%; intervalo de 95% [-5.5; 19.8] cruza zero",
+   "n_celulas_mes": 14094
+  },
+  {
+   "fator": "vento",
+   "efeito_pct": -8.952964928578977,
+   "ic95_pct": [
+    -13.2595913543717,
+    -5.327373064479024
+   ],
+   "razao_decil_baixo": 6.322730609248838,
+   "razao_decil_alto": 5.756658755274262,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": false,
+   "nota": "descartado: efeito de -9.0%, abaixo de 10%",
+   "n_celulas_mes": 14094
+  },
+  {
+   "fator": "umidade",
+   "efeito_pct": -20.674557210541412,
+   "ic95_pct": [
+    -29.19918081177567,
+    -7.97471442812735
+   ],
+   "razao_decil_baixo": 6.346065699006876,
+   "razao_decil_alto": 5.034044715447155,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "mantido: efeito de -20.7% com intervalo [-29.2; -8.0]",
+   "n_celulas_mes": 14094
+  },
+  {
+   "fator": "temperatura",
+   "efeito_pct": 39.69138542473198,
+   "ic95_pct": [
+    27.28296953494849,
+    54.497275038071486
+   ],
+   "razao_decil_baixo": 4.781556683587141,
+   "razao_decil_alto": 6.679422776171745,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "mantido: efeito de 39.7% com intervalo [27.3; 54.5]",
+   "n_celulas_mes": 14094
+  },
+  {
+   "fator": "altitude",
+   "efeito_pct": -20.95988639032067,
+   "ic95_pct": [
+    -27.01269297284538,
+    -15.07835284954346
+   ],
+   "razao_decil_baixo": 6.8801216389244555,
+   "razao_decil_alto": 5.438055959890021,
+   "ic_cruza_zero": false,
+   "n_boot": 500,
+   "mantido": true,
+   "nota": "mantido: efeito de -21.0% com intervalo [-27.0; -15.1]",
+   "n_celulas_mes": 14094
+  }
+ ],
+ "pesos_sem_mes_do_ano": [
+  {
+   "termo": "intercepto",
+   "rotulo": "intercepto",
+   "peso": 1.9393626630768708,
+   "ic95": [
+    1.8696307128283576,
+    1.9735057434746666
+   ],
+   "erro_padrao_quasi_poisson": 0.009350615568524883,
+   "efeito_multiplicativo": 6.954317314721212,
+   "ic95_multiplicativo": [
+    6.4859007970204585,
+    7.195859156850728
+   ],
+   "ic_cruza_zero": false,
+   "leitura": "constante do modelo (log do esperado de V com todos os termos em zero); so faz sentido junto com os demais termos"
+  },
+  {
+   "termo": "log_n_mais_1",
+   "rotulo": "log(n+1) (n = focos do MODIS na celula e mes)",
+   "peso": 0.6913907233949925,
+   "ic95": [
+    0.6799565220291504,
+    0.7118325165404602
+   ],
+   "erro_padrao_quasi_poisson": 0.0050758964189567156,
+   "efeito_multiplicativo": 1.9964901690063532,
+   "ic95_multiplicativo": [
+    1.973791913897562,
+    2.0377219985486397
+   ],
+   "ic_cruza_zero": false,
+   "leitura": "elasticidade: dobrar (n+1) multiplica o esperado de V por 1,615; se for menor que 2, a razao V/n cai quando o MODIS conta mais focos"
+  },
+  {
+   "termo": "indicador_n_zero",
+   "rotulo": "indicador n == 0",
+   "peso": -0.5092227275893361,
+   "ic95": [
+    -0.5644483803844167,
+    -0.4262591631121681
+   ],
+   "erro_padrao_quasi_poisson": 0.015058192645365884,
+   "efeito_multiplicativo": 0.6009625089008321,
+   "ic95_multiplicativo": [
+    0.5686737518506161,
+    0.6529471003883981
+   ],
+   "ic_cruza_zero": false,
+   "leitura": "celula-mes sem foco MODIS (n = 0): com todos os fatores na media, o esperado de V e exp(b0 + b2) = 4,18 focos VIIRS por celula-mes"
+  },
+  {
+   "termo": "frp_medio_log",
+   "rotulo": "FRP medio dos focos (log)",
+   "peso": -0.006413239557595055,
+   "ic95": [
+    -0.02860934472726243,
+    0.012997056027029576
+   ],
+   "erro_padrao_quasi_poisson": 0.005354771587519254,
+   "efeito_multiplicativo": 0.9936072813712374,
+   "ic95_multiplicativo": [
+    0.9717960275648084,
+    1.0130818848697332
+   ],
+   "ic_cruza_zero": true,
+   "media_treino": 3.374574317184963,
+   "desvio_treino": 0.797572860899893,
+   "importancia_pct": 1.239378651636416,
+   "efeito_na_unidade_original": {
+    "passo": "dobrar o FRP medio (de x para 2x)",
+    "multiplicador": 0.9944419450611942,
+    "ic95": [
+     0.975443009569708,
+     1.0113593936362573
+    ]
+   },
+   "leitura": "cada 1 desvio-padrao a mais de FRP medio dos focos (log) (1 desvio = 0,798) multiplica a razao VIIRS/MODIS por 0,994 (IC 95%: 0,972 a 1,013); em unidade original, dobrar o FRP medio (de x para 2x) multiplica por 0,994 (IC 95%: 0,975 a 1,011). Atencao: o intervalo inclui 1, efeito nao distinguivel de zero"
+  },
+  {
+   "termo": "frac_noturna",
+   "rotulo": "fracao de focos noturnos",
+   "peso": 0.052845268278519826,
+   "ic95": [
+    0.040235184539158995,
+    0.06642652811719865
+   ],
+   "erro_padrao_quasi_poisson": 0.0037408315180256554,
+   "efeito_multiplicativo": 1.0542665040270633,
+   "ic95_multiplicativo": [
+    1.041055585581467,
+    1.0686824430794564
+   ],
+   "ic_cruza_zero": false,
+   "media_treino": 0.07251105223149319,
+   "desvio_treino": 0.19515744858816889,
+   "importancia_pct": 10.212513778131362,
+   "efeito_na_unidade_original": {
+    "passo": "cada +10 pontos percentuais de focos noturnos",
+    "multiplicador": 1.027448221897315,
+    "ic95": [
+     1.0208307753180288,
+     1.0346233044740476
+    ]
+   },
+   "leitura": "cada 1 desvio-padrao a mais de fracao de focos noturnos (1 desvio = 0,195) multiplica a razao VIIRS/MODIS por 1,054 (IC 95%: 1,041 a 1,069); em unidade original, cada +10 pontos percentuais de focos noturnos multiplica por 1,027 (IC 95%: 1,021 a 1,035)"
+  },
+  {
+   "termo": "scan_medio",
+   "rotulo": "scan medio (tamanho do pixel)",
+   "peso": -0.015075576497330915,
+   "ic95": [
+    -0.032505358871903575,
+    0.0036141936975346745
+   ],
+   "erro_padrao_quasi_poisson": 0.005276497288983816,
+   "efeito_multiplicativo": 0.9850374911065023,
+   "ic95_multiplicativo": [
+    0.9680172623368972,
+    1.0036207327710291
+   ],
+   "ic_cruza_zero": true,
+   "media_treino": 1.57989612614691,
+   "desvio_treino": 0.5663721258923591,
+   "importancia_pct": 2.9134024238617724,
+   "efeito_na_unidade_original": {
+    "passo": "cada +0,1 km de scan",
+    "multiplicador": 0.9973417600072906,
+    "ic95": [
+     0.9942772149561562,
+     1.0006383342225602
+    ]
+   },
+   "leitura": "cada 1 desvio-padrao a mais de scan medio (tamanho do pixel) (1 desvio = 0,566) multiplica a razao VIIRS/MODIS por 0,985 (IC 95%: 0,968 a 1,004); em unidade original, cada +0,1 km de scan multiplica por 0,997 (IC 95%: 0,994 a 1,001). Atencao: o intervalo inclui 1, efeito nao distinguivel de zero"
+  },
+  {
+   "termo": "log_terra_mais_1",
+   "rotulo": "log(T+1) do Terra",
+   "peso": 0.35698104888106336,
+   "ic95": [
+    0.3392448083292144,
+    0.36914885438010925
+   ],
+   "erro_padrao_quasi_poisson": 0.005124355409266367,
+   "efeito_multiplicativo": 1.4290087882817566,
+   "ic95_multiplicativo": [
+    1.4038869863754408,
+    1.4465029059433896
+   ],
+   "ic_cruza_zero": false,
+   "media_treino": 0.7074935502288708,
+   "desvio_treino": 1.0282417849266732,
+   "importancia_pct": 68.98770692231517,
+   "efeito_na_unidade_original": {
+    "passo": "dobrar T+1 (focos do Terra na celula e mes)",
+    "multiplicador": 1.2720683352997821,
+    "ic95": [
+     1.2569498401696138,
+     1.2825452948216318
+    ]
+   },
+   "leitura": "cada 1 desvio-padrao a mais de log(T+1) do Terra (1 desvio = 1,028) multiplica a razao VIIRS/MODIS por 1,429 (IC 95%: 1,404 a 1,447); em unidade original, dobrar T+1 (focos do Terra na celula e mes) multiplica por 1,272 (IC 95%: 1,257 a 1,283)"
+  },
+  {
+   "termo": "umidade",
+   "rotulo": "umidade relativa (%)",
+   "peso": -0.0021476172841053587,
+   "ic95": [
+    -0.016808398878580835,
+    0.01661802025094762
+   ],
+   "erro_padrao_quasi_poisson": 0.005141123891830146,
+   "efeito_multiplicativo": 0.9978546871958852,
+   "ic95_multiplicativo": [
+    0.9833320741146433,
+    1.0167568676059104
+   ],
+   "ic_cruza_zero": true,
+   "media_treino": 62.78294634644864,
+   "desvio_treino": 13.111795861073059,
+   "importancia_pct": 0.41503377347776715,
+   "efeito_na_unidade_original": {
+    "passo": "cada +10 pontos de umidade relativa",
+    "multiplicador": 0.9983634130321517,
+    "ic95": [
+     0.9872625214485686,
+     1.0127547560688879
+    ]
+   },
+   "leitura": "cada 1 desvio-padrao a mais de umidade relativa (%) (1 desvio = 13,112) multiplica a razao VIIRS/MODIS por 0,998 (IC 95%: 0,983 a 1,017); em unidade original, cada +10 pontos de umidade relativa multiplica por 0,998 (IC 95%: 0,987 a 1,013). Atencao: o intervalo inclui 1, efeito nao distinguivel de zero"
+  },
+  {
+   "termo": "temperatura",
+   "rotulo": "temperatura a 2 m (C)",
+   "peso": 0.05731103170836188,
+   "ic95": [
+    0.037888017629197676,
+    0.07420203937437174
+   ],
+   "erro_padrao_quasi_poisson": 0.004754670322458067,
+   "efeito_multiplicativo": 1.0589851371336487,
+   "ic95_multiplicativo": [
+    1.038614919805042,
+    1.0770243848485797
+   ],
+   "ic_cruza_zero": false,
+   "media_treino": 25.356915005961504,
+   "desvio_treino": 2.351028088988968,
+   "importancia_pct": 11.075536562248347,
+   "efeito_na_unidade_original": {
+    "passo": "cada +1 C",
+    "multiplicador": 1.0246765568497564,
+    "ic95": [
+     1.0162460656206818,
+     1.032064874755804
+    ]
+   },
+   "leitura": "cada 1 desvio-padrao a mais de temperatura a 2 m (C) (1 desvio = 2,351) multiplica a razao VIIRS/MODIS por 1,059 (IC 95%: 1,039 a 1,077); em unidade original, cada +1 C multiplica por 1,025 (IC 95%: 1,016 a 1,032)"
+  },
+  {
+   "termo": "altitude",
+   "rotulo": "altitude (m)",
+   "peso": -0.026682246999862175,
+   "ic95": [
+    -0.04258741477028521,
+    0.004321097837885957
+   ],
+   "erro_padrao_quasi_poisson": 0.004946015856723988,
+   "efeito_multiplicativo": 0.9736705791229213,
+   "ic95_multiplicativo": [
+    0.9583066917001479,
+    1.0043304472428622
+   ],
+   "ic_cruza_zero": true,
+   "media_treino": 530.6343689320388,
+   "desvio_treino": 223.8124463527467,
+   "importancia_pct": 5.156427888329174,
+   "efeito_na_unidade_original": {
+    "passo": "cada +100 m de altitude",
+    "multiplicador": 0.9881490825316107,
+    "ic95": [
+     0.9811517219339725,
+     1.0019325430370813
+    ]
+   },
+   "leitura": "cada 1 desvio-padrao a mais de altitude (m) (1 desvio = 223,812) multiplica a razao VIIRS/MODIS por 0,974 (IC 95%: 0,958 a 1,004); em unidade original, cada +100 m de altitude multiplica por 0,988 (IC 95%: 0,981 a 1,002). Atencao: o intervalo inclui 1, efeito nao distinguivel de zero"
+  }
+ ],
+ "ablacao": {
+  "so_base_sem_mes": {
+   "fatores": [],
+   "mes_do_ano": false,
+   "wape_loyo_pct": 11.242783895475855,
+   "wape_teste_pct": 9.852171767094504,
+   "vies_teste_pct": -1.2913414507255714,
+   "anomalia_2classes_teste_pct": 84.0909090909091,
+   "wape_deriva_pct": 12.741262153463303
+  },
+  "so_base_com_mes": {
+   "fatores": [],
+   "mes_do_ano": true,
+   "wape_loyo_pct": 7.524716878353931,
+   "wape_teste_pct": 8.413330241347428,
+   "vies_teste_pct": -0.9057341368311804,
+   "anomalia_2classes_teste_pct": 88.63636363636364,
+   "wape_deriva_pct": 11.382909193340879
+  },
+  "base_mais_outro_sensor_com_mes": {
+   "fatores": [
+    "log_terra_mais_1"
+   ],
+   "mes_do_ano": true,
+   "wape_loyo_pct": 6.234975242567578,
+   "wape_teste_pct": 9.367601308111471,
+   "vies_teste_pct": -2.187974839432144,
+   "anomalia_2classes_teste_pct": 84.0909090909091,
+   "wape_deriva_pct": 10.461437232140092
+  },
+  "so_clima_com_mes": {
+   "fatores": [
+    "chuva",
+    "vento",
+    "umidade",
+    "temperatura",
+    "altitude"
+   ],
+   "mes_do_ano": true,
+   "wape_loyo_pct": 8.981760721909954,
+   "wape_teste_pct": 7.684309068269866,
+   "vies_teste_pct": -4.286013854732147,
+   "anomalia_2classes_teste_pct": 88.63636363636364,
+   "wape_deriva_pct": 12.367231562750547
+  },
+  "clima_mais_outro_sensor_com_mes": {
+   "fatores": [
+    "chuva",
+    "vento",
+    "umidade",
+    "temperatura",
+    "altitude",
+    "log_terra_mais_1"
+   ],
+   "mes_do_ano": true,
+   "wape_loyo_pct": 6.489229560827356,
+   "wape_teste_pct": 8.615800671667703,
+   "vies_teste_pct": -5.038786592665774,
+   "anomalia_2classes_teste_pct": 86.36363636363636,
+   "wape_deriva_pct": 9.936671901100368
+  },
+  "triagem_sem_mes": {
+   "fatores": [
+    "frp_medio_log",
+    "frac_noturna",
+    "scan_medio",
+    "log_terra_mais_1",
+    "umidade",
+    "temperatura",
+    "altitude"
+   ],
+   "mes_do_ano": false,
+   "wape_loyo_pct": 9.79531768685101,
+   "wape_teste_pct": 9.893253774713694,
+   "vies_teste_pct": -1.7337478892265354,
+   "anomalia_2classes_teste_pct": 77.27272727272727,
+   "wape_deriva_pct": 12.478472111605317
+  },
+  "triagem_com_mes": {
+   "fatores": [
+    "frp_medio_log",
+    "frac_noturna",
+    "scan_medio",
+    "log_terra_mais_1",
+    "umidade",
+    "temperatura",
+    "altitude"
+   ],
+   "mes_do_ano": true,
+   "wape_loyo_pct": 7.066894729914091,
+   "wape_teste_pct": 8.431286163769311,
+   "vies_teste_pct": -5.370783712837943,
+   "anomalia_2classes_teste_pct": 88.63636363636364,
+   "wape_deriva_pct": 10.209327798138386
+  },
+  "todos_os_fatores_sem_mes": {
+   "fatores": [
+    "frp_medio_log",
+    "frac_noturna",
+    "scan_medio",
+    "hora_dia",
+    "log_terra_mais_1",
+    "chuva",
+    "vento",
+    "umidade",
+    "temperatura",
+    "altitude"
+   ],
+   "mes_do_ano": false,
+   "wape_loyo_pct": 10.397543001215597,
+   "wape_teste_pct": 10.036957942608973,
+   "vies_teste_pct": -2.2790257714170927,
+   "anomalia_2classes_teste_pct": 81.81818181818183,
+   "wape_deriva_pct": 14.008076087694596
+  },
+  "todos_os_fatores_com_mes": {
+   "fatores": [
+    "frp_medio_log",
+    "frac_noturna",
+    "scan_medio",
+    "hora_dia",
+    "log_terra_mais_1",
+    "chuva",
+    "vento",
+    "umidade",
+    "temperatura",
+    "altitude"
+   ],
+   "mes_do_ano": true,
+   "wape_loyo_pct": 6.713830193605597,
+   "wape_teste_pct": 8.98937444493724,
+   "vies_teste_pct": -4.38936456910555,
+   "anomalia_2classes_teste_pct": 86.36363636363636,
+   "wape_deriva_pct": 13.095565619406432
+  }
+ },
+ "extrapolacao_2003_2011": {
+  "frp_medio_log": {
+   "faixa_treino_p1_p99": [
+    1.791759469228055,
+    5.348196544636471
+   ],
+   "pct_focos_fora": 0.864299797360206
+  },
+  "frac_noturna": {
+   "faixa_treino_p1_p99": [
+    0.0,
+    1.0
+   ],
+   "pct_focos_fora": 0.0
+  },
+  "scan_medio": {
+   "faixa_treino_p1_p99": [
+    1.0,
+    3.6508749999999965
+   ],
+   "pct_focos_fora": 0.11364258721726272
+  },
+  "log_terra_mais_1": {
+   "faixa_treino_p1_p99": [
+    0.0,
+    4.442651256490317
+   ],
+   "pct_focos_fora": 12.390807273125581
+  },
+  "umidade": {
+   "faixa_treino_p1_p99": [
+    32.49,
+    83.0107
+   ],
+   "pct_focos_fora": 0.9618544279533381
+  },
+  "temperatura": {
+   "faixa_treino_p1_p99": [
+    19.959300000000002,
+    30.740699999999997
+   ],
+   "pct_focos_fora": 1.6043458020702122
+  },
+  "altitude": {
+   "faixa_treino_p1_p99": [
+    13.23,
+    1021.07
+   ],
+   "pct_focos_fora": 1.0655704036365627
+  }
+ }
+}
