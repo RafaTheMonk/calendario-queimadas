@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Calendário de Queimadas</title>
-  <meta name="description" content="Calendário harmonizado de focos de calor MODIS e VIIRS (NASA FIRMS) para a Bahia, 2003 a 2025.">
+  <title>Régua de Fogo</title>
+  <meta name="description" content="Régua de Fogo: focos de calor MODIS e VIIRS (NASA FIRMS) numa régua só, de 2003 a 2025, com o mês atual comparado ao normal.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap">
@@ -14,22 +14,24 @@
 <body>
   <header class="nav">
     <div class="wrap nav-inner">
-      <a class="marca" href="#inicio" aria-label="Calendário de Queimadas, início">
-        <svg class="chama" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c.6 3.2-1 5.1-2.5 6.9C8 10.6 6.5 12.4 6.5 15a5.5 5.5 0 0 0 11 0c0-2-1-3.6-2-4.8-.3 1.4-1 2.4-2.1 2.9.4-3.6-.4-7.6-1.4-11.1z"/></svg>
-        <span>Calendário de Queimadas</span>
+      <a class="marca" href="#" aria-label="Régua de Fogo, início">
+        <svg class="regua" viewBox="0 0 32 32" aria-hidden="true">
+          <rect x="3" y="11" width="26" height="10" rx="2.5" class="regua-corpo"/>
+          <path d="M8 11v4.5M12.5 11v3M17 11v4.5M21.5 11v3M26 11v4.5" class="regua-marca"/>
+        </svg>
+        <span>Régua de Fogo</span>
       </a>
       <nav class="links" aria-label="Seções">
-        <a href="#calendario">Calendário</a>
-        <a href="#por-ano">Por ano</a>
-        <a href="#por-mes">Por mês</a>
-        <a href="#area">Área</a>
-        <a href="#metodo">Como funciona</a>
+        <a href="#calendario" data-janela="calendario">Calendário</a>
+        <a href="#por-ano" data-janela="por-ano">Por ano</a>
+        <a href="#por-mes" data-janela="por-mes">Por mês</a>
+        <a href="#metodo" data-janela="metodo">Como funciona</a>
       </nav>
       <div class="acoes">
-        <span class="chip" title="Área processada nesta versão">
+        <button class="chip" type="button" data-janela="area" title="Trocar a área">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
-          <span id="nome-area">Bahia</span>
-        </span>
+          <span class="nome-area">Bahia</span>
+        </button>
         <a class="icone" href="https://github.com/RafaTheMonk/calendario-queimadas" target="_blank" rel="noopener" aria-label="Código no GitHub">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.9 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A11.5 11.5 0 0 0 12 .5z"/></svg>
         </a>
@@ -44,13 +46,14 @@
   <section class="hero" id="inicio">
     <div class="wrap hero-grid">
       <div class="hero-texto">
-        <p class="eyebrow"><span class="pulso" aria-hidden="true"></span> NASA FIRMS · <span id="periodo-ini">2003</span> a <span id="periodo-fim">2025</span></p>
-        <h1>Quando a Bahia<br><span class="grad">pega fogo?</span></h1>
-        <p class="lead">Mais de duas décadas de focos de calor vistos do espaço, numa régua só. Explore mês a mês, compare com o normal e veja o que muda quando o satélite muda.</p>
+        <p class="eyebrow"><span class="pulso" aria-hidden="true"></span> NASA FIRMS · <span id="periodo-ini">2003</span> a <span id="periodo-fim">2025</span> · <span class="nome-area">Bahia</span></p>
+        <h1>Quando <span id="titulo-area">a Bahia</span><br><span class="grad">pega fogo?</span></h1>
+        <p class="lead">Mais de duas décadas de focos de calor vistos do espaço, numa régua só. Compare o mês de agora com o normal, explore o calendário e veja o que muda quando o satélite muda.</p>
         <div class="ctas">
-          <a class="botao" href="#calendario">Explorar o calendário</a>
+          <button class="botao" type="button" data-janela="calendario">Abrir o calendário</button>
           <button class="botao fantasma" type="button" id="cta-salto">Ver o salto de 2012</button>
         </div>
+        <p class="aviso-area" id="aviso-area" aria-live="polite"></p>
       </div>
       <div class="hero-card" aria-live="polite">
         <div class="hero-card-top">
@@ -62,98 +65,161 @@
           <p class="agora-status"><span class="tag normal" id="agora-tag">...</span> <span id="agora-comparacao"></span></p>
           <p class="agora-normal" id="agora-normal"></p>
         </div>
-        <div id="graf-hero" class="grafico-hero" role="img" aria-label="Mediana de focos por mês do ano na Bahia, com o mês atual destacado"></div>
+        <div id="graf-hero" class="grafico-hero" role="img" aria-label="Mediana de focos por mês do ano, com o mês atual destacado"></div>
         <p class="hero-foot"><strong id="hero-meses">Setembro e outubro</strong> concentram <strong id="hero-pct">60%</strong> dos focos de um ano típico. Toque num mês para ver todos os anos.</p>
         <p class="agora-fonte" id="agora-fonte"></p>
       </div>
     </div>
   </section>
 
-  <main class="wrap">
-    <section aria-label="Resumo" class="faixa-cartoes">
+  <main class="wrap painel">
+    <section aria-label="Resumo">
       <div class="cartoes" id="cartoes"></div>
     </section>
 
-    <section aria-labelledby="t-calendario" class="bloco" id="calendario">
-      <div class="cabeca-bloco">
-        <div>
-          <h2 id="t-calendario">Calendário do fogo</h2>
-          <p class="nota">Cada quadrado é um mês. Passe o mouse ou toque para ver os detalhes.</p>
-        </div>
-        <div class="alternar" role="group" aria-label="O que colorir">
-          <button type="button" class="ativo" data-modo="focos" aria-pressed="true">Focos</button>
-          <button type="button" data-modo="anomalia" aria-pressed="false">Acima ou abaixo do normal</button>
-        </div>
+    <section aria-labelledby="t-explorar" class="explorar">
+      <h2 id="t-explorar" class="visualmente-oculto">Explorar</h2>
+      <div class="blocos">
+        <button type="button" class="bloco-abrir" data-janela="calendario">
+          <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span>
+          <span class="bloco-titulo">Calendário do fogo</span>
+          <span class="bloco-texto">Cada mês desde 2003, colorido por focos ou por quanto fugiu do normal.</span>
+        </button>
+        <button type="button" class="bloco-abrir" data-janela="por-ano">
+          <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 19l5-6 4 3 4-7 5 5"/><path d="M3 21h18"/></svg></span>
+          <span class="bloco-titulo">Focos por ano</span>
+          <span class="bloco-texto">A série harmonizada e o salto falso de 2012 quando o satélite muda.</span>
+        </button>
+        <button type="button" class="bloco-abrir" data-janela="por-mes">
+          <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 20V10M10 20V5M15 20v-8M20 20V8"/></svg></span>
+          <span class="bloco-titulo">Um mês ao longo dos anos</span>
+          <span class="bloco-texto">O mesmo mês em todos os anos, contra a mediana e a faixa normal.</span>
+        </button>
+        <button type="button" class="bloco-abrir" data-janela="area">
+          <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></span>
+          <span class="bloco-titulo">Área de interesse</span>
+          <span class="bloco-texto">Sua localização ou um ponto no mapa, com o raio que quiser.</span>
+        </button>
+        <button type="button" class="bloco-abrir" data-janela="top">
+          <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3c.5 2.6-.8 4.2-2 5.6S7.5 11.4 7.5 13.5a4.5 4.5 0 0 0 9 0c0-1.6-.8-2.9-1.6-3.9-.3 1.1-.8 1.9-1.7 2.3.3-2.9-.3-6.1-1.2-8.9z"/></svg></span>
+          <span class="bloco-titulo">Os 10 meses com mais fogo</span>
+          <span class="bloco-texto">O ranking dos meses mais fortes da série.</span>
+        </button>
+        <button type="button" class="bloco-abrir" data-janela="metodo">
+          <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="7" rx="2"/><path d="M7 9v3M11 9v2M15 9v3M19 9v2"/></svg></span>
+          <span class="bloco-titulo">Como funciona</span>
+          <span class="bloco-texto">Dados da NASA, método, precisão, fatores e download.</span>
+        </button>
       </div>
-      <div id="graf-calendario" class="grafico alto" role="img" aria-label="Calendário de meses por anos colorido pela quantidade de focos"></div>
-      <p class="nota legenda-extra"><span class="amostra tracejada" aria-hidden="true"></span> Borda tracejada: de 2003 a 2011 o valor é uma estimativa (só existia o MODIS). O detalhe mostra a faixa entre as leituras dos dois satélites MODIS.</p>
     </section>
+  </main>
 
-    <section aria-labelledby="t-serie" class="bloco" id="por-ano">
-      <div class="cabeca-bloco">
-        <div>
-          <h2 id="t-serie">Focos por ano</h2>
-          <p class="nota">Série harmonizada. A área sombreada é a faixa de 2003 a 2011, quando os dois satélites MODIS discordam entre si.</p>
-        </div>
-        <label class="chave"><input type="checkbox" id="mostrar-brutos"> Mostrar os dados sem harmonizar</label>
+  <!-- janelas -->
+  <dialog class="janela" id="janela-calendario" aria-labelledby="t-calendario">
+    <div class="janela-topo">
+      <div>
+        <h2 id="t-calendario">Calendário do fogo · <span class="nome-area">Bahia</span></h2>
+        <p class="nota">Cada quadrado é um mês. Passe o mouse ou toque para ver os detalhes.</p>
       </div>
+      <button class="fechar" type="button" aria-label="Fechar">×</button>
+    </div>
+    <div class="janela-corpo">
+      <div class="alternar" role="group" aria-label="O que colorir">
+        <button type="button" class="ativo" data-modo="focos" aria-pressed="true">Focos</button>
+        <button type="button" data-modo="anomalia" aria-pressed="false">Acima ou abaixo do normal</button>
+      </div>
+      <div id="graf-calendario" class="grafico alto" role="img" aria-label="Calendário de meses por anos"></div>
+      <p class="nota legenda-extra"><span class="amostra tracejada" aria-hidden="true"></span> Borda tracejada: de 2003 a 2011 o valor é uma estimativa (só existia o MODIS). O detalhe mostra a faixa entre as leituras dos dois satélites MODIS.</p>
+    </div>
+  </dialog>
+
+  <dialog class="janela" id="janela-por-ano" aria-labelledby="t-serie">
+    <div class="janela-topo">
+      <div>
+        <h2 id="t-serie">Focos por ano · <span class="nome-area">Bahia</span></h2>
+        <p class="nota">Série harmonizada. A área sombreada é a faixa de 2003 a 2011, quando os dois satélites MODIS discordam entre si.</p>
+      </div>
+      <button class="fechar" type="button" aria-label="Fechar">×</button>
+    </div>
+    <div class="janela-corpo">
+      <label class="chave"><input type="checkbox" id="mostrar-brutos"> Mostrar os dados sem harmonizar</label>
       <div id="graf-serie" class="grafico" role="img" aria-label="Total de focos por ano"></div>
       <p class="nota" id="nota-brutos" hidden>Sem harmonizar, a contagem salta em 2012, quando o VIIRS entra. Não houve mais fogo: o VIIRS enxerga fogo menor e conta cerca de 6 vezes mais focos.</p>
-    </section>
+    </div>
+  </dialog>
 
-    <section aria-labelledby="t-mes" class="bloco" id="por-mes">
-      <div class="cabeca-bloco">
-        <div>
-          <h2 id="t-mes">Um mês ao longo dos anos</h2>
-          <p class="nota">Compare o mesmo mês em todos os anos. A faixa clara vai do 25º ao 75º percentil; a linha é a mediana.</p>
-        </div>
-        <label class="seletor">Mês
-          <select id="sel-mes"></select>
-        </label>
+  <dialog class="janela" id="janela-por-mes" aria-labelledby="t-mes">
+    <div class="janela-topo">
+      <div>
+        <h2 id="t-mes">Um mês ao longo dos anos · <span class="nome-area">Bahia</span></h2>
+        <p class="nota">A faixa clara vai do 25º ao 75º percentil; a linha é a mediana.</p>
       </div>
+      <button class="fechar" type="button" aria-label="Fechar">×</button>
+    </div>
+    <div class="janela-corpo">
+      <label class="seletor">Mês <select id="sel-mes"></select></label>
       <div id="graf-mes" class="grafico" role="img" aria-label="Focos do mês escolhido em cada ano"></div>
-    </section>
+    </div>
+  </dialog>
 
-    <section aria-labelledby="t-area" class="bloco duas-colunas" id="area">
+  <dialog class="janela" id="janela-area" aria-labelledby="t-area">
+    <div class="janela-topo">
       <div>
         <h2 id="t-area">Área de interesse</h2>
-        <p class="nota">Nesta primeira versão os dados estão processados para a Bahia. O método vale para qualquer área: basta processar os focos do FIRMS e o clima da NASA POWER da nova região.</p>
-        <form id="form-area" class="form-area">
-          <fieldset>
-            <legend>Retângulo (graus decimais)</legend>
-            <label>Latitude sul <input type="number" step="0.01" id="lat-min"></label>
-            <label>Latitude norte <input type="number" step="0.01" id="lat-max"></label>
-            <label>Longitude oeste <input type="number" step="0.01" id="lon-min"></label>
-            <label>Longitude leste <input type="number" step="0.01" id="lon-max"></label>
-          </fieldset>
-          <button type="submit">Ver no mapa</button>
-          <p class="nota" id="msg-area" aria-live="polite"></p>
-        </form>
+        <p class="nota">Toque no mapa para escolher um ponto, use sua localização ou volte para a Bahia inteira. Nesta versão, os dados processados cobrem a Bahia.</p>
       </div>
-      <div id="mapa" class="mapa" role="region" aria-label="Mapa da área de interesse"></div>
-    </section>
+      <button class="fechar" type="button" aria-label="Fechar">×</button>
+    </div>
+    <div class="janela-corpo duas-colunas">
+      <div class="controles-area">
+        <div class="botoes-area">
+          <button type="button" class="botao" id="usar-local">Usar minha localização</button>
+          <button type="button" class="botao fantasma" id="bahia-inteira">Bahia inteira</button>
+        </div>
+        <label class="seletor">Raio em volta do ponto
+          <select id="raio">
+            <option value="50">50 km</option>
+            <option value="100" selected>100 km</option>
+            <option value="200">200 km</option>
+          </select>
+        </label>
+        <p class="nota" id="msg-area" aria-live="polite"></p>
+        <p class="nota pequena">A localização fica no seu navegador. Para os últimos 7 dias, o site envia só o retângulo aproximado da área escolhida.</p>
+      </div>
+      <div id="mapa" class="mapa" role="region" aria-label="Mapa para escolher a área"></div>
+    </div>
+  </dialog>
 
-    <section aria-labelledby="t-top" class="bloco">
-      <h2 id="t-top">Os 10 meses com mais fogo</h2>
+  <dialog class="janela" id="janela-top" aria-labelledby="t-top">
+    <div class="janela-topo">
+      <h2 id="t-top">Os 10 meses com mais fogo · <span class="nome-area">Bahia</span></h2>
+      <button class="fechar" type="button" aria-label="Fechar">×</button>
+    </div>
+    <div class="janela-corpo">
       <ol id="lista-top" class="lista-top"></ol>
-    </section>
+    </div>
+  </dialog>
 
-    <section aria-labelledby="t-metodo" class="bloco metodo" id="metodo">
+  <dialog class="janela" id="janela-metodo" aria-labelledby="t-metodo">
+    <div class="janela-topo">
       <h2 id="t-metodo">Como funciona</h2>
+      <button class="fechar" type="button" aria-label="Fechar">×</button>
+    </div>
+    <div class="janela-corpo metodo">
       <div id="metodo-conteudo"></div>
       <div class="baixar">
         <a class="botao" href="data/calendario_bahia.csv" download>Baixar CSV</a>
         <a class="botao secundario" href="data/calendario_bahia.json" download>Baixar JSON</a>
       </div>
-    </section>
-  </main>
+      <p class="nota" id="fonte"></p>
+      <p class="nota citacao" id="citacao"></p>
+    </div>
+  </dialog>
 
   <footer class="rodape">
     <div class="wrap">
-      <p><strong>Focos de calor detectados por satélite, não incêndios confirmados.</strong> Um foco é um pixel onde o satélite viu temperatura alta; um incêndio grande pode gerar muitos focos.</p>
-      <p id="fonte"></p>
-      <p id="citacao" class="citacao"></p>
-      <p class="assinatura">NASA Space Apps Challenge 2026 · equipe Timeout Zero · Salvador</p>
+      <p><strong>Focos de calor detectados por satélite, não incêndios confirmados.</strong> Um foco é um pixel onde o satélite viu temperatura alta; um incêndio grande pode gerar muitos focos. Dados: NASA FIRMS e NASA POWER.</p>
+      <p class="assinatura">Régua de Fogo · NASA Space Apps Challenge 2026 · equipe Timeout Zero · Salvador</p>
     </div>
   </footer>
 

@@ -1,6 +1,6 @@
-# Calendário de Queimadas
+# Régua de Fogo
 
-Calendário harmonizado de focos de calor por satélite para a Bahia, de 2003 a 2025, feito para o desafio **Harmonization of MODIS and VIIRS Hot Spots** do NASA Space Apps Challenge 2026 (equipe Timeout Zero, Salvador).
+Focos de calor por satélite numa régua só: calendário harmonizado para a Bahia, de 2003 a 2025, feito para o desafio **Harmonization of MODIS and VIIRS Hot Spots** do NASA Space Apps Challenge 2026 (equipe Timeout Zero, Salvador).
 
 Site: https://calendario-queimadas.vercel.app
 
