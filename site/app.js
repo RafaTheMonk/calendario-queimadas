@@ -396,7 +396,8 @@ function cartoes() {
   const meses = DADOS.meses;
   const ultimo = meses[meses.length - 1];
   const nMesmoMes = meses.filter((m) => m.mes_num === ultimo.mes_num).length;
-  const anos = DADOS.totais_por_ano;
+  // anos completos: um ano em andamento (como 2026) não entra nas comparações de total anual
+  const anos = DADOS.totais_por_ano.filter((a) => a.meses === 12);
   const pico = anos.reduce((a, b) => (b.focos > a.focos ? b : a));
   const ultimoAno = anos[anos.length - 1];
   const anosViirs = anos.filter((a) => a.ano >= 2013 && a.ano < ultimoAno.ano);
@@ -405,7 +406,7 @@ function cartoes() {
   const val = OFICIAL.metodo.validacao;
   document.getElementById('cartoes').innerHTML = [
     `<article class="cartao principal">
-      <p class="rotulo">Último mês da série: ${MESES_LONGO[ultimo.mes_num - 1]} de ${ultimo.ano}</p>
+      <p class="rotulo">Último mês da série: ${MESES_LONGO[ultimo.mes_num - 1]} de ${ultimo.ano}${ultimo.qualidade === 'provisorio' ? ' (provisório)' : ''}</p>
       <p class="valor">${fmt(ultimo.focos)} focos</p>
       <p class="detalhe"><span class="tag ${classeTag(ultimo.classe)}">${ultimo.classe}</span> ${pct(ultimo.anomalia_pct)} da mediana de ${MESES_LONGO[ultimo.mes_num - 1]}; ${ultimo.posicao_no_mes}º de ${nMesmoMes} desde 2003.</p>
     </article>`,
@@ -446,7 +447,7 @@ function tooltipMes(m) {
   const media = DADOS.normal_por_mes.media && DADOS.normal_por_mes.media[String(m.mes_num).padStart(2, '0')];
   if (media) t += `${pct(Math.round((m.focos - media) / media * 1000) / 10)} da média dos anos medidos pelo VIIRS<br>`;
   t += `${m.posicao_no_mes}º ${MESES_LONGO[m.mes_num - 1]} com mais fogo desde 2003<br>`;
-  t += `<span style="opacity:.75">origem: ${m.origem}${m.qualidade === 'corrigido' ? ', mês corrigido' : ''}</span>`;
+  t += `<span style="opacity:.75">origem: ${m.origem}${m.qualidade === 'corrigido' ? ', mês corrigido' : ''}${m.qualidade === 'provisorio' ? ', dado provisório (quase tempo real)' : ''}</span>`;
   return t;
 }
 
@@ -492,7 +493,8 @@ function serie(brutos) {
   const el = document.getElementById('graf-serie');
   const g = graficos.serie || echarts.init(el);
   graficos.serie = g;
-  const anos = noPeriodo(DADOS.totais_por_ano);
+  // só anos completos: o ano em andamento fica no calendário até fechar
+  const anos = noPeriodo(DADOS.totais_por_ano).filter((a) => a.meses === 12);
   const series = [
     { name: 'faixa_base', type: 'line', data: anos.map((a) => (a.faixa_inferior ? a.faixa_inferior : null)), stack: 'faixa', symbol: 'none', lineStyle: { opacity: 0 }, tooltip: { show: false }, silent: true },
     { name: 'Faixa (2003 a 2011)', type: 'line', data: anos.map((a) => (a.faixa_inferior ? a.faixa_superior - a.faixa_inferior : null)), stack: 'faixa', symbol: 'none', lineStyle: { opacity: 0 }, areaStyle: { color: 'rgba(56,189,248,.25)' }, tooltip: { show: false }, silent: true },
