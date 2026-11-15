@@ -354,3 +354,27 @@ button.chip:hover { filter: brightness(1.05); }
 /* troca de idioma (inglês na raiz, português em /pt/) */
 .idioma { display: inline-grid; place-items: center; min-width: 38px; height: 38px; padding: 0 8px; border-radius: 999px; border: 1px solid var(--borda); background: var(--superficie); color: var(--texto); font-weight: 700; font-size: 13px; text-decoration: none; letter-spacing: .04em; }
 .idioma:hover { border-color: var(--destaque); color: var(--destaque); }
+
+/* janela de metodologia e testes */
+.blocos > .bloco-total { grid-column: 1 / -1; }
+.passos { counter-reset: passo; list-style: none; padding: 0; margin: 10px 0; display: grid; gap: 10px; }
+.passos li { counter-increment: passo; position: relative; padding: 10px 12px 10px 48px; border: 1px solid var(--borda); border-radius: 12px; background: var(--superficie-2); font-size: 14px; }
+.passos li::before { content: counter(passo); position: absolute; left: 12px; top: 10px; width: 26px; height: 26px; border-radius: 50%; background: var(--destaque); color: #fff; font-weight: 700; display: grid; place-items: center; font-size: 13px; }
+.passos strong { display: block; margin-bottom: 2px; }
+.formula { font-family: "Liberation Mono", ui-monospace, monospace; font-size: 13px; background: var(--superficie); border: 1px dashed var(--borda); border-radius: 8px; padding: 6px 10px; margin: 6px 0 0; display: inline-block; }
+.testes { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin: 10px 0; }
+.teste-card { border: 1px solid var(--borda); border-radius: 14px; padding: 12px 14px; background: var(--superficie-2); display: grid; gap: 6px; align-content: start; }
+.teste-card header { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
+.teste-card h4 { margin: 0; font-size: 15px; }
+.teste-card .pergunta { margin: 0; font-size: 13px; color: var(--texto-suave); font-style: italic; }
+.teste-card .resultado { margin: 0; font-size: 14px; }
+.teste-card .resultado strong { font-size: 20px; font-variant-numeric: tabular-nums; margin-right: 4px; }
+.teste-card a { font-size: 13px; font-weight: 600; color: var(--destaque); }
+.tag.passou { color: #fff; background: #2e7d32; }
+.tag.limite { color: #1c1714; background: #f2c14e; }
+.tabela-regioes { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0; font-variant-numeric: tabular-nums; }
+.tabela-regioes th, .tabela-regioes td { padding: 6px 8px; border-bottom: 1px solid var(--borda); text-align: right; }
+.tabela-regioes th:first-child, .tabela-regioes td:first-child { text-align: left; }
+.tabela-regioes tr.destaque td { font-weight: 700; }
+.tabela-rolagem { overflow-x: auto; }
+.comandos { font-family: "Liberation Mono", ui-monospace, monospace; font-size: 12px; background: var(--superficie-2); border: 1px solid var(--borda); border-radius: 10px; padding: 10px 12px; overflow-x: auto; white-space: pre; line-height: 1.5; }
