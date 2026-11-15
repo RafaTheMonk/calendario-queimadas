@@ -28,6 +28,7 @@ let METODOS = null;     // comparação dos métodos (carregada sob demanda)
 let INPE = null;        // comparação com o INPE (carregada sob demanda)
 let RELATADOS = null;   // incêndios relatados pelo IBAMA (carregados sob demanda)
 const desenho = { ativo: false, pontos: [] };  // área desenhada no mapa
+const focosMapa = { modo: '', dados: null, pedido: 0 };  // pontos de foco desenhados no mapa
 const graficos = {};
 const estado = {
   modo: 'focos', brutos: false, mes: MES_ATUAL,
@@ -259,6 +260,7 @@ function atualizarTudo() {
   agora();
   cartoes();
   if (mapaL) desenharAreaNoMapa();
+  contagemFocos();
   const aberta = document.querySelector('dialog.janela[open]');
   if (aberta) desenharJanela(aberta.id.replace('janela-', ''));
 }
@@ -652,6 +654,91 @@ function desenharAreaNoMapa() {
     mapaL.fitBounds(camadas.celulas ? L.featureGroup([camadas.poligono, ...camadas.celulas.getLayers()]).getBounds() : camadas.poligono.getBounds(), { padding: [20, 20] });
   } else {
     mapaL.fitBounds(camadas.bahia.getBounds(), { padding: [12, 12] });
+  }
+}
+
+// ------------------------------------------------------------------ focos no mapa
+
+const CORES_IDADE = [['#d7191c', 'menos de 24 h'], ['#fdae61', '1 a 3 dias'], ['#ffd34d', '3 a 7 dias']];
+const COR_DIA = { modis: '#d7191c', viirs: '#f57c00' };
+
+function celulaDoPonto(lat, lon) {
+  const i = Math.round((lat + 18.5) / 0.5);
+  const j = Math.round((lon + 46.875) / 0.625);
+  return 'L' + String(i).padStart(2, '0') + 'C' + String(j).padStart(2, '0');
+}
+
+function dataBr(iso) { return iso.slice(8, 10) + '/' + iso.slice(5, 7) + '/' + iso.slice(0, 4); }
+
+function idadeHoras(p) {
+  const t = Date.parse(`${p[2]}T${p[3].slice(0, 2)}:${p[3].slice(2, 4)}:00Z`);
+  return (Date.now() - t) / 3600000;
+}
+
+function corDoPonto(p) {
+  if (focosMapa.modo === 'dia') return COR_DIA[focosMapa.dados.sat];
+  const h = idadeHoras(p);
+  return h < 24 ? CORES_IDADE[0][0] : (h < 72 ? CORES_IDADE[1][0] : CORES_IDADE[2][0]);
+}
+
+async function atualizarCamadaFocos() {
+  const sel = document.getElementById('camada-focos').value;
+  const msg = document.getElementById('msg-focos');
+  const legenda = document.getElementById('legenda-focos');
+  document.getElementById('escolha-dia').hidden = sel !== 'dia';
+  focosMapa.modo = sel;
+  const meuPedido = ++focosMapa.pedido;
+  if (camadas.focos) { mapaL.removeLayer(camadas.focos); camadas.focos = null; }
+  focosMapa.dados = null;
+  legenda.innerHTML = '';
+  if (!sel) { msg.textContent = ''; return; }
+  let url = 'api/pontos?modo=recentes';
+  if (sel === 'dia') {
+    const dia = document.getElementById('dia-focos').value;
+    if (!dia) { msg.textContent = 'Escolha um dia.'; return; }
+    url = `api/pontos?modo=dia&data=${dia}&sat=${document.getElementById('sat-dia').value}`;
+  }
+  msg.textContent = 'Buscando os focos na NASA...';
+  try {
+    const r = await fetch(url);
+    const j = await r.json();
+    if (meuPedido !== focosMapa.pedido) return;
+    if (!r.ok) { msg.textContent = j.erro || 'Não foi possível buscar os focos agora.'; return; }
+    focosMapa.dados = j;
+    const render = L.canvas({ padding: 0.3 });
+    camadas.focos = L.layerGroup(j.pontos.map((p) => L.circleMarker([p[0], p[1]], {
+      renderer: render, radius: 3, weight: 0.5, color: '#3a1a00', fillColor: corDoPonto(p), fillOpacity: 0.9,
+    }).bindPopup(`<strong>${dataBr(p[2])}, ${p[3].slice(0, 2)}h${p[3].slice(2, 4)} UTC</strong><br>potência do fogo (FRP): ${String(p[4]).replace('.', ',')} MW<br>satélite: ${p[5]}`))).addTo(mapaL);
+    legenda.innerHTML = sel === 'dia'
+      ? `<span><i style="background:${COR_DIA[j.sat]}"></i>${j.sat === 'modis' ? 'MODIS (Aqua e Terra)' : 'VIIRS'}, ${dataBr(j.data)}</span>`
+      : CORES_IDADE.map(([c, t]) => `<span><i style="background:${c}"></i>${t}</span>`).join('');
+    contagemFocos();
+  } catch (e) {
+    if (meuPedido === focosMapa.pedido) msg.textContent = 'Não foi possível buscar os focos agora.';
+  }
+}
+
+// Texto com o total na Bahia e na área escolhida (mesmas células que o site soma).
+function contagemFocos() {
+  const j = focosMapa.dados;
+  if (!j) return;
+  const msg = document.getElementById('msg-focos');
+  const n = j.pontos.length;
+  let naArea = '';
+  if (estado.area.tipo !== 'bahia' && DADOS.celulas_ids) {
+    const ids = new Set(DADOS.celulas_ids);
+    const k = j.pontos.filter((p) => ids.has(celulaDoPonto(p[0], p[1]))).length;
+    naArea = ` ${fmt(k)} na área escolhida.`;
+  }
+  if (focosMapa.modo === 'dia') {
+    let txt = `${fmt(n)} focos na Bahia em ${dataBr(j.data)}.${naArea}`;
+    if (j.sat === 'modis') {
+      const taxa = OFICIAL.metodo.taxa_por_mes[j.data.slice(5, 7)];
+      txt += ` Na régua do VIIRS, com a taxa de ${MESES_LONGO[Number(j.data.slice(5, 7)) - 1]} (${num1(taxa)}), seriam cerca de ${fmt(n * taxa)} na Bahia. Num dia só, a conversão varia mais que no mês.`;
+    }
+    msg.textContent = txt + ` Fonte: ${j.fonte}. Toque num ponto para ver hora e potência.`;
+  } else {
+    msg.textContent = `${fmt(n)} focos na Bahia nos últimos 7 dias.${naArea} Fonte: ${j.fonte}. Toque num ponto para ver hora e potência.`;
   }
 }
 
@@ -1087,6 +1174,19 @@ function ligarControles() {
   document.querySelectorAll('.baixar-area').forEach((b) => b.addEventListener('click', baixarCsvArea));
   document.getElementById('bahia-inteira').addEventListener('click', () => definirArea({ tipo: 'bahia' }));
   document.getElementById('desenhar-area').addEventListener('click', iniciarDesenho);
+  const diaFocos = document.getElementById('dia-focos');
+  const ontem = new Date(Date.now() - 86400000);
+  diaFocos.max = ontem.toISOString().slice(0, 10);
+  diaFocos.value = '2007-09-10';
+  document.getElementById('camada-focos').addEventListener('change', () => { if (!mapaL) abrirMapa(); atualizarCamadaFocos(); });
+  document.getElementById('ver-focos-mapa').addEventListener('click', () => {
+    const sel = document.getElementById('camada-focos');
+    if (sel.value === 'recentes' && focosMapa.dados) return;
+    sel.value = 'recentes';
+    setTimeout(() => { if (!mapaL) abrirMapa(); atualizarCamadaFocos(); }, 80);
+  });
+  diaFocos.addEventListener('change', atualizarCamadaFocos);
+  document.getElementById('sat-dia').addEventListener('change', atualizarCamadaFocos);
   document.getElementById('concluir-desenho').addEventListener('click', concluirDesenho);
   document.getElementById('desfazer-ponto').addEventListener('click', () => { desenho.pontos.pop(); atualizarDesenho(); });
   document.getElementById('cancelar-desenho').addEventListener('click', () => {

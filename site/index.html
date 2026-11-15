@@ -69,6 +69,7 @@
         <div id="graf-hero" class="grafico-hero" role="img" aria-label="Mediana de focos por mês do ano, com o mês atual destacado"></div>
         <p class="hero-foot"><strong id="hero-meses">Setembro e outubro</strong> concentram <strong id="hero-pct">60%</strong> dos focos de um ano típico. Toque num mês para ver todos os anos.</p>
         <p class="agora-fonte" id="agora-fonte"></p>
+          <button type="button" class="link-mapa" id="ver-focos-mapa" data-janela="area">Ver os focos dos últimos 7 dias no mapa</button>
       </div>
     </div>
   </section>
@@ -218,13 +219,34 @@
           </div>
           <p class="nota pequena">Toque no mapa para marcar os cantos (um município, uma reserva, uma fazenda). Com 3 pontos ou mais, clique em "Concluir área". Entram as células da grade com centro dentro do contorno.</p>
         </div>
+        <fieldset class="camadas">
+          <legend>Focos no mapa (NASA FIRMS)</legend>
+          <label class="seletor">Mostrar
+            <select id="camada-focos">
+              <option value="">nenhum</option>
+              <option value="recentes">últimos 7 dias, cor pela idade</option>
+              <option value="dia">um dia escolhido, desde 2000</option>
+            </select>
+          </label>
+          <div class="escolha-dia" id="escolha-dia" hidden>
+            <label>Dia <input type="date" id="dia-focos" min="2000-11-01"></label>
+            <label>Satélite
+              <select id="sat-dia">
+                <option value="modis">MODIS (desde 2000)</option>
+                <option value="viirs">VIIRS (desde 2012)</option>
+              </select>
+            </label>
+          </div>
+          <div class="legenda-focos" id="legenda-focos"></div>
+          <p class="nota" id="msg-focos" aria-live="polite"></p>
+        </fieldset>
         <form class="coordenada" id="form-coordenada">
           <label>Latitude <input type="number" step="0.01" id="lat-ponto" placeholder="-12,97"></label>
           <label>Longitude <input type="number" step="0.01" id="lon-ponto" placeholder="-38,51"></label>
           <button type="submit" class="botao fantasma">Usar esta coordenada</button>
         </form>
         <p class="nota" id="msg-area" aria-live="polite"></p>
-        <p class="nota pequena">A localização só é pedida quando você clica em "Usar minha localização". Sua coordenada não é enviada: para os últimos dias, o site manda só a lista das células da grade (dezenas de km). Ao abrir o mapa, os blocos do OpenStreetMap da região são baixados.</p>
+        <p class="nota pequena">A localização só é pedida quando você clica em "Usar minha localização". Sua coordenada não é enviada: para os últimos dias, o site manda só a lista das células da grade (dezenas de km). Ao abrir o mapa, os blocos do OpenStreetMap da região são baixados. Para mostrar focos no mapa, o site pede à nossa função só o modo e a data.</p>
       </div>
       <div id="mapa" class="mapa" role="region" aria-label="Mapa para escolher a área"></div>
     </div>
