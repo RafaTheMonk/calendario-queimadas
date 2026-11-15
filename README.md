@@ -1,88 +1,103 @@
-# Régua de Fogo
+# Régua de Fogo (Fire Ruler)
 
-Focos de calor por satélite numa régua só: calendário harmonizado para a Bahia, de 2003 a 2026, feito para o desafio **Harmonization of MODIS and VIIRS Hot Spots** do NASA Space Apps Challenge 2026 (equipe Timeout Zero, Salvador).
+Satellite fire hotspots on one consistent ruler: a harmonized burning activity calendar for Bahia, Brazil, from 2003 to 2026, built for the **Harmonization of MODIS and VIIRS Hot Spots** challenge of the NASA Space Apps Challenge 2026 (team Timeout Zero, Salvador, Brazil).
 
-Site: https://regua-queimadas.vercel.app
+- Web app: https://regua-queimadas.vercel.app (Portuguese version: https://regua-queimadas.vercel.app/pt/)
+- Data: NASA FIRMS and NASA POWER
 
-## O problema
+## The problem
 
-Os satélites registram focos de calor há mais de 20 anos, mas o registro está dividido entre dois sensores que não se comparam direto:
+Satellites have recorded fire hotspots for more than 20 years, but the record is split between two sensors that cannot be compared directly:
 
-- **MODIS** (satélites Terra e Aqua, desde 2000): pixel de 1 km, perde fogo pequeno. Está sendo desligado.
-- **VIIRS** (Suomi NPP, NOAA-20 e NOAA-21, desde 2012): pixel de 375 m, enxerga fogo menor e conta cerca de 6 vezes mais focos na Bahia.
+- **MODIS** (Terra and Aqua satellites, since 2000): 1 km pixel, misses small fires. It is being retired.
+- **VIIRS** (Suomi NPP, NOAA-20 and NOAA-21, since 2012): 375 m pixel, sees smaller fires and counts about 6 times more hotspots in Bahia.
 
-Juntando os dois sem ajuste, a série dá um salto falso em 2012: 27.470 focos do MODIS Aqua em 2011 contra 220.567 do VIIRS em 2012. Não houve mais fogo, o que mudou foi o sensor.
+Joining both records without adjustment creates a false jump in 2012: 26,477 MODIS Aqua hotspots in 2011 against 210,941 VIIRS hotspots in 2012. There was not more fire; the sensor changed.
 
-## A solução
+## The solution
 
-1. **Harmonizar:** converter os anos que só têm MODIS (2003 a 2011) para a escala do VIIRS, calibrando nos anos em que os dois funcionaram juntos.
-2. **Mostrar:** um calendário de meses por anos, com o mês atual comparado com o normal daquele mês (anos medidos pelo VIIRS, 2012 a 2025), anomalias, ranking, filtro de período, escolha da área e download dos dados.
+1. **Harmonize:** convert the years that only have MODIS (2003 to 2011) to the VIIRS scale, calibrating on the years both sensors flew together.
+2. **Show:** a calendar of months by years with accessible color ramps, the current month against the normal for that month (years measured by VIIRS, 2012 to 2025), anomalies against the multi-year median and mean, rankings, a date range filter, any area of interest (point and radius, latitude and longitude, or a polygon drawn on the map), hotspots of the last 7 days or of any chosen day on the map, CSV and JSON downloads.
 
-## Dados (NASA; INPE e IBAMA só para conferir)
+## Data (NASA; INPE and IBAMA only for checking)
 
-- **NASA FIRMS:** focos MODIS C6.1 (Terra e Aqua) e VIIRS 375 m (Suomi NPP e NOAA-20), arquivos anuais por país, processamento padrão. 48 arquivos, 40 milhões de focos no Brasil, 3,6 milhões na área de estudo depois dos filtros. Cobertura de dias acima de 99% em todos os satélites.
-- **NASA POWER:** chuva, vento, umidade, temperatura e altitude em grade mensal (0,5 x 0,625 grau), de 2003 a 2025.
-- **IBAMA, Sisfogo (ROI):** Registros de Ocorrência de Incêndio das brigadas do Prevfogo (https://dadosabertos.ibama.gov.br/dados/SISFOGO/ROI.csv). Incêndios relatados em solo na Bahia, 399 de 2015 a 2021, para comparar com os focos detectados; não entram no cálculo.
-- **INPE, Programa Queimadas:** focos do satélite de referência, arquivos anuais de 2003 a 2025 (https://dataserver-coids.inpe.br/queimadas/queimadas/focos/csv/anual/Brasil_sat_ref/). Usados só para conferir a série harmonizada; não entram no cálculo.
+- **NASA FIRMS:** MODIS C6.1 (Terra and Aqua) and VIIRS 375 m (Suomi NPP and NOAA-20) active fire hotspots, annual country files, standard processing. 48 files, 40 million hotspots in Brazil, 3.6 million in the study area after filters. Day coverage above 99% for every satellite. 2026 comes from the FIRMS area API. A sample check against the FIRMS API matched VIIRS exactly in 28 of 28 windows and MODIS within 0.15% (the annual files use a newer processing version, 6.2, than the API, 6.03).
+- **NASA POWER:** rain, wind, humidity, temperature and elevation on a monthly grid (0.5 x 0.625 degree), 2003 to 2025.
+- **INPE, Programa Queimadas** (Brazil's National Institute for Space Research): reference satellite hotspots, annual files 2003 to 2025 (https://dataserver-coids.inpe.br/queimadas/queimadas/focos/csv/anual/Brasil_sat_ref/). Used only to check the harmonized series.
+- **IBAMA, Sisfogo (ROI):** Fire Occurrence Records of the Prevfogo federal brigades (https://dadosabertos.ibama.gov.br/dados/SISFOGO/ROI.csv). Fires reported on the ground in Bahia, 399 from 2015 to 2021, compared with the detected hotspots. Not used in the calculation.
 
-Área: retângulo envolvente da Bahia (longitude -46,62 a -37,34, latitude -18,35 a -8,53). Filtros: só focos de vegetação (`type = 0`) e sem confiança baixa.
+Area: bounding rectangle of Bahia (longitude -46.62 to -37.34, latitude -18.35 to -8.53). Filters: vegetation fires only (`type = 0`), MODIS confidence 30 or more, VIIRS without low confidence.
 
-## Método e resultados
+## Method and results
 
-- **Conversão principal (taxa por mês do ano):** para cada mês do ano, total de focos VIIRS dividido pelo do MODIS Aqua, que passa no mesmo horário. Calibrada com 2012 a 2019 e testada em 2020 a 2023, anos que o modelo não viu: **erro de 7,2% por mês** (8,7% contando os meses com falha de satélite) e **desvio de 0,2%** no total. Esse erro vale para a Bahia inteira; em áreas de 100 km, antes de 2012, o erro típico é de cerca de 25%.
-- **Comparação de 7 métodos na mesma prova** (janela "Métodos" do site): taxa única 9,2%, taxa por mês 7,2%, células de grade com fogo por dia 9,8%, quantile mapping 8,1% (2,7% nos anos de calibração, sinal de que decora), modelo com fatores 7,9%, taxa por mês a partir do Terra 11,8% e mistura 70% taxa + 30% fatores 6,6%. A mistura ganhou da taxa por mês em 8 de 11 anos, mas a diferença ainda pode ser acaso, então o número principal segue com a taxa por mês.
-- **Conferência externa com o INPE** (janela "Conferência com o INPE"): correlação de 0,985 ano a ano com a série do satélite de referência (sem harmonizar: -0,13), 0,992 mês a mês e mesmo mês de pico em 21 de 23 anos. Sem harmonizar, a razão contra o INPE salta 6,2 vezes em 2012; harmonizada, a diferença entre 2003-2011 e 2012-2021 fica em 11%.
-- **Modelo com fatores (regressão de Poisson por célula e mês):** explica por que a relação entre os sensores muda, usando só dados que existiam antes de 2012. Fatores que mais pesam: fração de focos noturnos (à noite o VIIRS é muito mais sensível) e umidade. Testados e descartados: tamanho do pixel, hora de passagem e vento. A faixa de 95% acertou 42 de 44 meses de teste.
-- **Correções de dado:** meses com falha do Suomi NPP completados com o NOAA-20, dias com dado degradado do Aqua excluídos, calibração antes da mudança de órbita do Aqua (que passou a cruzar a área mais tarde a partir de 2022).
-- **Descoberta:** antes de 2012, os dois MODIS discordam entre si. O Terra via 0,47 foco por foco do Aqua em 2003-2011 e 0,72 de 2012 em diante, só de dia. Por isso 2003-2011 aparece com faixa: de 132 mil (leitura do Terra) a 204 mil (leitura do Aqua) focos por ano, contra 124 mil do VIIRS real em 2012-2021. Em todas as leituras, 2007 foi o ano com mais fogo.
+- **Main conversion (one ratio per calendar month):** for each month of the year, total VIIRS hotspots divided by total MODIS Aqua hotspots (Aqua flies in the afternoon, close to the VIIRS overpass). The ratio goes from 5.8 in September (dry season) to 9.6 in January (rainy season, small fires). Calibrated on 2012 to 2019 and tested on 2020 to 2023, years the model never saw: **7.2% monthly error** (8.7% counting the months with satellite failures) and **+0.2% total bias**. Leaving one year out at a time, from 2013 to 2023: 7.1%. This error is for the whole of Bahia; for 100 km areas, before 2012, the typical error is about 25%.
+- **7 methods compared on the same test** ("Methods" window of the app): single ratio 9.2%, monthly ratio 7.2%, grid cells with fire per day 9.8%, quantile mapping 8.1% (2.7% on the calibration years, a sign that it memorizes), factor model 7.9%, Terra-based monthly ratio 11.8% and a 70% ratio + 30% factor model blend 6.6%. The blend beat the monthly ratio in 8 of 11 years, but the difference may still be chance, so the main number keeps the monthly ratio.
+- **External check against INPE** ("Check against INPE" window): year-to-year correlation of 0.985 with the reference satellite series (not harmonized: -0.13), 0.992 month to month and the same peak month in 21 of 23 years. Without harmonization, the ratio against INPE jumps 6.2 times in 2012; harmonized, the difference between 2003-2011 and 2012-2021 is 11%.
+- **Factor model (Poisson regression per grid cell and month):** explains why the relation between the sensors changes, using only data that existed before 2012. Strongest factors: share of night-time hotspots (VIIRS is much more sensitive at night) and humidity. Tested and discarded: pixel size, overpass time and wind. The 95% band covered 42 of 44 test months.
+- **Data corrections:** months with Suomi NPP failures filled with adjusted NOAA-20, days with degraded Aqua data excluded, calibration before the Aqua orbit change (it started crossing the area later from 2022 on, which INPE's data also shows).
+- **Finding:** before 2012 the two MODIS satellites disagree. Terra saw 0.47 hotspots for each Aqua hotspot in 2003-2011 and 0.72 from 2012 on, daytime only. So 2003-2011 is shown as a band: from 132 thousand (Terra reading) to 204 thousand (Aqua reading) hotspots per year, against 124 thousand from real VIIRS in 2012-2021. In every reading, 2007 was the year with the most fire.
+- **Detected and reported:** for each fire registered by the federal brigades in Bahia, the satellite detected about 2,085 hotspots; only 12 of the 399 records were found by satellite.
+- **The method works elsewhere:** `Scripts/replicar_regiao.py` recalibrates the rates for any country in the FIRMS archive. For Argentina, the monthly ratio had a 10.0% error on 2020 to 2023 (single ratio: 16.3%) and different rates (July: 4.0 in Argentina, 5.7 in Bahia). Rates must be recalculated for each region, never copied.
 
-## Estrutura
+## Structure
 
 ```
-site/                         aplicação web estática (HTML, CSS, JavaScript; ECharts e Leaflet)
-  data/                       calendario_bahia.json e .csv lidos pelo site
+site/                         static web app (HTML, CSS, JavaScript; ECharts and Leaflet), English
+  pt/                         Portuguese version
+  data/                       JSON and CSV files read by the app
+api/                          Vercel functions: recentes (last 7 days) and pontos (hotspots on the map)
 Scripts/
-  baixar_firms_bahia.sh       baixa os arquivos anuais do FIRMS e recorta a área
-  completude_firms.py         relatório de completude dos dados
-  harmonizacao/               técnicas de harmonização e avaliação
-    fatores/                  modelo com fatores (NASA POWER, regressão de Poisson)
-  gerar_json_site.py          gera os dados do site
+  baixar_firms_bahia.sh       downloads the FIRMS annual files and clips the area
+  completude_firms.py         data completeness report
+  harmonizacao/               harmonization techniques, evaluation and the 7-method comparison
+    fatores/                  factor model (NASA POWER, Poisson regression)
+  gerar_json_site.py          builds the app data
+  baixar_firms_2026.py        2026 from the FIRMS area API
+  estender_2026.py            adds the complete months of 2026
+  conferir_com_api.py         checks the downloaded files against the FIRMS API
+  comparar_inpe.py            check against INPE
+  processar_roi_ibama.py      detected and reported fires (IBAMA)
+  replicar_regiao.py          runs the method for another country
 Dados/
-  firms_bahia/                relatório de completude, log e contagem diária (os CSV brutos não vão para o repositório)
-  harmonizado/                resultados das técnicas e do modelo com fatores
-  nasa_power/                 clima da NASA POWER
-  site/                       dados do site e guia dos campos (LEIAME.md)
+  firms_bahia/                completeness report, log and daily counts (raw CSV files are not in the repository)
+  harmonizado/                results of the techniques, the factor model and the API check
+  nasa_power/                 NASA POWER weather
+  site/                       app data and field guide (LEIAME.md)
 ```
 
-## Como rodar
+Code comments and variable names are in Portuguese, the team's language.
 
-Requisitos: Python 3 com numpy, curl e bash.
+## How to run
+
+Requirements: Python 3 with numpy, curl and bash. The 2026 scripts, the API check and the map day lookup need a free FIRMS MAP_KEY in `FIRMS_MAP_KEY` (local `.env` file, never committed; Vercel environment variable for the deployed app).
 
 ```bash
-Scripts/baixar_firms_bahia.sh                              # baixa o FIRMS (uns 3,5 GB lidos, guarda só a área)
-python3 -I Scripts/completude_firms.py                     # completude
-python3 -I Scripts/harmonizacao/avaliar.py                 # técnicas de harmonização
-python3 -I Scripts/harmonizacao/fatores/baixar_power.py    # clima da NASA POWER
-python3 -I Scripts/harmonizacao/fatores/versao2.py         # modelo com fatores
-python3 -I Scripts/gerar_json_site.py                      # dados do site
-python3 -I Scripts/baixar_firms_2026.py                    # 2026 pela API do FIRMS (precisa de FIRMS_MAP_KEY no .env)
-python3 -I Scripts/estender_2026.py                        # acrescenta os meses completos de 2026 ao site
-python3 -I Scripts/harmonizacao/comparar_metodos.py       # comparação dos 7 métodos (janela "Métodos")
-python3 -I Scripts/comparar_inpe.py                        # conferência com o INPE (zips do INPE em Dados/inpe_ref/)
-python3 -I Scripts/processar_roi_ibama.py                  # detectados e relatados (ROI.csv do IBAMA em Dados/ibama_roi/)
-cd site && python3 -m http.server 8000                     # abrir http://localhost:8000
+Scripts/baixar_firms_bahia.sh                              # downloads FIRMS (about 3.5 GB read, keeps only the area)
+python3 -I Scripts/completude_firms.py                     # completeness
+python3 -I Scripts/harmonizacao/avaliar.py                 # harmonization techniques
+python3 -I Scripts/harmonizacao/fatores/baixar_power.py    # NASA POWER weather
+python3 -I Scripts/harmonizacao/fatores/versao2.py         # factor model
+python3 -I Scripts/gerar_json_site.py                      # app data
+python3 -I Scripts/baixar_firms_2026.py                    # 2026 from the FIRMS API
+python3 -I Scripts/estender_2026.py                        # adds the complete months of 2026
+python3 -I Scripts/harmonizacao/comparar_metodos.py        # 7-method comparison ("Methods" window)
+python3 -I Scripts/comparar_inpe.py                        # check against INPE (INPE zip files in Dados/inpe_ref/)
+python3 -I Scripts/processar_roi_ibama.py                  # detected and reported (IBAMA ROI.csv in Dados/ibama_roi/)
+python3 -I Scripts/conferir_com_api.py                     # sample check of the files against the FIRMS API
+python3 -I Scripts/replicar_regiao.py Argentina            # the method for another country
+cd site && python3 -m http.server 8000                     # open http://localhost:8000
 ```
 
-O site é estático, com duas funções pequenas na Vercel (`api/recentes` e `api/pontos`) para ler o FIRMS do lado do servidor. A consulta de um dia escolhido no mapa precisa da chave do FIRMS na variável `FIRMS_MAP_KEY` do projeto na Vercel; sem ela, o resto do site funciona normalmente. Para publicar, basta servir a pasta `site/`.
+The app is static, with two small Vercel functions (`api/recentes` and `api/pontos`) that read FIRMS on the server side, so the API key never reaches the browser.
 
-## Limitações
+## Limitations
 
-- Área piloto: a Bahia. O método vale para qualquer área, mas só a Bahia foi processada e validada.
-- Os anos de 2003 a 2011 não podem ser conferidos com VIIRS (ele não existia), por isso vêm com faixa.
-- 2026 entra só com os meses completos, pela API do FIRMS (VIIRS S-NPP, com o NOAA-20 ajustado onde falta S-NPP). Os meses vindos do quase tempo real são provisórios: não trazem o tipo do foco e mudam quando sair o processamento padrão. O NOAA-21 ainda não entrou.
-- Focos de calor são detecções de satélite, não incêndios confirmados.
+- Pilot area: Bahia. The method works for any area (see the Argentina run), but only Bahia is processed in the app.
+- The years 2003 to 2011 cannot be checked against VIIRS (it did not exist), so they come with a band.
+- 2026 only includes complete months, from the FIRMS API (VIIRS Suomi NPP, with adjusted NOAA-20 where Suomi NPP is missing). Months from near real time data are provisional: they do not carry the hotspot type and will change when the standard processing is released. NOAA-21 is not included yet.
+- Fire hotspots are satellite detections, not confirmed fires.
 
-## Citação dos dados
+## Data citation
 
 We acknowledge the use of imagery from the NASA LANCE FIRMS (https://earthdata.nasa.gov/firms), part of the NASA Earth Science Data and Information System (ESDIS).
 
