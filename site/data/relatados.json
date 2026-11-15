@@ -1,0 +1,267 @@
+{
+ "descricao": "Incêndios relatados em solo (registros das brigadas do IBAMA/Prevfogo) contra focos detectados por satélite, Bahia.",
+ "fonte": "IBAMA, Sisfogo, Registros de Ocorrência de Incêndio (ROI), dados abertos",
+ "url_fonte": "https://dadosabertos.ibama.gov.br/dados/SISFOGO/ROI.csv",
+ "cobertura": "Só áreas atendidas por brigadas federais: unidades de conservação, terras indígenas, assentamentos e propriedades no entorno.",
+ "total_ocorrencias": 399,
+ "datas_invalidas_descartadas": 10,
+ "anos_com_cobertura": [
+  2015,
+  2021
+ ],
+ "minimo_registros_por_ano": 10,
+ "media_ocorrencias_por_ano": 56.7,
+ "media_focos_por_ano": 118262,
+ "focos_por_ocorrencia": 2085,
+ "detectados_por_satelite": 12,
+ "correlacao_mensal": 0.34,
+ "correlacao_sazonal": 0.59,
+ "mes_pico_relatados": 8,
+ "mes_pico_detectados": 9,
+ "por_ano": [
+  {
+   "ano": 2015,
+   "relatados": 21,
+   "area_ha": 371,
+   "detectados": 201943
+  },
+  {
+   "ano": 2016,
+   "relatados": 51,
+   "area_ha": 2444,
+   "detectados": 81674
+  },
+  {
+   "ano": 2017,
+   "relatados": 61,
+   "area_ha": 11759,
+   "detectados": 84514
+  },
+  {
+   "ano": 2018,
+   "relatados": 69,
+   "area_ha": 852,
+   "detectados": 75110
+  },
+  {
+   "ano": 2019,
+   "relatados": 76,
+   "area_ha": 4923,
+   "detectados": 108574
+  },
+  {
+   "ano": 2020,
+   "relatados": 55,
+   "area_ha": 405,
+   "detectados": 97909
+  },
+  {
+   "ano": 2021,
+   "relatados": 64,
+   "area_ha": 445,
+   "detectados": 178112
+  }
+ ],
+ "fora_dos_anos_com_cobertura": {
+  "2010": 1,
+  "2022": 1
+ },
+ "sazonal": [
+  {
+   "mes": 1,
+   "relatados_pct": 7.1,
+   "detectados_pct": 2.3
+  },
+  {
+   "mes": 2,
+   "relatados_pct": 9.8,
+   "detectados_pct": 1.8
+  },
+  {
+   "mes": 3,
+   "relatados_pct": 8.6,
+   "detectados_pct": 2.3
+  },
+  {
+   "mes": 4,
+   "relatados_pct": 1.0,
+   "detectados_pct": 1.3
+  },
+  {
+   "mes": 5,
+   "relatados_pct": 0.0,
+   "detectados_pct": 2.1
+  },
+  {
+   "mes": 6,
+   "relatados_pct": 1.5,
+   "detectados_pct": 2.9
+  },
+  {
+   "mes": 7,
+   "relatados_pct": 8.1,
+   "detectados_pct": 4.5
+  },
+  {
+   "mes": 8,
+   "relatados_pct": 22.4,
+   "detectados_pct": 9.2
+  },
+  {
+   "mes": 9,
+   "relatados_pct": 15.1,
+   "detectados_pct": 32.7
+  },
+  {
+   "mes": 10,
+   "relatados_pct": 14.4,
+   "detectados_pct": 30.5
+  },
+  {
+   "mes": 11,
+   "relatados_pct": 6.8,
+   "detectados_pct": 7.1
+  },
+  {
+   "mes": 12,
+   "relatados_pct": 5.3,
+   "detectados_pct": 3.4
+  }
+ ],
+ "deteccao": [
+  {
+   "nome": "RONDA",
+   "n": 156
+  },
+  {
+   "nome": "TELEFONE",
+   "n": 135
+  },
+  {
+   "nome": "PONTO DE OBSERVAÇÃO",
+   "n": 40
+  },
+  {
+   "nome": "INDÍGENA",
+   "n": 18
+  },
+  {
+   "nome": "ASSENTADO/PROPRIETÁRIO",
+   "n": 14
+  },
+  {
+   "nome": "MONITORAMENTO POR SATÉLITE",
+   "n": 12
+  },
+  {
+   "nome": "DURANTE COMBATE",
+   "n": 11
+  },
+  {
+   "nome": "OUTROS",
+   "n": 8
+  }
+ ],
+ "causas": [
+  {
+   "nome": "INDETERMINADO",
+   "n": 149
+  },
+  {
+   "nome": "VANDALISMO",
+   "n": 73
+  },
+  {
+   "nome": "QUEIMA DE LIXO",
+   "n": 63
+  },
+  {
+   "nome": "LIMPEZA DE ÁREA PARA CULTIVO",
+   "n": 29
+  },
+  {
+   "nome": "RENOVAÇÃO DE PASTAGEM NATURAL",
+   "n": 22
+  },
+  {
+   "nome": "CAÇA",
+   "n": 20
+  },
+  {
+   "nome": "RENOVAÇÃO DE PASTAGEM PLANTADA",
+   "n": 10
+  },
+  {
+   "nome": "não informada",
+   "n": 8
+  }
+ ],
+ "locais": [
+  {
+   "nome": "PROPRIEDADE RURAL",
+   "n": 182
+  },
+  {
+   "nome": "UNIDADE DE CONSERVAÇÃO",
+   "n": 113
+  },
+  {
+   "nome": "TERRA INDÍGENA",
+   "n": 57
+  },
+  {
+   "nome": "PROJETO DE ASSENTAMENTO",
+   "n": 38
+  },
+  {
+   "nome": "COMUNIDADE TRADICIONAL",
+   "n": 5
+  },
+  {
+   "nome": "FLORESTA PÚBLICA",
+   "n": 4
+  }
+ ],
+ "municipios": [
+  {
+   "nome": "BARREIRAS",
+   "n": 138
+  },
+  {
+   "nome": "PORTO SEGURO",
+   "n": 82
+  },
+  {
+   "nome": "SANTA CRUZ CABRALIA",
+   "n": 46
+  },
+  {
+   "nome": "ANDARAI",
+   "n": 28
+  },
+  {
+   "nome": "ITAETE",
+   "n": 17
+  },
+  {
+   "nome": "SERRA DO RAMALHO",
+   "n": 16
+  },
+  {
+   "nome": "SAO DESIDERIO",
+   "n": 13
+  },
+  {
+   "nome": "MUCUGE",
+   "n": 11
+  },
+  {
+   "nome": "RIACHAO DAS NEVES",
+   "n": 11
+  },
+  {
+   "nome": "BOM JESUS DA LAPA",
+   "n": 7
+  }
+ ]
+}
