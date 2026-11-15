@@ -356,7 +356,7 @@ async function agora() {
   const tag = document.getElementById('agora-tag');
   document.getElementById('agora-titulo').textContent = `Agora: ${nomeMes} de ${ANO_ATUAL}`;
   document.getElementById('agora-normal').textContent =
-    `Normal de ${nomeMes}: ${fmt(porDia(nm.mediana[chave]))} focos por dia (mediana dos anos medidos pelo VIIRS, 2012 a 2025; faixa normal de ${fmt(porDia(nm.p25[chave]))} a ${fmt(porDia(nm.p75[chave]))}). Esperado para o mês inteiro: cerca de ${fmt(nm.mediana[chave])} focos.`;
+    `Normal de ${nomeMes}: ${fmt(porDia(nm.mediana[chave]))} focos por dia (mediana dos anos medidos pelo VIIRS, 2012 a 2025; faixa normal de ${fmt(porDia(nm.p25[chave]))} a ${fmt(porDia(nm.p75[chave]))}${nm.media ? `; média de ${fmt(porDia(nm.media[chave]))}` : ''}). Esperado para o mês inteiro: cerca de ${fmt(nm.mediana[chave])} focos.`;
   try {
     let url = 'api/recentes';
     if (estado.area.tipo !== 'bahia') url += '?celulas=' + DADOS.celulas_ids.join(',');
@@ -441,6 +441,8 @@ function tooltipMes(m) {
     t += `${fmt(m.focos)} focos<br>`;
   }
   t += `${pct(m.anomalia_pct)} da mediana do mês (${m.classe})<br>`;
+  const media = DADOS.normal_por_mes.media && DADOS.normal_por_mes.media[String(m.mes_num).padStart(2, '0')];
+  if (media) t += `${pct(Math.round((m.focos - media) / media * 1000) / 10)} da média dos anos medidos pelo VIIRS<br>`;
   t += `${m.posicao_no_mes}º ${MESES_LONGO[m.mes_num - 1]} com mais fogo desde 2003<br>`;
   t += `<span style="opacity:.75">origem: ${m.origem}${m.qualidade === 'corrigido' ? ', mês corrigido' : ''}</span>`;
   return t;
@@ -545,7 +547,13 @@ function mesAoLongoDosAnos(numMes) {
       type: 'bar',
       data: ms.map((m) => ({ value: m.focos, itemStyle: { color: cor(m), decal: m.faixa_inferior ? { symbol: 'rect', dashArrayX: [1, 0], dashArrayY: [2, 4], rotation: Math.PI / 4, color: 'rgba(255,255,255,.35)' } : undefined } })),
       markArea: { silent: true, itemStyle: { color: 'rgba(148,163,184,.18)' }, data: [[{ yAxis: normal.p25[chave] }, { yAxis: normal.p75[chave] }]] },
-      markLine: { silent: true, symbol: 'none', lineStyle: { color: css('--texto'), type: 'dashed' }, label: { position: 'insideEndTop', formatter: 'mediana ' + fmt(normal.mediana[chave]), color: css('--texto-suave') }, data: [{ yAxis: normal.mediana[chave] }] },
+      markLine: {
+        silent: true, symbol: 'none',
+        data: [
+          { yAxis: normal.mediana[chave], lineStyle: { color: css('--texto'), type: 'dashed' }, label: { position: 'insideEndTop', formatter: 'mediana ' + fmt(normal.mediana[chave]), color: css('--texto-suave') } },
+          ...(normal.media ? [{ yAxis: normal.media[chave], lineStyle: { color: css('--destaque'), type: 'dotted', width: 2 }, label: { position: 'insideStartTop', formatter: 'média ' + fmt(normal.media[chave]), color: css('--destaque') } }] : []),
+        ],
+      },
     }],
   }, true);
 }
