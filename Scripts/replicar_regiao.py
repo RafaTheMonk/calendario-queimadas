@@ -4,9 +4,11 @@
 Mesmas regras usadas na Bahia, sem nada calibrado na Bahia:
 - arquivos anuais do NASA FIRMS do pais (MODIS C6.1, VIIRS S-NPP e NOAA-20);
 - so vegetacao (type = 0), MODIS com confianca 30 ou mais, VIIRS sem confianca baixa;
-- mes sinalizado (fora da calibracao e do teste) quando o Aqua ou o S-NPP tem 3 dias ou mais sem dado
-  (dia em que o outro satelite do mesmo sensor viu fogo e ele nao) ou com dado degradado
-  (razao diaria Aqua/S-NPP abaixo de 0,25 vez a mediana do mes);
+- mes sinalizado (fora da calibracao e do teste) com a MESMA lista usada na Bahia: falha de satelite e
+  um evento global, entao os dias sem dado do Aqua e do S-NPP e os dias degradados do Aqua sao medidos
+  no Brasil inteiro (Dados/firms_bahia/cobertura) e valem para qualquer pais. Medir isso dentro de um
+  pais pequeno confunde "nao houve fogo" com "o satelite nao mandou dado";
+- mes do calendario sem nenhum mes de calibracao usa a taxa unica;
 - taxa por mes do ano (VIIRS / Aqua) aprendida em 2012-02 a 2019-12 e testada em 2020 a 2023;
 - prova extra escondendo um ano de cada vez (2013 a 2023) e taxa unica como comparacao.
 
@@ -22,6 +24,13 @@ import sys
 import time
 import urllib.request
 from collections import Counter, defaultdict
+
+SCRIPTS = os.path.dirname(os.path.abspath(__file__))
+for _p in (os.path.join(SCRIPTS, "harmonizacao"), SCRIPTS):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
+import comum  # noqa: E402
+import gerar_json_site  # noqa: E402
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE = "https://firms.modaps.eosdis.nasa.gov/data/country"
@@ -92,23 +101,12 @@ def contar(pasta):
     return focos, dia
 
 
-def sinalizar(dia, todos):
-    sinal = {}
-    razoes = defaultdict(dict)
-    for d, v in dia["snpp"].items():
-        if v > 0 and d in dia["aqua"]:
-            razoes[d[:7]][d] = dia["aqua"][d] / v
-    for m in todos:
-        a, k = int(m[:4]), int(m[5:7])
-        datas = ["%s-%02d" % (m, x) for x in range(1, calendar.monthrange(a, k)[1] + 1)]
-        sem_aqua = sum(1 for d in datas if dia["aqua"][d] == 0 and dia["terra"][d] > 0)
-        sem_snpp = sum(1 for d in datas if dia["snpp"][d] == 0 and dia["n20"][d] > 0) if m >= "2018-04" else 0
-        degr = 0
-        if razoes[m]:
-            med = statistics.median(razoes[m].values())
-            degr = sum(1 for r in razoes[m].values() if r < FATOR_DEGRADADO * med)
-        sinal[m] = (sem_aqua + degr) >= LIMITE_DIAS or sem_snpp >= LIMITE_DIAS
-    return sinal
+def sinalizar_global(todos):
+    """Mesma sinalizacao da Bahia: dias sem dado (Brasil inteiro) e dias degradados do Aqua."""
+    degr = gerar_json_site.dias_degradados_aqua()
+    sem_aqua = comum.dias_sem_dado("modis", "Aqua", todos)
+    sem_snpp = comum.dias_sem_dado("viirs-snpp", "N", todos)
+    return comum.sinalizar({m: (sem_aqua[m] or 0) + degr.get(m, 0) for m in todos}, sem_snpp, todos)
 
 
 def taxas(cal, aqua, viirs):
@@ -132,15 +130,15 @@ def main():
     todos = meses("2003-01", "2025-12")
     aqua = {m: focos["aqua"][m] for m in todos}
     viirs = {m: focos["snpp"][m] for m in todos}
-    sinal = sinalizar(dia, todos)
+    sinal = sinalizar_global(todos)
     validos = [m for m in todos if "2012-02" <= m <= "2023-12" and not sinal[m] and aqua[m] > 0 and viirs[m] > 0]
     cal = [m for m in validos if m <= "2019-12"]
     teste = [m for m in validos if m >= "2020-01"]
     deriva = [m for m in todos if m >= "2024-01" and not sinal[m] and aqua[m] > 0]
 
     r1 = taxas(cal, aqua, viirs)
-    p1 = {m: r1.get(int(m[5:7]), 0) * aqua[m] for m in todos}
     unica = sum(viirs[m] for m in cal) / sum(aqua[m] for m in cal)
+    p1 = {m: r1.get(int(m[5:7]), unica) * aqua[m] for m in todos}
     p0 = {m: unica * aqua[m] for m in todos}
     vies = (sum(p1[m] for m in teste) - sum(viirs[m] for m in teste)) / sum(viirs[m] for m in teste) * 100
 
@@ -151,13 +149,14 @@ def main():
         u = sum(viirs[m] for m in c) / sum(aqua[m] for m in c)
         for m in validos:
             if m[:4] == str(a):
-                loyo[m] = r.get(int(m[5:7]), 0) * aqua[m]
+                loyo[m] = r.get(int(m[5:7]), u) * aqua[m]
                 loyo0[m] = u * aqua[m]
 
     # serie anual harmonizada (taxas de producao 2012-02 a 2021-12) e serie sem harmonizar
     prod = [m for m in validos if m <= "2021-12"]
     rp = taxas(prod, aqua, viirs)
-    harm = {m: (viirs[m] if m >= "2012-02" else rp.get(int(m[5:7]), 0) * aqua[m]) for m in todos}
+    up = sum(viirs[m] for m in prod) / sum(aqua[m] for m in prod)
+    harm = {m: (viirs[m] if m >= "2012-02" else rp.get(int(m[5:7]), up) * aqua[m]) for m in todos}
     crua = {m: (viirs[m] if m >= "2012-02" else aqua[m]) for m in todos}
     anual = {a: round(sum(harm[m] for m in todos if m[:4] == str(a))) for a in range(2003, 2026)}
     anual_cru = {a: sum(crua[m] for m in todos if m[:4] == str(a)) for a in range(2003, 2026)}
@@ -166,6 +165,7 @@ def main():
     saida = {
         "pais": pais,
         "focos_filtrados": {"aqua": sum(aqua.values()), "snpp": sum(viirs.values())},
+        "viirs_mediana_mensal_teste": int(statistics.median([viirs[m] for m in teste])) if teste else 0,
         "meses_sinalizados": [m for m in todos if sinal[m] and m >= "2012-02"],
         "n_meses_teste": len(teste),
         "taxa_por_mes": {"%02d" % k: round(v, 3) for k, v in sorted(r1.items())},
