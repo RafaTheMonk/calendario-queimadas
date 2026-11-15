@@ -25,6 +25,7 @@ let OFICIAL = null;     // série oficial da Bahia
 let CELULAS = null;     // série por célula (carregada sob demanda)
 let DADOS = null;       // série da área ativa, no mesmo formato da oficial
 let METODOS = null;     // comparação dos métodos (carregada sob demanda)
+let INPE = null;        // comparação com o INPE (carregada sob demanda)
 const graficos = {};
 const estado = {
   modo: 'focos', brutos: false, mes: MES_ATUAL,
@@ -245,6 +246,7 @@ function desenharJanela(nome) {
   else if (nome === 'top') topDez();
   else if (nome === 'area') abrirMapa();
   else if (nome === 'metodos') comparacaoMetodos();
+  else if (nome === 'inpe') comparacaoInpe();
   Object.values(graficos).forEach((g) => g.resize());
 }
 
@@ -713,9 +715,89 @@ async function comparacaoMetodos() {
     </ul>
     <h3>E a mistura, que errou menos?</h3>
     <p>Ela ganhou por pouco: ${num1(r.mistura.teste_erro_pct)}% contra ${num1(t1.teste_erro_pct)}% no teste, e em ${r.mistura.anos_que_ganha_da_taxa_por_mes} de ${nAnos} anos. Com tão poucos anos de dado, uma diferença desse tamanho ainda pode ser acaso, e o site ainda não calcula a fórmula com pesos para cada área do mapa. Por isso o número principal segue com a taxa por mês e a mistura fica como próximo teste.</p>
+    <h3>Conferência de fora</h3>
+    <p>Comparamos a série convertida com a do satélite de referência do INPE, que não passa pela nossa conversão. O desenho dos anos bate e o salto de 2012 some. <a href="#inpe" data-janela="inpe">Veja a conferência com o INPE</a>.</p>
     <h3>Correlação não é prova</h3>
     <p>A ordem dos meses, do mais fraco ao mais forte, tem correlação de ${num3(c.taxa_por_mes)} com a taxa por mês. Mas o Aqua sem conversão nenhuma já chega a ${num3(c.aqua_sem_conversao)}, porque seca e chuva mandam no ano. Por isso medimos pelo erro em focos, não pela correlação.</p>
     <p class="nota">* ${d.notas.join(' ')} Os anos de 2024 e 2025 ficam fora da escolha porque a órbita do Aqua mudou; o erro de cada método nesses anos está no JSON.</p>`;
+}
+
+// ------------------------------------------------------------------ conferência com o INPE
+
+async function comparacaoInpe() {
+  if (!INPE) {
+    try {
+      INPE = await (await fetch('data/inpe.json')).json();
+    } catch (e) {
+      document.getElementById('inpe-intro').innerHTML = '<p>Não foi possível carregar a comparação.</p>';
+      return;
+    }
+  }
+  const d = INPE;
+  const r = d.resumo;
+  const anos = d.anos;
+  const num2 = (n) => n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const iguais = (a, b) => a[0] === b[0];
+  document.getElementById('inpe-intro').innerHTML = `
+    <p>O INPE publica os focos de um <strong>satélite de referência</strong>, o mesmo desde 2003, justamente para comparar anos. É uma série que não passa pela nossa conversão. Se a harmonização estiver certa, as duas séries têm que subir e descer juntas, sem salto em 2012.</p>
+    <div class="metricas">
+      <div><strong>${num3(r.correlacao_anual)}</strong><span>correlação ano a ano com o INPE (sem harmonizar: ${num2(r.correlacao_anual_sem_harmonizar)})</span></div>
+      <div><strong>${num3(r.correlacao_mensal)}</strong><span>correlação mês a mês</span></div>
+      <div><strong>${r.mes_pico_igual} de ${r.n_anos}</strong><span>anos com o mesmo mês de pico</span></div>
+      <div><strong>${r.top5_inpe[0]}</strong><span>${iguais(r.top5_inpe, r.top5_nossa) ? 'ano com mais fogo nas duas séries' : 'ano com mais fogo no INPE (nosso: ' + r.top5_nossa[0] + ')'}</span></div>
+    </div>`;
+
+  const nomes = { inpe: 'INPE, satélite de referência', nossa: 'Régua de Fogo (harmonizada)', crua: 'Sem harmonizar' };
+  const cores = { inpe: css('--abaixo'), nossa: css('--destaque'), crua: '#94a3b8' };
+  const eixo = (fmtY) => ({
+    xAxis: { type: 'category', data: anos.map((a) => String(a.ano)), axisLabel: { color: css('--texto-suave') } },
+    yAxis: { type: 'value', axisLabel: { color: css('--texto-suave'), formatter: fmtY }, splitLine: { lineStyle: { color: css('--borda') } } },
+  });
+  const marca2012 = { silent: true, symbol: 'none', lineStyle: { color: css('--texto-suave'), type: 'dotted' }, label: { formatter: 'chega o VIIRS', color: css('--texto-suave') }, data: [{ xAxis: '2012' }] };
+  const estreito = document.getElementById('graf-inpe').clientWidth < 520;
+  const legenda = { top: 0, left: estreito ? 0 : 'center', orient: estreito ? 'vertical' : 'horizontal', itemGap: 6, textStyle: { color: css('--texto-suave'), fontSize: estreito ? 11 : 12 } };
+  const linha = (chave, campo, extra) => ({ name: nomes[chave], type: 'line', data: anos.map((a) => a[campo]), symbolSize: 5, lineStyle: { width: chave === 'crua' ? 2 : 3, color: cores[chave], type: chave === 'crua' ? 'dashed' : 'solid' }, itemStyle: { color: cores[chave] }, ...extra });
+
+  const g1 = graficos.inpe || echarts.init(document.getElementById('graf-inpe'));
+  graficos.inpe = g1;
+  g1.setOption({
+    animation: false, legend: legenda,
+    grid: { left: 48, right: 16, top: estreito ? 84 : 56, bottom: 28 },
+    tooltip: { trigger: 'axis', confine: true, formatter: (ps) => {
+      const a = anos[ps[0].dataIndex];
+      return `<strong>${a.ano}</strong><br>INPE: ${fmt(a.inpe)} focos<br>Régua de Fogo: ${fmt(a.nossa)} focos<br>Sem harmonizar: ${fmt(a.sem_harmonizar)} focos<br><span style="opacity:.75">índice: ${ps.map((p) => p.seriesName.split(' ')[0] + ' ' + Math.round(p.value)).join(' · ')}</span>`;
+    } },
+    ...eixo((v) => v),
+    series: [linha('inpe', 'indice_inpe', { markLine: marca2012 }), linha('nossa', 'indice_nossa'), linha('crua', 'indice_sem_harmonizar')],
+  }, true);
+
+  const g2 = graficos.inpeRazao || echarts.init(document.getElementById('graf-inpe-razao'));
+  graficos.inpeRazao = g2;
+  g2.setOption({
+    animation: false, legend: { ...legenda, data: [nomes.nossa, nomes.crua] },
+    grid: { left: 48, right: 16, top: estreito ? 70 : 56, bottom: 28 },
+    tooltip: { trigger: 'axis', confine: true, valueFormatter: (v) => num1(v) + ' focos para cada foco do INPE' },
+    ...eixo((v) => v + 'x'),
+    series: [linha('nossa', 'razao_nossa_inpe', { markLine: marca2012 }), linha('crua', 'razao_sem_harmonizar_inpe')],
+  }, true);
+
+  const h = anos.filter((a) => a.hora_utc_mais_comum_inpe !== null);
+  const ultimoAntes = h.filter((a) => a.hora_utc_mais_comum_inpe === h[0].hora_utc_mais_comum_inpe).pop();
+  const depois = h.filter((a) => a.ano > ultimoAntes.ano);
+  document.getElementById('inpe-leitura').innerHTML = `
+    <h3>O que a comparação mostra</h3>
+    <ul>
+      <li><strong>O salto de 2012 some.</strong> Sem harmonizar, a nossa contagem passa de ${num1(r.razao_sem_harmonizar_2011)} para ${num1(r.razao_sem_harmonizar_2012)} focos para cada foco do INPE de 2011 para 2012, um salto de ${num1(r.salto_sem_harmonizar_vezes)} vezes só pela troca de satélite. Harmonizada, fica em ${num1(r.razao_media_2003_2011)} de 2003 a 2011 e ${num1(r.razao_media_2012_2021)} de 2012 a 2021: sobra uma diferença de ${num1(r.diferenca_entre_periodos_pct)}%.</li>
+      <li><strong>Os anos sobem e descem juntos.</strong> Correlação de ${num3(r.correlacao_anual)} ano a ano e ${num3(r.correlacao_mensal)} mês a mês. Sem harmonizar, a correlação ano a ano cai para ${num2(r.correlacao_anual_sem_harmonizar)}: a série crua nem aponta na mesma direção.</li>
+      <li><strong>Os piores anos coincidem.</strong> Cinco anos com mais fogo no INPE: ${r.top5_inpe.join(', ')}. Na Régua de Fogo: ${r.top5_nossa.join(', ')}.</li>
+      ${depois.length ? `<li><strong>A mudança de órbita do Aqua aparece no INPE também.</strong> A hora mais comum das passagens era ${h[0].hora_utc_mais_comum_inpe}h UTC até ${ultimoAntes.ano} e passa a ${depois[0].hora_utc_mais_comum_inpe}h UTC em ${depois.map((a) => a.ano).join(' e ')}. É a mesma deriva que encontramos nos dados da NASA, confirmada por outra fonte.</li>` : ''}
+    </ul>
+    <h3>Como ler</h3>
+    <ul>
+      <li>O INPE conta bem menos focos que a nossa série: usa outro processamento e só os focos dentro do contorno oficial do estado. Nós usamos um retângulo em volta da Bahia, que pega pedaços dos estados vizinhos. Por isso a comparação é do desenho da série, não do número absoluto.</li>
+      <li>A hora das passagens, por volta das 13h30 na Bahia, indica que o satélite de referência é o MODIS Aqua, o mesmo que usamos como base. Por isso a conferência confirma a forma da série, mas não resolve a diferença entre o Aqua e o Terra antes de 2012. A faixa de incerteza desse período continua.</li>
+    </ul>
+    <p class="nota">Fonte: ${d.fonte}, <a href="${d.url_fonte}" target="_blank" rel="noopener">dataserver-coids.inpe.br</a>. Contagem dos focos com estado igual a Bahia, de 2003 a 2025.</p>`;
 }
 
 // ------------------------------------------------------------------ método e rodapé
@@ -754,6 +836,8 @@ function metodo() {
     <h3>O que descobrimos antes de 2012</h3>
     <p>${f.descoberta}</p>
     <p class="nota">Média anual de 2003 a 2011, em focos equivalentes VIIRS: ${fmt(f.media_anual_2003_2011.t1_terra)} pelo Terra, ${fmt(f.media_anual_2003_2011.fatores_aqua)} pelo modelo com fatores e ${fmt(f.media_anual_2003_2011.t1_aqua)} pela taxa por mês do Aqua. VIIRS real de 2012 a 2021: ${fmt(f.viirs_real_media_anual_2012_2021)} por ano.</p>` : ''}
+    <h3>Conferência com o INPE</h3>
+    <p>Comparamos a série harmonizada com a do satélite de referência do INPE, uma fonte independente: o desenho dos anos bate e o salto de 2012 desaparece. <a href="#inpe" data-janela="inpe">Ver a comparação</a>.</p>
     <h3>Áreas menores</h3>
     <p>Ao escolher um ponto, o site soma as células da grade NASA POWER (cerca de 55 x 68 km) dentro do raio, usando as mesmas taxas calibradas para a Bahia. A precisão medida (${v.erro_mensal_wape_pct.toLocaleString('pt-BR')}%) vale para a Bahia inteira; em áreas pequenas, com poucos focos, os números variam mais.</p>
     <h3>Limitações</h3>
@@ -768,10 +852,12 @@ function rodape() {
 // ------------------------------------------------------------------ controles
 
 function ligarControles() {
-  document.querySelectorAll('[data-janela]').forEach((el) => el.addEventListener('click', (ev) => {
+  document.addEventListener('click', (ev) => {
+    const el = ev.target.closest('[data-janela]');
+    if (!el) return;
     ev.preventDefault();
     abrirJanela(el.dataset.janela);
-  }));
+  });
   document.querySelectorAll('dialog.janela').forEach((d) => {
     d.querySelector('.fechar').addEventListener('click', () => d.close());
     d.addEventListener('click', (ev) => { if (ev.target === d) d.close(); });

@@ -299,7 +299,7 @@ button.chip:hover { filter: brightness(1.05); }
 .coordenada input { width: 130px; }
 
 /* ---------- comparação dos métodos ---------- */
-.bloco-largo { grid-column: 1 / -1; border-color: color-mix(in srgb, var(--destaque) 35%, var(--borda)); background: linear-gradient(90deg, var(--destaque-suave), var(--superficie) 70%); }
+.bloco-largo { border-color: color-mix(in srgb, var(--destaque) 35%, var(--borda)); background: linear-gradient(90deg, var(--destaque-suave), var(--superficie) 70%); }
 .lista-metodos { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin: 14px 0 6px; }
 .metodo-card { border: 1px solid var(--borda); border-radius: 14px; padding: 12px 14px; background: var(--superficie-2); display: grid; gap: 6px; align-content: start; }
 .metodo-card.usado { border: 2px solid var(--destaque); background: var(--destaque-suave); }
@@ -314,3 +314,16 @@ button.chip:hover { filter: brightness(1.05); }
 .tag.promissor { color: #fff; background: var(--abaixo); }
 .tag.descartado { color: var(--texto); background: var(--borda); }
 .tag { white-space: nowrap; }
+
+/* blocos: 6 colunas para caber 3 normais ou 2 largos por linha */
+.blocos { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.blocos > .bloco-abrir { grid-column: span 2; }
+.blocos > .bloco-largo { grid-column: span 3; }
+.grafico.baixo { height: 260px; }
+@media (max-width: 900px) {
+  .blocos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .blocos > .bloco-abrir, .blocos > .bloco-largo { grid-column: auto; }
+}
+@media (max-width: 560px) {
+  .blocos { grid-template-columns: 1fr; }
+}

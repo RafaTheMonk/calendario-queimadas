@@ -116,6 +116,11 @@
           <span class="bloco-titulo">7 métodos testados: qual ganhou e por quê</span>
           <span class="bloco-texto">Todos na mesma prova, adivinhando anos que não tinham visto. O erro de cada um, o que deu errado e o que ficou no site.</span>
         </button>
+        <button type="button" class="bloco-abrir bloco-largo" data-janela="inpe">
+          <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 16l5-6 4 3 8-8"/><path d="M3 20l5-5 4 3 8-8" stroke-dasharray="2.5 2.5"/></svg></span>
+          <span class="bloco-titulo">Conferência com o INPE</span>
+          <span class="bloco-texto">Nossa série contra a do satélite de referência do INPE, uma fonte independente: mesmo desenho, sem o salto de 2012.</span>
+        </button>
       </div>
     </section>
   </main>
@@ -233,6 +238,26 @@
       <div id="metodos-conclusao"></div>
       <div class="baixar">
         <a class="botao secundario" href="data/metodos.json" download>JSON da comparação</a>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="janela" id="janela-inpe" aria-labelledby="t-inpe">
+    <div class="janela-topo">
+      <h2 id="t-inpe">Conferência com o INPE</h2>
+      <button class="fechar" type="button" aria-label="Fechar">×</button>
+    </div>
+    <div class="janela-corpo metodo">
+      <div id="inpe-intro"><p>Carregando a comparação...</p></div>
+      <h3>As duas séries, no mesmo desenho</h3>
+      <p class="nota">Cada série dividida pela própria média de 2012 a 2021 (= 100), para comparar a forma e não o tamanho.</p>
+      <div id="graf-inpe" class="grafico" role="img" aria-label="Focos por ano: INPE, Régua de Fogo e dados sem harmonizar, como índice"></div>
+      <h3>Quantos focos nossos para cada foco do INPE</h3>
+      <p class="nota">Se a conversão estiver certa, essa conta fica parecida antes e depois de 2012.</p>
+      <div id="graf-inpe-razao" class="grafico baixo" role="img" aria-label="Razão entre a nossa série e a do INPE, por ano"></div>
+      <div id="inpe-leitura"></div>
+      <div class="baixar">
+        <a class="botao secundario" href="data/inpe.json" download>JSON da comparação</a>
       </div>
     </div>
   </dialog>
