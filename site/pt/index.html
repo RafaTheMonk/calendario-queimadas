@@ -25,7 +25,7 @@
         <a href="#calendario" data-janela="calendario">Calendário</a>
         <a href="#por-ano" data-janela="por-ano">Por ano</a>
         <a href="#por-mes" data-janela="por-mes">Por mês</a>
-        <a href="#metodos" data-janela="metodos">Métodos</a>
+        <a href="#metodos" data-janela="metodologia">Metodologia</a>
         <a href="#metodo" data-janela="metodo">Como funciona</a>
       </nav>
       <div class="acoes">
@@ -112,6 +112,11 @@
           <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="7" rx="2"/><path d="M7 9v3M11 9v2M15 9v3M19 9v2"/></svg></span>
           <span class="bloco-titulo">Como funciona</span>
           <span class="bloco-texto">Dados da NASA, método, precisão, fatores e download.</span>
+        </button>
+        <button type="button" class="bloco-abrir bloco-largo bloco-total" data-janela="metodologia">
+          <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6A2 2 0 0 0 19 18l-5-9V3"/><path d="M7.5 14h9"/></svg></span>
+          <span class="bloco-titulo">Metodologia e testes: tudo o que conferimos</span>
+          <span class="bloco-texto">Como a série é montada passo a passo, as 12 taxas por mês, todos os testes (anos não vistos, 7 métodos, INPE, API do FIRMS, 11 regiões) e como refazer.</span>
         </button>
         <button type="button" class="bloco-abrir bloco-largo" data-janela="metodos">
           <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21v-6h4v6M10 21V9h4v12M15 21v-4h4v4"/><path d="M12 3l1 2 2 .3-1.5 1.4.4 2.1-1.9-1-1.9 1 .4-2.1L9 5.3l2-.3z"/></svg></span>
@@ -261,6 +266,17 @@
     <div class="janela-corpo">
       <ol id="lista-top" class="lista-top"></ol>
     </div>
+  </dialog>
+
+  <dialog class="janela" id="janela-metodologia" aria-labelledby="t-metodologia">
+    <div class="janela-topo">
+      <div>
+        <h2 id="t-metodologia">Metodologia e testes</h2>
+        <p class="nota">Tudo o que fizemos para colocar o MODIS e o VIIRS numa régua só, e todos os testes que fizemos para conferir. Todo número sai de um script do repositório aberto.</p>
+      </div>
+      <button class="fechar" type="button" aria-label="Fechar">×</button>
+    </div>
+    <div class="janela-corpo metodo" id="metodologia-conteudo"><p>Carregando...</p></div>
   </dialog>
 
   <dialog class="janela" id="janela-metodos" aria-labelledby="t-metodos">

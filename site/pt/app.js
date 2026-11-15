@@ -27,6 +27,8 @@ let DADOS = null;       // série da área ativa, no mesmo formato da oficial
 let METODOS = null;     // comparação dos métodos (carregada sob demanda)
 let INPE = null;        // comparação com o INPE (carregada sob demanda)
 let RELATADOS = null;   // incêndios relatados pelo IBAMA (carregados sob demanda)
+let REPLICACAO = null;  // o método em outras regiões (carregado sob demanda)
+let CONFERENCIA = null; // conferência dos arquivos com a API do FIRMS (carregada sob demanda)
 const desenho = { ativo: false, pontos: [] };  // área desenhada no mapa
 const focosMapa = { modo: '', dados: null, pedido: 0 };  // pontos de foco desenhados no mapa
 const graficos = {};
@@ -285,6 +287,7 @@ function desenharJanela(nome) {
   else if (nome === 'metodos') comparacaoMetodos();
   else if (nome === 'inpe') comparacaoInpe();
   else if (nome === 'relatados') detectadosRelatados();
+  else if (nome === 'metodologia') metodologia();
   Object.values(graficos).forEach((g) => g.resize());
 }
 
@@ -796,6 +799,7 @@ function concluirDesenho() {
 
 const num1 = (n) => n.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const num3 = (n) => n.toLocaleString('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+const num2b = (n) => n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const ORDEM_METODOS = ['taxa_unica', 'taxa_por_mes', 'quadradinhos', 'ranking', 'formula_pesos', 'terra', 'mistura'];
 
 function textosMetodos(d) {
@@ -1076,6 +1080,143 @@ async function detectadosRelatados() {
       ${lista('Municípios com mais registros', d.municipios.slice(0, 6), nomeProprio)}
     </div>
     <p class="nota">Fonte: ${d.fonte}, <a href="${d.url_fonte}" target="_blank" rel="noopener">dadosabertos.ibama.gov.br</a>. ${fmt(d.total_ocorrencias)} ocorrências na Bahia, contando cada registro uma vez. Anos com menos de ${d.minimo_registros_por_ano} registros ficam fora dos gráficos, porque o arquivo aberto só tem cobertura de ${a0} a ${a1}; ${d.datas_invalidas_descartadas} registros com data inválida foram descartados.</p>`;
+}
+
+// ------------------------------------------------------------------ metodologia e testes
+
+// completude dos dados: dias com dado por satélite (Dados/firms_bahia/relatorio_completude.md)
+const COMPLETUDE = [['MODIS Aqua', 99.6], ['MODIS Terra', 99.3], ['VIIRS Suomi NPP', 99.3], ['VIIRS NOAA-20', 99.8]];
+
+async function carregarJson(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(url + ' ' + r.status);
+  return r.json();
+}
+
+async function metodologia() {
+  const caixa = document.getElementById('metodologia-conteudo');
+  try {
+    [METODOS, INPE, RELATADOS, REPLICACAO, CONFERENCIA] = await Promise.all([
+      METODOS || carregarJson('../data/metodos.json'), INPE || carregarJson('../data/inpe.json'), RELATADOS || carregarJson('../data/relatados.json'),
+      REPLICACAO || carregarJson('../data/replicacao_regioes.json'), CONFERENCIA || carregarJson('../data/conferencia_api.json'),
+    ]);
+  } catch (e) {
+    caixa.innerHTML = '<p>Não foi possível carregar os testes.</p>';
+    return;
+  }
+  const v = OFICIAL.metodo.validacao;
+  const f = OFICIAL.metodo.fatores;
+  const t1 = METODOS.metodos.taxa_por_mes;
+  const unica = METODOS.metodos.taxa_unica;
+  const ri = INPE.resumo;
+  const rep = REPLICACAO;
+  const janelas = CONFERENCIA.janelas;
+  const api = (prod) => {
+    const js = janelas.filter((x) => x.produto === prod);
+    const l = js.reduce((t, x) => t + x.local_filtrado, 0);
+    const a = js.reduce((t, x) => t + x.api_filtrado, 0);
+    return { n: js.length, iguais: js.filter((x) => x.local_filtrado === x.api_filtrado).length, dif: (l - a) / a * 100 };
+  };
+  const viirsApi = api('VIIRS_SNPP_SP');
+  const modisApi = api('MODIS_SP');
+  const taxa = OFICIAL.metodo.taxa_por_mes;
+  const fim = OFICIAL.periodo.fim;
+  const NOMES = { 'Bahia (Brazil)': 'Bahia', Argentina: 'Argentina', Australia: 'Austrália', Bolivia: 'Bolívia', Canada: 'Canadá', Chile: 'Chile',
+    Indonesia: 'Indonésia', Mexico: 'México', Portugal: 'Portugal', 'South Africa': 'África do Sul', 'United States': 'Estados Unidos' };
+  const nome = (r) => NOMES[r.regiao] || r.regiao;
+  const card = (titulo, pergunta, resultado, ok, janela) => `<article class="teste-card">
+      <header><h4>${titulo}</h4><span class="tag ${ok ? 'passou' : 'limite'}">${ok ? 'passou' : 'limite achado'}</span></header>
+      <p class="pergunta">${pergunta}</p>
+      <p class="resultado">${resultado}</p>
+      ${janela ? `<a href="#${janela}" data-janela="${janela}">Ver os detalhes</a>` : ''}
+    </article>`;
+  const regioes = [...rep.regioes].sort((a, b) => a.teste_erro_pct - b.teste_erro_pct);
+  caixa.innerHTML = `
+    <h3>1. Como a série é montada</h3>
+    <ol class="passos">
+      <li><strong>Baixar</strong>Arquivos anuais do NASA FIRMS para o Brasil: MODIS Coleção 6.1 (Aqua e Terra, 2000 a 2025) e VIIRS 375 m (Suomi NPP 2012 a 2025, NOAA-20 2018 a 2025), recortados num retângulo em volta da Bahia. 2026 vem da API de área do FIRMS, até ${MESES_LONGO[Number(fim.slice(5, 7)) - 1]} de ${fim.slice(0, 4)}.</li>
+      <li><strong>Filtrar e contar</strong>Só fogo em vegetação (type = 0), MODIS com confiança 30 ou mais, VIIRS sem confiança baixa. Os focos são contados por mês para cada satélite, e por célula da grade NASA POWER (cerca de 55 x 68 km), para somar qualquer área de interesse.</li>
+      <li><strong>Tirar os meses ruins</strong>Meses com 3 dias ou mais sem dado, ou com dias degradados do Aqua (razão diária Aqua/Suomi NPP abaixo de 0,25 vez a mediana do mês), ficam fora da calibração e do teste. As falhas do Suomi NPP são completadas com o NOAA-20 vezes ${OFICIAL.metodo.razao_snpp_noaa20.toLocaleString('pt-BR')}, razão medida quando os dois estavam completos.</li>
+      <li><strong>Aprender uma taxa para cada mês do ano</strong>Nos anos em que os dois sensores funcionaram juntos (fevereiro de 2012 a dezembro de 2021, antes da deriva da órbita do Aqua), a taxa de cada mês do ano é o total do VIIRS dividido pelo total do MODIS Aqua. O Aqua é a base porque passa à tarde, perto do horário do VIIRS.<br><span class="formula">equivalente VIIRS(mês) = taxa(mês do ano) × MODIS Aqua(mês)</span></li>
+      <li><strong>Montar a série</strong>2003 a janeiro de 2012: MODIS Aqua convertido com a taxa do seu mês. De fevereiro de 2012 em diante: VIIRS medido. Antes de 2012, uma faixa entre três leituras (taxa pelo Aqua, taxa pelo Terra e modelo com fatores), porque os dois MODIS discordam.</li>
+      <li><strong>Comparar com o normal</strong>Para cada mês do ano, a mediana, a média e a faixa entre os percentis 25 e 75 dos anos medidos pelo VIIRS (2012 a 2025). Mês acima do percentil 75 está acima do normal; abaixo do 25, abaixo do normal.</li>
+    </ol>
+    <p class="nota">As 12 taxas aprendidas (focos do VIIRS para cada foco do MODIS Aqua). Ficam mais altas na chuva, quando o fogo é pequeno e o VIIRS enxerga bem mais que o MODIS.</p>
+    <div id="graf-taxas" class="grafico baixo" role="img" aria-label="Taxa VIIRS/MODIS Aqua de cada mês do ano"></div>
+
+    <h3>2. Todos os testes que fizemos</h3>
+    <div class="testes">
+      ${card('Anos não vistos', 'Aprendendo só com 2012 a 2019, quanto ele acerta 2020 a 2023?', `<strong>${num1(t1.teste_erro_pct)}%</strong>de erro por mês em ${t1.teste_n_meses} meses, desvio total de ${pct(t1.teste_vies_pct)}.`, true, null)}
+      ${card('Escondendo um ano de cada vez', '2020 a 2023 foi só um período de sorte?', `<strong>${num1(t1.um_ano_fora_erro_pct)}%</strong>de erro escondendo cada ano de 2013 a 2023 (${t1.um_ano_fora_n_meses} meses). Taxa única: ${num1(unica.um_ano_fora_erro_pct)}%.`, true, null)}
+      ${card('7 métodos, mesma prova', 'A taxa por mês é mesmo a melhor escolha?', `<strong>${num1(t1.teste_erro_pct)}%</strong>o menor erro entre os métodos usados sozinhos. A posição no ranking decorou os dados (${num1(METODOS.metodos.ranking.anos_que_viu_erro_pct)}% nos anos vistos, ${num1(METODOS.metodos.ranking.teste_erro_pct)}% nos novos).`, true, 'metodos')}
+      ${card('Conferência independente: INPE', 'A série harmonizada bate com uma fonte que nunca passou pela nossa conversão?', `<strong>${num3(ri.correlacao_anual)}</strong>de correlação ano a ano (sem harmonizar: ${num2b(ri.correlacao_anual_sem_harmonizar)}). O salto de ${num1(ri.salto_sem_harmonizar_vezes)} vezes em 2012 cai para ${num1(ri.diferenca_entre_periodos_pct)}%.`, true, 'inpe')}
+      ${card('Conferência dos dados: API do FIRMS', 'Os arquivos que baixamos são iguais aos da API oficial da NASA?', `<strong>${viirsApi.iguais} de ${viirsApi.n}</strong>janelas do VIIRS batem exatamente. O MODIS difere em ${pct(Math.round(modisApi.dif * 100) / 100)} (versão de processamento mais nova nos arquivos anuais).`, true, null)}
+      ${card('Completude dos dados', 'Há buracos no registro dos satélites?', `<strong>&gt;99%</strong>dos dias com dado: ${COMPLETUDE.map(([n, p]) => `${n} ${p.toLocaleString('pt-BR')}%`).join(', ')}. Meses com falha são sinalizados.`, true, null)}
+      ${card('Outras regiões', 'O método só funciona na Bahia?', `<strong>${rep.taxa_por_mes_ganha_da_taxa_unica_no_teste} de ${rep.n_regioes}</strong>lugares em que a taxa por mês ganha da taxa única em anos não vistos (${rep.taxa_por_mes_ganha_da_taxa_unica_um_ano_fora} de ${rep.n_regioes} escondendo um ano de cada vez). Sofre com pouco fogo (Portugal) e com anos recordes (Canadá 2023).`, false, null)}
+      ${card('Modelo com fatores (pesos da mentoria)', 'Fatores de clima e de fogo melhoram a conversão?', `<strong>${num1(METODOS.metodos.formula_pesos.teste_erro_pct)}%</strong>de erro, não melhor que a taxa por mês, mas explica por que a taxa muda (focos noturnos, umidade) e a faixa de 95% cobriu ${f.cobertura_faixa_95} meses de teste.`, false, 'metodo')}
+      ${card('Detectados x relatados', 'Como a detecção por satélite se compara aos incêndios registrados em solo?', `<strong>${fmt(RELATADOS.focos_por_ocorrencia)}</strong>focos para cada incêndio registrado pelas brigadas do IBAMA; só ${RELATADOS.detectados_por_satelite} de ${fmt(RELATADOS.total_ocorrencias)} registros foram achados por satélite.`, true, 'relatados')}
+      ${card('Correlação não é prova', 'Uma correlação alta basta para confiar no método?', `<strong>${num3(METODOS.correlacao_ordem_dos_meses.aqua_sem_conversao)}</strong>o Aqua cru já chega a isso, sem conversão nenhuma, porque as estações mandam no ano. Por isso medimos pelo erro em focos, não pela correlação.`, false, null)}
+    </div>
+
+    <h3>3. Funciona em outros lugares?</h3>
+    <p>Os mesmos scripts, os mesmos filtros e a mesma prova (aprende com 2012 a 2019, adivinha 2020 a 2023) em ${rep.n_regioes - 1} países com fogo muito diferente. As taxas são recalculadas em cada lugar: julho vai de ${num1(rep.taxa_julho_min_max[0])} a ${num1(rep.taxa_julho_min_max[1])}.</p>
+    <div id="graf-replicacao" class="grafico" style="height:460px" role="img" aria-label="Erro da taxa por mês e da taxa única em cada região"></div>
+    <div class="tabela-rolagem"><table class="tabela-regioes">
+      <thead><tr><th>Região</th><th>Taxa por mês</th><th>Taxa única</th><th>Escondendo cada ano</th><th>Desvio</th><th>Salto de 2012</th><th>Ano recorde</th></tr></thead>
+      <tbody>${regioes.map((r) => `<tr class="${r.regiao.startsWith('Bahia') ? 'destaque' : ''}"><td>${nome(r)}</td><td>${num1(r.teste_erro_pct)}%</td><td>${num1(r.teste_erro_taxa_unica_pct)}%</td><td>${num1(r.um_ano_fora_erro_pct)}%</td><td>${pct(r.teste_vies_pct)}</td><td>${num1(r.salto_sem_harmonizar_2011_2012)}x</td><td>${r.ano_com_mais_fogo}</td></tr>`).join('')}</tbody>
+    </table></div>
+    <p class="nota">Erro = WAPE mensal em 2020 a 2023 contra o VIIRS medido. Os anos recordes batem com eventos conhecidos (Indonésia 2015, Chile 2017, Canadá 2023, Bolívia 2024). Portugal tem mediana de cerca de 100 focos VIIRS por mês, pouco para uma taxa por mês estável; o recorde do Canadá em 2023 ficou muito fora dos anos de calibração.</p>
+
+    <h3>4. Incerteza e limites</h3>
+    <ul>
+      <li>Antes de 2012 não há VIIRS para conferir, e os dois MODIS discordam: esses anos aparecem com faixa.</li>
+      <li>Os ${num1(v.erro_mensal_wape_pct)}% de erro valem para a Bahia inteira; em áreas de 100 km, antes de 2012, ficam perto de 25%.</li>
+      <li>Só a Bahia está processada no site; o método foi testado em outros ${rep.n_regioes - 1} países.</li>
+      <li>Os meses recentes de 2026 são provisórios (quase tempo real).</li>
+    </ul>
+
+    <h3>5. Como refazer</h3>
+    <p>Tudo está no repositório aberto: <a href="https://github.com/RafaTheMonk/calendario-queimadas" target="_blank" rel="noopener">github.com/RafaTheMonk/calendario-queimadas</a>. Python 3 com numpy; os scripts de 2026 e da API precisam de uma chave gratuita do FIRMS (MAP_KEY).</p>
+    <div class="comandos">Scripts/baixar_firms_bahia.sh                    # baixa o FIRMS e recorta a área
+python3 -I Scripts/completude_firms.py           # completude dos dados
+python3 -I Scripts/gerar_json_site.py            # monta a série harmonizada
+python3 -I Scripts/harmonizacao/comparar_metodos.py   # 7 métodos, mesma prova
+python3 -I Scripts/comparar_inpe.py              # conferência com o INPE
+python3 -I Scripts/conferir_com_api.py           # confere os arquivos com a API do FIRMS
+python3 -I Scripts/replicar_regiao.py Argentina  # o método em outro país
+python3 -I Scripts/resumo_regioes.py             # resumo de todas as regiões</div>`;
+
+  const estreito = caixa.clientWidth < 560;
+  if (graficos.taxas) graficos.taxas.dispose();
+  const g1 = echarts.init(document.getElementById('graf-taxas'));
+  graficos.taxas = g1;
+  g1.setOption({
+    animation: false,
+    grid: { left: 36, right: 12, top: 24, bottom: 24 },
+    tooltip: { trigger: 'axis', confine: true, valueFormatter: (x) => num1(x) + ' focos VIIRS por foco do MODIS Aqua' },
+    xAxis: { type: 'category', data: MESES, axisLabel: { color: css('--texto-suave') } },
+    yAxis: { type: 'value', axisLabel: { color: css('--texto-suave') }, splitLine: { lineStyle: { color: css('--borda') } } },
+    series: [{ type: 'bar', data: MESES.map((_, i) => taxa[String(i + 1).padStart(2, '0')]), itemStyle: { color: css('--destaque'), borderRadius: [4, 4, 0, 0] },
+      label: { show: !estreito, position: 'top', color: css('--texto-suave'), formatter: (x) => num1(x.value) } }],
+  }, true);
+
+  const ordem = [...regioes].reverse();
+  if (graficos.replicacao) graficos.replicacao.dispose();
+  const g2 = echarts.init(document.getElementById('graf-replicacao'));
+  graficos.replicacao = g2;
+  g2.setOption({
+    animation: false,
+    legend: { top: 0, textStyle: { color: css('--texto-suave'), fontSize: estreito ? 11 : 12 } },
+    grid: { left: estreito ? 96 : 120, right: 40, top: 32, bottom: 20 },
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, confine: true, valueFormatter: (x) => num1(x) + '%' },
+    xAxis: { type: 'value', axisLabel: { show: !estreito, color: css('--texto-suave'), formatter: (x) => x + '%' }, splitLine: { lineStyle: { color: css('--borda') } } },
+    yAxis: { type: 'category', data: ordem.map(nome),
+      axisLabel: { color: css('--texto'), fontSize: estreito ? 11 : 12, formatter: (n) => (n === 'Bahia' ? '{b|Bahia}' : n), rich: { b: { fontWeight: 700, color: css('--destaque') } } } },
+    series: [
+      { name: 'Taxa por mês (nosso método)', type: 'bar', data: ordem.map((r) => r.teste_erro_pct), itemStyle: { color: css('--destaque'), borderRadius: [0, 4, 4, 0] } },
+      { name: 'Taxa única', type: 'bar', data: ordem.map((r) => r.teste_erro_taxa_unica_pct), itemStyle: { color: '#94a3b8', borderRadius: [0, 4, 4, 0] } },
+    ],
+  }, true);
 }
 
 // ------------------------------------------------------------------ método e rodapé
