@@ -18,17 +18,19 @@ Juntando os dois sem ajuste, a série dá um salto falso em 2012: 27.470 focos d
 1. **Harmonizar:** converter os anos que só têm MODIS (2003 a 2011) para a escala do VIIRS, calibrando nos anos em que os dois funcionaram juntos.
 2. **Mostrar:** um calendário de meses por anos, com o mês atual comparado com o normal daquele mês (anos medidos pelo VIIRS, 2012 a 2025), anomalias, ranking, filtro de período, escolha da área e download dos dados.
 
-## Dados (todos da NASA)
+## Dados (NASA; INPE só para conferir)
 
 - **NASA FIRMS:** focos MODIS C6.1 (Terra e Aqua) e VIIRS 375 m (Suomi NPP e NOAA-20), arquivos anuais por país, processamento padrão. 48 arquivos, 40 milhões de focos no Brasil, 3,6 milhões na área de estudo depois dos filtros. Cobertura de dias acima de 99% em todos os satélites.
 - **NASA POWER:** chuva, vento, umidade, temperatura e altitude em grade mensal (0,5 x 0,625 grau), de 2003 a 2025.
+- **INPE, Programa Queimadas:** focos do satélite de referência, arquivos anuais de 2003 a 2025 (https://dataserver-coids.inpe.br/queimadas/queimadas/focos/csv/anual/Brasil_sat_ref/). Usados só para conferir a série harmonizada; não entram no cálculo.
 
 Área: retângulo envolvente da Bahia (longitude -46,62 a -37,34, latitude -18,35 a -8,53). Filtros: só focos de vegetação (`type = 0`) e sem confiança baixa.
 
 ## Método e resultados
 
 - **Conversão principal (taxa por mês do ano):** para cada mês do ano, total de focos VIIRS dividido pelo do MODIS Aqua, que passa no mesmo horário. Calibrada com 2012 a 2019 e testada em 2020 a 2023, anos que o modelo não viu: **erro de 7,2% por mês** (8,7% contando os meses com falha de satélite) e **desvio de 0,2%** no total. Esse erro vale para a Bahia inteira; em áreas de 100 km, antes de 2012, o erro típico é de cerca de 25%.
-- **Comparação de técnicas:** taxa única, taxa por mês, contagem por células de grade e quantile mapping. A taxa por mês teve o menor erro.
+- **Comparação de 7 métodos na mesma prova** (janela "Métodos" do site): taxa única 9,2%, taxa por mês 7,2%, células de grade com fogo por dia 9,8%, quantile mapping 8,1% (2,7% nos anos de calibração, sinal de que decora), modelo com fatores 7,9%, taxa por mês a partir do Terra 11,8% e mistura 70% taxa + 30% fatores 6,6%. A mistura ganhou da taxa por mês em 8 de 11 anos, mas a diferença ainda pode ser acaso, então o número principal segue com a taxa por mês.
+- **Conferência externa com o INPE** (janela "Conferência com o INPE"): correlação de 0,985 ano a ano com a série do satélite de referência (sem harmonizar: -0,13), 0,992 mês a mês e mesmo mês de pico em 21 de 23 anos. Sem harmonizar, a razão contra o INPE salta 6,2 vezes em 2012; harmonizada, a diferença entre 2003-2011 e 2012-2021 fica em 11%.
 - **Modelo com fatores (regressão de Poisson por célula e mês):** explica por que a relação entre os sensores muda, usando só dados que existiam antes de 2012. Fatores que mais pesam: fração de focos noturnos (à noite o VIIRS é muito mais sensível) e umidade. Testados e descartados: tamanho do pixel, hora de passagem e vento. A faixa de 95% acertou 42 de 44 meses de teste.
 - **Correções de dado:** meses com falha do Suomi NPP completados com o NOAA-20, dias com dado degradado do Aqua excluídos, calibração antes da mudança de órbita do Aqua (que passou a cruzar a área mais tarde a partir de 2022).
 - **Descoberta:** antes de 2012, os dois MODIS discordam entre si. O Terra via 0,47 foco por foco do Aqua em 2003-2011 e 0,72 de 2012 em diante, só de dia. Por isso 2003-2011 aparece com faixa: de 132 mil (leitura do Terra) a 204 mil (leitura do Aqua) focos por ano, contra 124 mil do VIIRS real em 2012-2021. Em todas as leituras, 2007 foi o ano com mais fogo.
@@ -63,6 +65,7 @@ python3 -I Scripts/harmonizacao/fatores/baixar_power.py    # clima da NASA POWER
 python3 -I Scripts/harmonizacao/fatores/versao2.py         # modelo com fatores
 python3 -I Scripts/gerar_json_site.py                      # dados do site
 python3 -I Scripts/harmonizacao/comparar_metodos.py       # comparação dos 7 métodos (janela "Métodos")
+python3 -I Scripts/comparar_inpe.py                        # conferência com o INPE (zips do INPE em Dados/inpe_ref/)
 cd site && python3 -m http.server 8000                     # abrir http://localhost:8000
 ```
 
