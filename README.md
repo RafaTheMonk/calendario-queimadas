@@ -16,7 +16,7 @@ Juntando os dois sem ajuste, a série dá um salto falso em 2012: 27.470 focos d
 ## A solução
 
 1. **Harmonizar:** converter os anos que só têm MODIS (2003 a 2011) para a escala do VIIRS, calibrando nos anos em que os dois funcionaram juntos.
-2. **Mostrar:** um calendário de meses por anos, com o mês atual comparado com o normal daquele mês, anomalias, ranking e download dos dados.
+2. **Mostrar:** um calendário de meses por anos, com o mês atual comparado com o normal daquele mês (anos medidos pelo VIIRS, 2012 a 2025), anomalias, ranking, filtro de período, escolha da área e download dos dados.
 
 ## Dados (todos da NASA)
 
@@ -27,7 +27,7 @@ Juntando os dois sem ajuste, a série dá um salto falso em 2012: 27.470 focos d
 
 ## Método e resultados
 
-- **Conversão principal (taxa por mês do ano):** para cada mês do ano, total de focos VIIRS dividido pelo do MODIS Aqua, que passa no mesmo horário. Calibrada com 2012 a 2019 e testada em 2020 a 2023, anos que o modelo não viu: **erro de 7,2% por mês** e **93% de acerto** em dizer se o mês ficou acima ou abaixo do normal.
+- **Conversão principal (taxa por mês do ano):** para cada mês do ano, total de focos VIIRS dividido pelo do MODIS Aqua, que passa no mesmo horário. Calibrada com 2012 a 2019 e testada em 2020 a 2023, anos que o modelo não viu: **erro de 7,2% por mês** (8,7% contando os meses com falha de satélite) e **desvio de 0,2%** no total. Esse erro vale para a Bahia inteira; em áreas de 100 km, antes de 2012, o erro típico é de cerca de 25%.
 - **Comparação de técnicas:** taxa única, taxa por mês, contagem por células de grade e quantile mapping. A taxa por mês teve o menor erro.
 - **Modelo com fatores (regressão de Poisson por célula e mês):** explica por que a relação entre os sensores muda, usando só dados que existiam antes de 2012. Fatores que mais pesam: fração de focos noturnos (à noite o VIIRS é muito mais sensível) e umidade. Testados e descartados: tamanho do pixel, hora de passagem e vento. A faixa de 95% acertou 42 de 44 meses de teste.
 - **Correções de dado:** meses com falha do Suomi NPP completados com o NOAA-20, dias com dado degradado do Aqua excluídos, calibração antes da mudança de órbita do Aqua (que passou a cruzar a área mais tarde a partir de 2022).
