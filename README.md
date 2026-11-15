@@ -73,7 +73,7 @@ python3 -I Scripts/processar_roi_ibama.py                  # detectados e relata
 cd site && python3 -m http.server 8000                     # abrir http://localhost:8000
 ```
 
-O site é estático: não precisa de servidor nem de banco. Para publicar, basta servir a pasta `site/`.
+O site é estático, com duas funções pequenas na Vercel (`api/recentes` e `api/pontos`) para ler o FIRMS do lado do servidor. A consulta de um dia escolhido no mapa precisa da chave do FIRMS na variável `FIRMS_MAP_KEY` do projeto na Vercel; sem ela, o resto do site funciona normalmente. Para publicar, basta servir a pasta `site/`.
 
 ## Limitações
 
