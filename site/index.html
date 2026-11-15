@@ -25,6 +25,7 @@
         <a href="#calendario" data-janela="calendario">Calendário</a>
         <a href="#por-ano" data-janela="por-ano">Por ano</a>
         <a href="#por-mes" data-janela="por-mes">Por mês</a>
+        <a href="#metodos" data-janela="metodos">Métodos</a>
         <a href="#metodo" data-janela="metodo">Como funciona</a>
       </nav>
       <div class="acoes">
@@ -109,6 +110,11 @@
           <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="7" rx="2"/><path d="M7 9v3M11 9v2M15 9v3M19 9v2"/></svg></span>
           <span class="bloco-titulo">Como funciona</span>
           <span class="bloco-texto">Dados da NASA, método, precisão, fatores e download.</span>
+        </button>
+        <button type="button" class="bloco-abrir bloco-largo" data-janela="metodos">
+          <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21v-6h4v6M10 21V9h4v12M15 21v-4h4v4"/><path d="M12 3l1 2 2 .3-1.5 1.4.4 2.1-1.9-1-1.9 1 .4-2.1L9 5.3l2-.3z"/></svg></span>
+          <span class="bloco-titulo">7 métodos testados: qual ganhou e por quê</span>
+          <span class="bloco-texto">Todos na mesma prova, adivinhando anos que não tinham visto. O erro de cada um, o que deu errado e o que ficou no site.</span>
         </button>
       </div>
     </section>
@@ -212,6 +218,22 @@
     </div>
     <div class="janela-corpo">
       <ol id="lista-top" class="lista-top"></ol>
+    </div>
+  </dialog>
+
+  <dialog class="janela" id="janela-metodos" aria-labelledby="t-metodos">
+    <div class="janela-topo">
+      <h2 id="t-metodos">Os métodos que testamos</h2>
+      <button class="fechar" type="button" aria-label="Fechar">×</button>
+    </div>
+    <div class="janela-corpo metodo">
+      <div id="metodos-intro"><p>Carregando a comparação...</p></div>
+      <div id="graf-metodos" class="grafico" role="img" aria-label="Erro de cada método no teste de 2020 a 2023 e escondendo um ano de cada vez"></div>
+      <div id="metodos-lista" class="lista-metodos"></div>
+      <div id="metodos-conclusao"></div>
+      <div class="baixar">
+        <a class="botao secundario" href="data/metodos.json" download>JSON da comparação</a>
+      </div>
     </div>
   </dialog>
 

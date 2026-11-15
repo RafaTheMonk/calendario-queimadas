@@ -24,6 +24,7 @@ const css = (nome) => getComputedStyle(document.documentElement).getPropertyValu
 let OFICIAL = null;     // série oficial da Bahia
 let CELULAS = null;     // série por célula (carregada sob demanda)
 let DADOS = null;       // série da área ativa, no mesmo formato da oficial
+let METODOS = null;     // comparação dos métodos (carregada sob demanda)
 const graficos = {};
 const estado = {
   modo: 'focos', brutos: false, mes: MES_ATUAL,
@@ -243,6 +244,7 @@ function desenharJanela(nome) {
   else if (nome === 'por-mes') mesAoLongoDosAnos(estado.mes);
   else if (nome === 'top') topDez();
   else if (nome === 'area') abrirMapa();
+  else if (nome === 'metodos') comparacaoMetodos();
   Object.values(graficos).forEach((g) => g.resize());
 }
 
@@ -588,6 +590,134 @@ function desenharAreaNoMapa() {
   }
 }
 
+// ------------------------------------------------------------------ métodos testados
+
+const num1 = (n) => n.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const num3 = (n) => n.toLocaleString('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+const ORDEM_METODOS = ['taxa_unica', 'taxa_por_mes', 'quadradinhos', 'ranking', 'formula_pesos', 'terra', 'mistura'];
+
+function textosMetodos(d) {
+  const r = d.metodos;
+  const t1 = r.taxa_por_mes;
+  const taxa = OFICIAL.metodo.taxa_por_mes;
+  const peso = Math.round(d.peso_mistura_taxa_por_mes * 100);
+  const nAnos = Object.keys(t1.um_ano_fora_por_ano).length;
+  return {
+    taxa_unica: {
+      nome: 'Uma taxa só para o ano todo', curto: 'Taxa única', tag: ['descartado', 'descartado'],
+      como: 'Um número só: o total de focos do VIIRS dividido pelo do MODIS Aqua nos anos em que os dois funcionaram juntos.',
+      veredito: 'Usa a mesma taxa na seca e na chuva. Na chuva o fogo é pequeno e o VIIRS enxerga bem mais que o MODIS, então a taxa única erra nesses meses.',
+    },
+    taxa_por_mes: {
+      nome: 'Uma taxa para cada mês do ano', curto: 'Taxa por mês', tag: ['usado', 'usado no site'],
+      como: `Para cada mês do ano, quantos focos o VIIRS vê para cada foco do MODIS Aqua. Em setembro, na seca, são ${num1(taxa['09'])}; em janeiro, na chuva, ${num1(taxa['01'])}. O dado antigo é multiplicado pela taxa do seu mês.`,
+      veredito: `Menor erro entre os métodos usados sozinhos, e continuou perto de ${num1(t1.um_ano_fora_erro_pct)}% escondendo cada ano. São 12 números que qualquer pessoa confere numa planilha.`,
+    },
+    quadradinhos: {
+      nome: 'Contar lugares com fogo em vez de focos', curto: 'Quadradinhos *', tag: ['descartado', 'teste de robustez'],
+      como: 'Divide o mapa em quadradinhos de uns 5,5 km e conta quantos tiveram fogo em cada dia. Depois aplica uma taxa por mês.',
+      veredito: `Quando o fogo é denso, o quadradinho já está aceso e para de contar. Errou mais em anos novos e nos anos de deriva do Aqua (${num1(r.quadradinhos.deriva_erro_pct)}%), e o número não se compara com as contagens oficiais de focos.`,
+    },
+    ranking: {
+      nome: 'Converter pela posição no ranking', curto: 'Posição no ranking', tag: ['descartado', 'descartado'],
+      como: 'Um mês que ficou entre os 30% mais fortes do MODIS recebe o valor dos 30% mais fortes do VIIRS.',
+      veredito: `Decorou os dados: errou ${num1(r.ranking.anos_que_viu_erro_pct)}% nos anos que já tinha visto e ${num1(r.ranking.teste_erro_pct)}% nos que não tinha. Os anos recordes antes de 2012 passam do maior valor que ele conhece.`,
+    },
+    formula_pesos: {
+      nome: 'Fórmula com pesos (pedido da mentoria)', curto: 'Fórmula com pesos', tag: ['faixa', 'usado na faixa'],
+      como: 'Uma fórmula estatística que ajusta a taxa pela intensidade do fogo, pela parte de focos noturnos, chuva, umidade, temperatura e altitude, com dados da NASA POWER.',
+      veredito: `Explica por que a taxa muda e manteve os mesmos fatores em todos os testes, mas não errou menos que a taxa por mês (${num1(r.formula_pesos.teste_erro_pct)}% contra ${num1(t1.teste_erro_pct)}%). Nos anos de deriva do Aqua errou menos (${num1(r.formula_pesos.deriva_erro_pct)}% contra ${num1(t1.deriva_erro_pct)}%). Entra na faixa de 2003 a 2011.`,
+    },
+    terra: {
+      nome: 'Converter a partir do MODIS Terra', curto: 'Taxa pelo Terra', tag: ['faixa', 'usado na faixa'],
+      como: 'A mesma taxa por mês, mas partindo do MODIS Terra em vez do Aqua.',
+      veredito: `Errou ${num1(r.terra.teste_erro_pct)}% no teste. O Terra passa de manhã e o Aqua à tarde, quase no horário do VIIRS. Antes de 2012 os dois MODIS discordam, por isso o Terra entra na faixa de incerteza.`,
+    },
+    mistura: {
+      nome: 'Misturar a taxa por mês com a fórmula', curto: `Mistura ${peso}/${100 - peso}`, tag: ['promissor', 'próximo passo'],
+      como: `${peso}% da taxa por mês e ${100 - peso}% da fórmula com pesos. A proporção foi escolhida só com 2013 a 2019, sem olhar o teste.`,
+      veredito: `Teve o menor erro (${num1(r.mistura.teste_erro_pct)}%) e ganhou da taxa por mês em ${r.mistura.anos_que_ganha_da_taxa_por_mes} de ${nAnos} anos, mas a diferença é de ${num1(t1.teste_erro_pct - r.mistura.teste_erro_pct)} ponto e ainda pode ser acaso. Por isso o número principal não mudou.`,
+    },
+  };
+}
+
+async function comparacaoMetodos() {
+  if (!METODOS) {
+    try {
+      METODOS = await (await fetch('data/metodos.json')).json();
+    } catch (e) {
+      document.getElementById('metodos-intro').innerHTML = '<p>Não foi possível carregar a comparação.</p>';
+      return;
+    }
+  }
+  const d = METODOS;
+  const r = d.metodos;
+  const tx = textosMetodos(d);
+  const t1 = r.taxa_por_mes;
+  const nAnos = Object.keys(t1.um_ano_fora_por_ano).length;
+  document.getElementById('metodos-intro').innerHTML = `
+    <p>Para escolher a conversão, colocamos todos os métodos na mesma prova. Cada um aprendeu só com ${d.periodos.calibracao_teste[0].slice(0, 4)} a 2019 e tentou adivinhar 2020 a 2023, anos que não tinha visto. Depois comparamos com o que o VIIRS mediu de verdade. Para conferir que não foi sorte do período, repetimos escondendo um ano de cada vez, de ${d.periodos.um_ano_fora[0]} a ${d.periodos.um_ano_fora[1]}.</p>
+    <p class="nota">Erro: quanto a conversão errou por mês, em média, contra o VIIRS real (WAPE, em %). Quanto menor, melhor. Mesmos ${t1.teste_n_meses} meses de teste para todos.</p>`;
+
+  const el = document.getElementById('graf-metodos');
+  const g = graficos.metodos || echarts.init(el);
+  graficos.metodos = g;
+  const ordem = [...ORDEM_METODOS].sort((a, b) => r[b].teste_erro_pct - r[a].teste_erro_pct);
+  const destaque = (k) => k === 'taxa_por_mes';
+  const estreito = el.clientWidth < 520;
+  const fonte = estreito ? 11 : 12;
+  g.setOption({
+    animation: false,
+    grid: { left: estreito ? 108 : 150, right: estreito ? 40 : 56, top: estreito ? 50 : 34, bottom: estreito ? 8 : 24 },
+    legend: { top: 0, left: estreito ? 0 : 'center', orient: estreito ? 'vertical' : 'horizontal', itemGap: 6, textStyle: { color: css('--texto-suave'), fontSize: fonte } },
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, confine: true, valueFormatter: (v) => num1(v) + '%' },
+    xAxis: { type: 'value', axisLabel: { show: !estreito, color: css('--texto-suave'), formatter: (v) => v + '%' }, splitLine: { lineStyle: { color: css('--borda') } } },
+    yAxis: {
+      type: 'category', data: ordem.map((k) => k),
+      axisLabel: { color: css('--texto'), fontSize: fonte, formatter: (k) => (destaque(k) ? '{b|' + tx[k].curto + '}' : tx[k].curto), rich: { b: { fontWeight: 700, color: css('--destaque') } } },
+    },
+    series: [
+      { name: 'Teste 2020 a 2023', type: 'bar', barGap: '15%', itemStyle: { color: css('--destaque'), borderRadius: [0, 4, 4, 0] },
+        label: { show: true, position: 'right', fontSize: fonte, color: css('--texto'), formatter: (p) => num1(p.value) + '%' },
+        data: ordem.map((k) => r[k].teste_erro_pct) },
+      { name: `Escondendo um ano de cada vez (${nAnos} anos)`, type: 'bar', itemStyle: { color: css('--destaque-2'), opacity: 0.75, borderRadius: [0, 4, 4, 0] },
+        label: { show: true, position: 'right', fontSize: fonte, color: css('--texto-suave'), formatter: (p) => num1(p.value) + '%' },
+        data: ordem.map((k) => r[k].um_ano_fora_erro_pct) },
+    ],
+  }, true);
+
+  document.getElementById('metodos-lista').innerHTML = ORDEM_METODOS.map((k, i) => {
+    const m = r[k];
+    const t = tx[k];
+    return `<article class="metodo-card ${k === 'taxa_por_mes' ? 'usado' : ''}">
+      <header><h3>${i + 1}. ${t.nome}</h3><span class="tag ${t.tag[0]}">${t.tag[1]}</span></header>
+      <p>${t.como}</p>
+      <div class="numeros">
+        <span><strong>${num1(m.teste_erro_pct)}%</strong>no teste</span>
+        <span><strong>${num1(m.um_ano_fora_erro_pct)}%</strong>escondendo cada ano</span>
+        <span><strong>${num1(m.anos_que_viu_erro_pct)}%</strong>nos anos que viu</span>
+      </div>
+      <p class="veredito">${t.veredito}</p>
+    </article>`;
+  }).join('');
+
+  const c = d.correlacao_ordem_dos_meses;
+  document.getElementById('metodos-conclusao').innerHTML = `
+    <h3>Por que o site usa a taxa por mês</h3>
+    <ul>
+      <li><strong>Menor erro entre os métodos usados sozinhos:</strong> ${num1(t1.teste_erro_pct)}% no teste e ${num1(t1.um_ano_fora_erro_pct)}% escondendo um ano de cada vez.</li>
+      <li><strong>Não decora:</strong> erra ${num1(t1.anos_que_viu_erro_pct)}% nos anos que viu e ${num1(t1.teste_erro_pct)}% nos que não viu. A posição no ranking ia de ${num1(r.ranking.anos_que_viu_erro_pct)}% para ${num1(r.ranking.teste_erro_pct)}%.</li>
+      <li><strong>Simples de conferir:</strong> 12 números, um por mês, que qualquer pessoa refaz numa planilha.</li>
+      <li><strong>Faz sentido físico:</strong> a taxa sobe na chuva, quando o fogo é pequeno e o VIIRS enxerga mais do que o MODIS.</li>
+      <li><strong>Vale para qualquer área:</strong> as mesmas 12 taxas são usadas quando você escolhe um ponto no mapa.</li>
+    </ul>
+    <h3>E a mistura, que errou menos?</h3>
+    <p>Ela ganhou por pouco: ${num1(r.mistura.teste_erro_pct)}% contra ${num1(t1.teste_erro_pct)}% no teste, e em ${r.mistura.anos_que_ganha_da_taxa_por_mes} de ${nAnos} anos. Com tão poucos anos de dado, uma diferença desse tamanho ainda pode ser acaso, e o site ainda não calcula a fórmula com pesos para cada área do mapa. Por isso o número principal segue com a taxa por mês e a mistura fica como próximo teste.</p>
+    <h3>Correlação não é prova</h3>
+    <p>A ordem dos meses, do mais fraco ao mais forte, tem correlação de ${num3(c.taxa_por_mes)} com a taxa por mês. Mas o Aqua sem conversão nenhuma já chega a ${num3(c.aqua_sem_conversao)}, porque seca e chuva mandam no ano. Por isso medimos pelo erro em focos, não pela correlação.</p>
+    <p class="nota">* ${d.notas.join(' ')} Os anos de 2024 e 2025 ficam fora da escolha porque a órbita do Aqua mudou; o erro de cada método nesses anos está no JSON.</p>`;
+}
+
 // ------------------------------------------------------------------ método e rodapé
 
 function metodo() {
@@ -620,7 +750,7 @@ function metodo() {
     <h3>Por que a relação entre os satélites muda</h3>
     <p>${f.o_que_e}</p>
     <ul>${pesos}</ul>
-    <p class="nota">Testados e descartados por não mudarem a relação: ${descartados}. Comparação no teste: taxa por mês ${comp.T1.erro_mensal_pct.toLocaleString('pt-BR')}% de erro, modelo com fatores ${comp.modelo_v2.erro_mensal_pct.toLocaleString('pt-BR')}%. O número principal usa a taxa por mês, que errou menos.</p>
+    <p class="nota">Testados e descartados por não mudarem a relação: ${descartados}. Comparação no teste: taxa por mês ${comp.T1.erro_mensal_pct.toLocaleString('pt-BR')}% de erro, modelo com fatores ${comp.modelo_v2.erro_mensal_pct.toLocaleString('pt-BR')}%. O número principal usa a taxa por mês. <a href="#metodos" data-janela="metodos">Veja a comparação dos 7 métodos testados</a>.</p>
     <h3>O que descobrimos antes de 2012</h3>
     <p>${f.descoberta}</p>
     <p class="nota">Média anual de 2003 a 2011, em focos equivalentes VIIRS: ${fmt(f.media_anual_2003_2011.t1_terra)} pelo Terra, ${fmt(f.media_anual_2003_2011.fatores_aqua)} pelo modelo com fatores e ${fmt(f.media_anual_2003_2011.t1_aqua)} pela taxa por mês do Aqua. VIIRS real de 2012 a 2021: ${fmt(f.viirs_real_media_anual_2012_2021)} por ano.</p>` : ''}
