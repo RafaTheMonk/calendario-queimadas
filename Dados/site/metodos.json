@@ -1,0 +1,195 @@
+{
+ "descricao": "Comparação dos métodos de harmonização testados, todos com os mesmos meses e o mesmo teste.",
+ "periodos": {
+  "calibracao_teste": [
+   "2012-02",
+   "2019-12"
+  ],
+  "teste": [
+   "2020-01",
+   "2023-12"
+  ],
+  "um_ano_fora": [
+   "2013",
+   "2023"
+  ],
+  "deriva": [
+   "2024-01",
+   "2025-12"
+  ]
+ },
+ "peso_mistura_taxa_por_mes": 0.7,
+ "vencedor_entre_metodos_simples": "taxa_por_mes",
+ "correlacao_ordem_dos_meses": {
+  "aqua_sem_conversao": 0.985,
+  "taxa_por_mes": 0.988
+ },
+ "metodos": {
+  "taxa_unica": {
+   "teste_erro_pct": 9.16,
+   "teste_vies_pct": 0.15,
+   "teste_n_meses": 44,
+   "deriva_erro_pct": 13.97,
+   "anos_que_viu_erro_pct": 10.08,
+   "um_ano_fora_erro_pct": 10.24,
+   "um_ano_fora_n_meses": 128,
+   "um_ano_fora_por_ano": {
+    "2013": 12.34,
+    "2014": 9.01,
+    "2015": 11.79,
+    "2016": 11.18,
+    "2017": 10.98,
+    "2018": 9.31,
+    "2019": 11.29,
+    "2020": 10.88,
+    "2021": 4.87,
+    "2022": 12.71,
+    "2023": 10.77
+   },
+   "anos_que_ganha_da_taxa_por_mes": 2
+  },
+  "taxa_por_mes": {
+   "teste_erro_pct": 7.2,
+   "teste_vies_pct": 0.23,
+   "teste_n_meses": 44,
+   "deriva_erro_pct": 13.49,
+   "anos_que_viu_erro_pct": 5.71,
+   "um_ano_fora_erro_pct": 7.11,
+   "um_ano_fora_n_meses": 128,
+   "um_ano_fora_por_ano": {
+    "2013": 6.22,
+    "2014": 4.11,
+    "2015": 10.12,
+    "2016": 4.78,
+    "2017": 4.69,
+    "2018": 10.52,
+    "2019": 3.42,
+    "2020": 10.1,
+    "2021": 6.45,
+    "2022": 7.02,
+    "2023": 8.44
+   },
+   "anos_que_ganha_da_taxa_por_mes": null
+  },
+  "quadradinhos": {
+   "teste_erro_pct": 9.84,
+   "teste_vies_pct": 3.64,
+   "teste_n_meses": 44,
+   "deriva_erro_pct": 21.69,
+   "anos_que_viu_erro_pct": 11.72,
+   "um_ano_fora_erro_pct": 12.4,
+   "um_ano_fora_n_meses": 128,
+   "um_ano_fora_por_ano": {
+    "2013": 14.97,
+    "2014": 8.07,
+    "2015": 21.95,
+    "2016": 13.57,
+    "2017": 9.16,
+    "2018": 15.11,
+    "2019": 10.17,
+    "2020": 15.67,
+    "2021": 9.47,
+    "2022": 5.83,
+    "2023": 10.04
+   },
+   "anos_que_ganha_da_taxa_por_mes": 1
+  },
+  "ranking": {
+   "teste_erro_pct": 8.06,
+   "teste_vies_pct": 2.45,
+   "teste_n_meses": 44,
+   "deriva_erro_pct": 17.93,
+   "anos_que_viu_erro_pct": 2.72,
+   "um_ano_fora_erro_pct": 8.22,
+   "um_ano_fora_n_meses": 128,
+   "um_ano_fora_por_ano": {
+    "2013": 3.92,
+    "2014": 5.68,
+    "2015": 9.88,
+    "2016": 9.34,
+    "2017": 9.97,
+    "2018": 9.69,
+    "2019": 4.59,
+    "2020": 12.72,
+    "2021": 8.03,
+    "2022": 9.16,
+    "2023": 7.46
+   },
+   "anos_que_ganha_da_taxa_por_mes": 4
+  },
+  "formula_pesos": {
+   "teste_erro_pct": 7.92,
+   "teste_vies_pct": -5.39,
+   "teste_n_meses": 44,
+   "deriva_erro_pct": 11.27,
+   "anos_que_viu_erro_pct": 6.66,
+   "um_ano_fora_erro_pct": 8.17,
+   "um_ano_fora_n_meses": 128,
+   "um_ano_fora_por_ano": {
+    "2013": 5.02,
+    "2014": 5.4,
+    "2015": 11.33,
+    "2016": 4.73,
+    "2017": 14.2,
+    "2018": 12.97,
+    "2019": 5.14,
+    "2020": 4.09,
+    "2021": 10.35,
+    "2022": 4.82,
+    "2023": 8.32
+   },
+   "anos_que_ganha_da_taxa_por_mes": 5
+  },
+  "terra": {
+   "teste_erro_pct": 11.83,
+   "teste_vies_pct": 4.75,
+   "teste_n_meses": 43,
+   "deriva_erro_pct": 10.26,
+   "anos_que_viu_erro_pct": 5.32,
+   "um_ano_fora_erro_pct": 8.36,
+   "um_ano_fora_n_meses": 126,
+   "um_ano_fora_por_ano": {
+    "2013": 6.26,
+    "2014": 7.18,
+    "2015": 2.91,
+    "2016": 9.18,
+    "2017": 7.41,
+    "2018": 8.22,
+    "2019": 8.05,
+    "2020": 7.16,
+    "2021": 11.59,
+    "2022": 14.46,
+    "2023": 13.24
+   },
+   "anos_que_ganha_da_taxa_por_mes": 3
+  },
+  "mistura": {
+   "teste_erro_pct": 6.63,
+   "teste_vies_pct": -1.46,
+   "teste_n_meses": 44,
+   "deriva_erro_pct": 12.72,
+   "anos_que_viu_erro_pct": 5.3,
+   "um_ano_fora_erro_pct": 6.73,
+   "um_ano_fora_n_meses": 128,
+   "um_ano_fora_por_ano": {
+    "2013": 5.16,
+    "2014": 4.2,
+    "2015": 10.0,
+    "2016": 3.8,
+    "2017": 5.42,
+    "2018": 9.93,
+    "2019": 3.1,
+    "2020": 7.87,
+    "2021": 7.39,
+    "2022": 5.68,
+    "2023": 7.76
+   },
+   "anos_que_ganha_da_taxa_por_mes": 8
+  }
+ },
+ "notas": [
+  "Quadradinhos: erro medido em quadradinhos de 0,05 grau com fogo por dia, não em focos.",
+  "Terra: sem os meses em que o Terra teve falta de dados.",
+  "Mistura: o peso foi escolhido só com 2013 a 2019, sem olhar o teste."
+ ]
+}
