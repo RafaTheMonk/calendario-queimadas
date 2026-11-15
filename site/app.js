@@ -380,7 +380,7 @@ async function agora() {
     document.getElementById('agora-comparacao').textContent = `${pct(Math.round((media - med) / med * 1000) / 10)} em relação à mediana de ${nomeMes}`;
     const dm = (d) => d.data.slice(8, 10) + '/' + d.data.slice(5, 7);
     const atual = j.atualizado_em ? new Date(j.atualizado_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : '';
-    document.getElementById('agora-fonte').textContent = `Média dos últimos ${dias.length} dias completos (${dm(dias[0])} a ${dm(dias[dias.length - 1])}) contra o normal de ${nomeMes}. Fonte: NASA FIRMS, VIIRS NOAA-20 em quase tempo real, convertido para a régua do histórico${atual ? '; arquivo de ' + atual : ''}. Dado provisório; a série do calendário fecha em dezembro de 2025.`;
+    document.getElementById('agora-fonte').textContent = `Média dos últimos ${dias.length} dias completos (${dm(dias[0])} a ${dm(dias[dias.length - 1])}) contra o normal de ${nomeMes}. Fonte: NASA FIRMS, VIIRS NOAA-20 em quase tempo real, convertido para a régua do histórico${atual ? '; arquivo de ' + atual : ''}. Dado provisório; a série do calendário vai até ${MESES_LONGO[Number(OFICIAL.periodo.fim.slice(5, 7)) - 1]} de ${OFICIAL.periodo.fim.slice(0, 4)}.`;
   } catch (e) {
     if (meuPedido !== pedidoAgora) return;
     document.getElementById('agora-valor').textContent = fmt(porDia(nm.mediana[chave]));
