@@ -1,6 +1,6 @@
 # Régua de Fogo
 
-Focos de calor por satélite numa régua só: calendário harmonizado para a Bahia, de 2003 a 2025, feito para o desafio **Harmonization of MODIS and VIIRS Hot Spots** do NASA Space Apps Challenge 2026 (equipe Timeout Zero, Salvador).
+Focos de calor por satélite numa régua só: calendário harmonizado para a Bahia, de 2003 a 2026, feito para o desafio **Harmonization of MODIS and VIIRS Hot Spots** do NASA Space Apps Challenge 2026 (equipe Timeout Zero, Salvador).
 
 Site: https://regua-queimadas.vercel.app
 
@@ -65,6 +65,8 @@ python3 -I Scripts/harmonizacao/avaliar.py                 # técnicas de harmon
 python3 -I Scripts/harmonizacao/fatores/baixar_power.py    # clima da NASA POWER
 python3 -I Scripts/harmonizacao/fatores/versao2.py         # modelo com fatores
 python3 -I Scripts/gerar_json_site.py                      # dados do site
+python3 -I Scripts/baixar_firms_2026.py                    # 2026 pela API do FIRMS (precisa de FIRMS_MAP_KEY no .env)
+python3 -I Scripts/estender_2026.py                        # acrescenta os meses completos de 2026 ao site
 python3 -I Scripts/harmonizacao/comparar_metodos.py       # comparação dos 7 métodos (janela "Métodos")
 python3 -I Scripts/comparar_inpe.py                        # conferência com o INPE (zips do INPE em Dados/inpe_ref/)
 python3 -I Scripts/processar_roi_ibama.py                  # detectados e relatados (ROI.csv do IBAMA em Dados/ibama_roi/)
@@ -77,7 +79,7 @@ O site é estático: não precisa de servidor nem de banco. Para publicar, basta
 
 - Área piloto: a Bahia. O método vale para qualquer área, mas só a Bahia foi processada e validada.
 - Os anos de 2003 a 2011 não podem ser conferidos com VIIRS (ele não existia), por isso vêm com faixa.
-- 2026 e o NOAA-21 ainda não entraram: dependem da chave da API do FIRMS.
+- 2026 entra só com os meses completos, pela API do FIRMS (VIIRS S-NPP, com o NOAA-20 ajustado onde falta S-NPP). Os meses vindos do quase tempo real são provisórios: não trazem o tipo do foco e mudam quando sair o processamento padrão. O NOAA-21 ainda não entrou.
 - Focos de calor são detecções de satélite, não incêndios confirmados.
 
 ## Citação dos dados
