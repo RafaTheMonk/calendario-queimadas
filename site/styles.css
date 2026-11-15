@@ -351,3 +351,6 @@ button.chip:hover { filter: brightness(1.05); }
 .legenda-focos i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0, 0, 0, .35); }
 .camadas .nota { margin: 0; }
 .link-mapa { margin-top: 6px; padding: 0; border: 0; background: none; font: inherit; font-size: 13px; font-weight: 600; color: var(--destaque); text-decoration: underline; cursor: pointer; }
+/* troca de idioma (inglês na raiz, português em /pt/) */
+.idioma { display: inline-grid; place-items: center; min-width: 38px; height: 38px; padding: 0 8px; border-radius: 999px; border: 1px solid var(--borda); background: var(--superficie); color: var(--texto); font-weight: 700; font-size: 13px; text-decoration: none; letter-spacing: .04em; }
+.idioma:hover { border-color: var(--destaque); color: var(--destaque); }

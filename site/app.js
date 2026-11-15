@@ -3,8 +3,13 @@
    Dados: data/calendario_bahia.json (série oficial da Bahia) e data/celulas_bahia.json (série por célula,
    para somar só a área em volta de um ponto). Últimos 7 dias: função api/recentes. */
 
-const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
-const MESES_LONGO = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+const MESES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const MESES_LONGO = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+// rótulos em inglês para os valores internos dos dados (que continuam em português)
+const CLASSE_EN = { 'acima do normal': 'above normal', 'abaixo do normal': 'below normal', normal: 'normal' };
+const ORIGEM_EN = { VIIRS: 'VIIRS', 'MODIS convertido': 'converted MODIS', 'VIIRS NOAA-20 ajustado': 'adjusted VIIRS NOAA-20' };
+const rotuloClasse = (c) => CLASSE_EN[c] || c;
+const rotuloOrigem = (o) => ORIGEM_EN[o] || o;
 // paleta "inferno": lembra fogo, é perceptualmente uniforme e funciona para daltônicos
 const INFERNO = ['#000004', '#1b0c41', '#4a0c6b', '#781c6d', '#a52c60', '#cf4446', '#ed6925', '#fb9b06', '#f7d13d', '#fcffa4'];
 // divergente azul e laranja (PuOr), seguro para daltônicos
@@ -17,8 +22,9 @@ const HOJE = new Date();
 const MES_ATUAL = HOJE.getMonth() + 1;
 const ANO_ATUAL = HOJE.getFullYear();
 
-const fmt = (n) => (n === null || n === undefined) ? 'sem dado' : Math.round(n).toLocaleString('pt-BR');
-const pct = (n) => (n > 0 ? '+' : '') + n.toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + '%';
+const fmt = (n) => (n === null || n === undefined) ? 'no data' : Math.round(n).toLocaleString('en-US');
+const pct = (n) => (n > 0 ? '+' : '') + n.toLocaleString('en-US', { maximumFractionDigits: 1 }) + '%';
+const milhar = (v) => (v >= 1000 ? Math.round(v / 1000) + 'k' : v);
 const css = (nome) => getComputedStyle(document.documentElement).getPropertyValue(nome).trim();
 
 let OFICIAL = null;     // série oficial da Bahia
@@ -75,8 +81,8 @@ function temaAtual() {
 function nomeArea() {
   const a = estado.area;
   if (a.tipo === 'bahia') return 'Bahia';
-  if (a.tipo === 'poligono') return 'Área desenhada';
-  const rotulo = { local: 'Perto de você', mapa: 'Ponto escolhido', coordenada: 'Coordenada escolhida' }[a.origem] || 'Ponto escolhido';
+  if (a.tipo === 'poligono') return 'Drawn area';
+  const rotulo = { local: 'Near you', mapa: 'Chosen point', coordenada: 'Chosen coordinate' }[a.origem] || 'Chosen point';
   return rotulo + ` (${a.raio} km)`;
 }
 
@@ -154,7 +160,7 @@ function montarDadosArea(cels) {
   return {
     ...OFICIAL,
     area: {
-      nome: nomeArea(), descricao: `${cels.length} células da grade NASA POWER`,
+      nome: nomeArea(), descricao: `${cels.length} NASA POWER grid cells`,
       lat_min: Math.min(...lats) - MEIA_LAT, lat_max: Math.max(...lats) + MEIA_LAT,
       lon_min: Math.min(...lons) - MEIA_LON, lon_max: Math.max(...lons) + MEIA_LON,
     },
@@ -205,9 +211,9 @@ async function definirArea(nova, mensagem) {
     if (cels.length === 0) {
       estado.area = { tipo: 'bahia' };
       DADOS = OFICIAL;
-      const txt = (nova.tipo === 'poligono' ? 'Essa área fica' : 'Esse ponto fica') + ' fora da área processada nesta versão (Bahia). Mostrando a Bahia inteira.';
+      const txt = (nova.tipo === 'poligono' ? 'This area is' : 'This point is') + ' outside the area processed in this version (Bahia). Showing the whole of Bahia.';
       aviso.textContent = nova.origem === 'local'
-        ? 'Você está fora da área processada nesta versão (Bahia). Mostrando a Bahia inteira; dá para escolher um ponto no chip de área, no topo.'
+        ? 'You are outside the area processed in this version (Bahia). Showing the whole of Bahia; you can choose a point with the area chip at the top.'
         : txt;
       msgJanela.textContent = txt;
       atualizarTudo();
@@ -216,16 +222,16 @@ async function definirArea(nova, mensagem) {
     estado.area = nova;
     DADOS = montarDadosArea(cels);
     const mediaAnual = DADOS.totais_por_ano.reduce((t, x) => t + x.focos, 0) / DADOS.totais_por_ano.length;
-    const extra = (pequena ? ' A área desenhada é menor que uma célula da grade, então entra a célula mais próxima (cerca de 55 x 68 km).' : '')
-      + ' Antes de 2012 a conversão usa a taxa da Bahia inteira: em áreas de 100 km o erro típico medido é de cerca de 25%.'
-      + (mediaAnual < 3000 ? ' Área com poucos focos: os números variam mais.' : '');
-    aviso.textContent = (mensagem || `Mostrando ${nomeArea().toLowerCase()}: ${cels.length} células da grade (cerca de 55 x 68 km cada).`) + extra;
-    msgJanela.textContent = `${cels.length} ${cels.length === 1 ? 'célula' : 'células'} da grade ${nova.tipo === 'poligono' ? 'dentro do contorno' : 'dentro do raio'} (em azul no mapa).` + extra;
+    const extra = (pequena ? ' The drawn area is smaller than one grid cell, so the nearest cell is used (about 55 x 68 km).' : '')
+      + ' Before 2012 the conversion uses the rates of the whole of Bahia: for 100 km areas the typical measured error is about 25%.'
+      + (mediaAnual < 3000 ? ' Area with few hotspots: the numbers vary more.' : '');
+    aviso.textContent = (mensagem || `Showing ${nomeArea().toLowerCase()}: ${cels.length} grid cells (about 55 x 68 km each).`) + extra;
+    msgJanela.textContent = `${cels.length} grid ${cels.length === 1 ? 'cell' : 'cells'} ${nova.tipo === 'poligono' ? 'inside the outline' : 'inside the radius'} (blue on the map).` + extra;
   } else {
     estado.area = { tipo: 'bahia' };
     DADOS = OFICIAL;
     aviso.textContent = mensagem || '';
-    msgJanela.textContent = 'Mostrando a Bahia inteira.';
+    msgJanela.textContent = 'Showing the whole of Bahia.';
   }
   atualizarTudo();
 }
@@ -240,17 +246,17 @@ function pedirLocalizacao(aoFalhar) {
 
 function usarMinhaLocalizacao() {
   const msg = document.getElementById('msg-area');
-  if (!('geolocation' in navigator)) { msg.textContent = 'Este navegador não informa a localização.'; return; }
-  msg.textContent = 'Buscando sua localização...';
-  pedirLocalizacao(() => { msg.textContent = 'Não foi possível usar a localização (permissão negada ou indisponível). Toque no mapa para escolher um ponto.'; });
+  if (!('geolocation' in navigator)) { msg.textContent = 'This browser does not provide a location.'; return; }
+  msg.textContent = 'Getting your location...';
+  pedirLocalizacao(() => { msg.textContent = 'Could not use your location (permission denied or unavailable). Tap the map to choose a point.'; });
 }
 
 function atualizarTextosArea() {
   const nome = nomeArea();
   document.querySelectorAll('.nome-area').forEach((el) => { el.textContent = nome; });
   document.getElementById('titulo-area').textContent = estado.area.tipo === 'bahia'
-    ? 'a Bahia'
-    : (estado.area.tipo === 'poligono' ? 'essa área' : (estado.area.origem === 'local' ? 'perto de você' : 'esse lugar'));
+    ? 'Bahia'
+    : (estado.area.tipo === 'poligono' ? 'this area' : (estado.area.origem === 'local' ? 'your area' : 'this place'));
 }
 
 function atualizarTudo() {
@@ -318,12 +324,12 @@ function heroGrafico() {
   const total = vals.reduce((s, v) => s + v, 0);
   const top2 = vals.map((v, i) => [v, i]).sort((a, b) => b[0] - a[0]).slice(0, 2).map((x) => x[1]).sort((a, b) => a - b);
   const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
-  document.getElementById('hero-meses').textContent = cap(MESES_LONGO[top2[0]]) + ' e ' + MESES_LONGO[top2[1]];
+  document.getElementById('hero-meses').textContent = cap(MESES_LONGO[top2[0]]) + ' and ' + MESES_LONGO[top2[1]];
   document.getElementById('hero-pct').textContent = Math.round((vals[top2[0]] + vals[top2[1]]) / total * 100) + '%';
   g.setOption({
     animationDuration: 700,
     grid: { left: 8, right: 8, top: 18, bottom: 22 },
-    tooltip: { trigger: 'item', confine: true, formatter: (p) => `<strong>${MESES_LONGO[p.dataIndex]}</strong><br>mediana de ${fmt(p.value)} focos<br><span style="opacity:.75">clique para ver o mês ao longo dos anos</span>` },
+    tooltip: { trigger: 'item', confine: true, formatter: (p) => `<strong>${MESES_LONGO[p.dataIndex]}</strong><br>median of ${fmt(p.value)} hotspots<br><span style="opacity:.75">click to see the month across the years</span>` },
     xAxis: { type: 'category', data: MESES.map((m) => m.charAt(0).toUpperCase()), axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: css('--texto-suave'), fontSize: 11 } },
     yAxis: { type: 'value', show: false },
     series: [{
@@ -338,7 +344,7 @@ function heroGrafico() {
         },
       })),
       emphasis: { itemStyle: { shadowBlur: 12, shadowColor: 'rgba(255,140,40,.6)' } },
-      label: { show: true, position: 'top', fontSize: 10, color: css('--texto-suave'), formatter: (p) => (p.dataIndex + 1 === MES_ATUAL ? 'agora' : '') },
+      label: { show: true, position: 'top', fontSize: 10, color: css('--texto-suave'), formatter: (p) => (p.dataIndex + 1 === MES_ATUAL ? 'now' : '') },
     }],
   }, true);
   g.off('click');
@@ -358,9 +364,9 @@ async function agora() {
   const porDia = (v) => v / diasNoMes;
   const nomeMes = MESES_LONGO[MES_ATUAL - 1];
   const tag = document.getElementById('agora-tag');
-  document.getElementById('agora-titulo').textContent = `Agora: ${nomeMes} de ${ANO_ATUAL}`;
+  document.getElementById('agora-titulo').textContent = `Now: ${nomeMes} ${ANO_ATUAL}`;
   document.getElementById('agora-normal').textContent =
-    `Normal de ${nomeMes}: ${fmt(porDia(nm.mediana[chave]))} focos por dia (mediana dos anos medidos pelo VIIRS, 2012 a 2025; faixa normal de ${fmt(porDia(nm.p25[chave]))} a ${fmt(porDia(nm.p75[chave]))}${nm.media ? `; média de ${fmt(porDia(nm.media[chave]))}` : ''}). Esperado para o mês inteiro: cerca de ${fmt(nm.mediana[chave])} focos.`;
+    `${nomeMes} normal: ${fmt(porDia(nm.mediana[chave]))} hotspots per day (median of the years measured by VIIRS, 2012 to 2025; normal range ${fmt(porDia(nm.p25[chave]))} to ${fmt(porDia(nm.p75[chave]))}${nm.media ? `; mean ${fmt(porDia(nm.media[chave]))}` : ''}). Expected for the whole month: about ${fmt(nm.mediana[chave])} hotspots.`;
   try {
     let url = 'api/recentes';
     if (estado.area.tipo !== 'bahia') url += '?celulas=' + DADOS.celulas_ids.join(',');
@@ -376,20 +382,20 @@ async function agora() {
     const med = porDia(nm.mediana[chave]);
     const classe = media > hi ? 'acima do normal' : (media < lo ? 'abaixo do normal' : 'normal');
     document.getElementById('agora-valor').textContent = fmt(media);
-    document.getElementById('agora-unidade').textContent = 'focos por dia';
-    tag.textContent = classe;
+    document.getElementById('agora-unidade').textContent = 'hotspots per day';
+    tag.textContent = rotuloClasse(classe);
     tag.className = 'tag ' + classeTag(classe);
-    document.getElementById('agora-comparacao').textContent = `${pct(Math.round((media - med) / med * 1000) / 10)} em relação à mediana de ${nomeMes}`;
-    const dm = (d) => d.data.slice(8, 10) + '/' + d.data.slice(5, 7);
-    const atual = j.atualizado_em ? new Date(j.atualizado_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : '';
-    document.getElementById('agora-fonte').textContent = `Média dos últimos ${dias.length} dias completos (${dm(dias[0])} a ${dm(dias[dias.length - 1])}) contra o normal de ${nomeMes}. Fonte: NASA FIRMS, VIIRS NOAA-20 em quase tempo real, convertido para a régua do histórico${atual ? '; arquivo de ' + atual : ''}. Dado provisório; a série do calendário vai até ${MESES_LONGO[Number(OFICIAL.periodo.fim.slice(5, 7)) - 1]} de ${OFICIAL.periodo.fim.slice(0, 4)}.`;
+    document.getElementById('agora-comparacao').textContent = `${pct(Math.round((media - med) / med * 1000) / 10)} compared with the ${nomeMes} median`;
+    const dm = (d) => MESES[Number(d.data.slice(5, 7)) - 1] + ' ' + Number(d.data.slice(8, 10));
+    const atual = j.atualizado_em ? new Date(j.atualizado_em).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+    document.getElementById('agora-fonte').textContent = `Mean of the last ${dias.length} complete days (${dm(dias[0])} to ${dm(dias[dias.length - 1])}) against the ${nomeMes} normal. Source: NASA FIRMS, VIIRS NOAA-20 near real time, converted to the historical ruler${atual ? '; file from ' + atual : ''}. Provisional data; the calendar series runs to ${MESES_LONGO[Number(OFICIAL.periodo.fim.slice(5, 7)) - 1]} ${OFICIAL.periodo.fim.slice(0, 4)}.`;
   } catch (e) {
     if (meuPedido !== pedidoAgora) return;
     document.getElementById('agora-valor').textContent = fmt(porDia(nm.mediana[chave]));
-    document.getElementById('agora-unidade').textContent = 'focos por dia num ' + nomeMes + ' típico';
-    tag.textContent = 'esperado';
+    document.getElementById('agora-unidade').textContent = 'hotspots per day in a typical ' + nomeMes;
+    tag.textContent = 'expected';
     tag.className = 'tag normal';
-    document.getElementById('agora-comparacao').textContent = 'Os dados dos últimos dias não carregaram agora.';
+    document.getElementById('agora-comparacao').textContent = 'The data for the last days did not load right now.';
     document.getElementById('agora-fonte').textContent = '';
   }
 }
@@ -408,30 +414,30 @@ function cartoes() {
   const val = OFICIAL.metodo.validacao;
   document.getElementById('cartoes').innerHTML = [
     `<article class="cartao principal">
-      <p class="rotulo">Último mês da série: ${MESES_LONGO[ultimo.mes_num - 1]} de ${ultimo.ano}${ultimo.qualidade === 'provisorio' ? ' (provisório)' : ''}</p>
-      <p class="valor">${fmt(ultimo.focos)} focos</p>
-      <p class="detalhe"><span class="tag ${classeTag(ultimo.classe)}">${ultimo.classe}</span> ${pct(ultimo.anomalia_pct)} da mediana de ${MESES_LONGO[ultimo.mes_num - 1]}; ${ultimo.posicao_no_mes}º de ${nMesmoMes} desde 2003.</p>
+      <p class="rotulo">Last month in the series: ${MESES_LONGO[ultimo.mes_num - 1]} ${ultimo.ano}${ultimo.qualidade === 'provisorio' ? ' (provisional)' : ''}</p>
+      <p class="valor">${fmt(ultimo.focos)} hotspots</p>
+      <p class="detalhe"><span class="tag ${classeTag(ultimo.classe)}">${rotuloClasse(ultimo.classe)}</span> ${pct(ultimo.anomalia_pct)} vs the ${MESES_LONGO[ultimo.mes_num - 1]} median; #${ultimo.posicao_no_mes} of ${nMesmoMes} since 2003.</p>
     </article>`,
     `<article class="cartao">
-      <p class="rotulo">Ano com mais fogo</p>
+      <p class="rotulo">Year with the most fire</p>
       <p class="valor">${pico.ano}</p>
-      <p class="detalhe">${fmt(pico.focos)} focos${pico.faixa_inferior ? ` (estimativa, entre ${fmt(pico.faixa_inferior)} e ${fmt(pico.faixa_superior)})` : ''}. Pico em ${MESES_LONGO[Number(pico.mes_pico.slice(5, 7)) - 1]}.</p>
+      <p class="detalhe">${fmt(pico.focos)} hotspots${pico.faixa_inferior ? ` (estimate, between ${fmt(pico.faixa_inferior)} and ${fmt(pico.faixa_superior)})` : ''}. Peak in ${MESES_LONGO[Number(pico.mes_pico.slice(5, 7)) - 1]}.</p>
     </article>`,
     `<article class="cartao">
-      <p class="rotulo">${ultimoAno.ano} contra 2013 a ${ultimoAno.ano - 1}</p>
+      <p class="rotulo">${ultimoAno.ano} vs 2013 to ${ultimoAno.ano - 1}</p>
       <p class="valor">${pct(Math.round(difAno * 10) / 10)}</p>
-      <p class="detalhe">${fmt(ultimoAno.focos)} focos no ano, contra média de ${fmt(mediaViirs)}.</p>
+      <p class="detalhe">${fmt(ultimoAno.focos)} hotspots in the year, against a mean of ${fmt(mediaViirs)}.</p>
     </article>`,
     estado.area.tipo === 'bahia'
       ? `<article class="cartao">
-      <p class="rotulo">Precisão da conversão</p>
-      <p class="valor">${val.erro_mensal_wape_pct.toLocaleString('pt-BR')}%</p>
-      <p class="detalhe">de erro por mês em anos que o modelo não viu (2020 a 2023), com desvio de ${pct(val.vies_pct)} no total.</p>
+      <p class="rotulo">Conversion accuracy</p>
+      <p class="valor">${val.erro_mensal_wape_pct.toLocaleString('en-US')}%</p>
+      <p class="detalhe">monthly error in years the model never saw (2020 to 2023), with a total bias of ${pct(val.vies_pct)}.</p>
     </article>`
       : `<article class="cartao">
-      <p class="rotulo">Precisão nesta escala</p>
-      <p class="valor">cerca de 25%</p>
-      <p class="detalhe">de erro típico antes de 2012 em áreas de 100 km. Na Bahia inteira o erro é de ${val.erro_mensal_wape_pct.toLocaleString('pt-BR')}%. De 2012 em diante a área usa o VIIRS medido.</p>
+      <p class="rotulo">Accuracy at this scale</p>
+      <p class="valor">about 25%</p>
+      <p class="detalhe">typical error before 2012 for 100 km areas. For the whole of Bahia the error is ${val.erro_mensal_wape_pct.toLocaleString('en-US')}%. From 2012 on the area uses measured VIIRS.</p>
     </article>`,
   ].join('');
 }
@@ -439,17 +445,17 @@ function cartoes() {
 // ------------------------------------------------------------------ gráficos das janelas
 
 function tooltipMes(m) {
-  let t = `<strong>${MESES_LONGO[m.mes_num - 1]} de ${m.ano}</strong><br>`;
+  let t = `<strong>${MESES_LONGO[m.mes_num - 1]} ${m.ano}</strong><br>`;
   if (m.faixa_inferior !== null && m.faixa_inferior !== undefined) {
-    t += `${fmt(m.focos)} focos (estimativa)<br>faixa: ${fmt(m.faixa_inferior)} a ${fmt(m.faixa_superior)}<br>`;
+    t += `${fmt(m.focos)} hotspots (estimate)<br>range: ${fmt(m.faixa_inferior)} to ${fmt(m.faixa_superior)}<br>`;
   } else {
-    t += `${fmt(m.focos)} focos<br>`;
+    t += `${fmt(m.focos)} hotspots<br>`;
   }
-  t += `${pct(m.anomalia_pct)} da mediana do mês (${m.classe})<br>`;
+  t += `${pct(m.anomalia_pct)} vs the month median (${rotuloClasse(m.classe)})<br>`;
   const media = DADOS.normal_por_mes.media && DADOS.normal_por_mes.media[String(m.mes_num).padStart(2, '0')];
-  if (media) t += `${pct(Math.round((m.focos - media) / media * 1000) / 10)} da média dos anos medidos pelo VIIRS<br>`;
-  t += `${m.posicao_no_mes}º ${MESES_LONGO[m.mes_num - 1]} com mais fogo desde 2003<br>`;
-  t += `<span style="opacity:.75">origem: ${m.origem}${m.qualidade === 'corrigido' ? ', mês corrigido' : ''}${m.qualidade === 'provisorio' ? ', dado provisório (quase tempo real)' : ''}</span>`;
+  if (media) t += `${pct(Math.round((m.focos - media) / media * 1000) / 10)} vs the mean of the years measured by VIIRS<br>`;
+  t += `#${m.posicao_no_mes} ${MESES_LONGO[m.mes_num - 1]} with the most fire since 2003<br>`;
+  t += `<span style="opacity:.75">source: ${rotuloOrigem(m.origem)}${m.qualidade === 'corrigido' ? ', corrected month' : ''}${m.qualidade === 'provisorio' ? ', provisional data (near real time)' : ''}</span>`;
   return t;
 }
 
@@ -478,8 +484,8 @@ function calendario(modo) {
   });
   const vals = meses.map((m) => Math.log10(Math.max(m.focos, 1)));
   const visual = modo === 'focos'
-    ? { min: Math.floor(Math.min(...vals) * 10) / 10, max: Math.ceil(Math.max(...vals) * 10) / 10, inRange: { color: INFERNO }, formatter: (v) => fmt(Math.pow(10, v)), text: ['mais focos', 'menos focos'] }
-    : { min: -2, max: 2, inRange: { color: DIVERGENTE }, formatter: (v) => (v >= 0 ? '+' : '') + Math.round((Math.pow(2, v) - 1) * 100) + '%', text: ['acima do normal', 'abaixo do normal'] };
+    ? { min: Math.floor(Math.min(...vals) * 10) / 10, max: Math.ceil(Math.max(...vals) * 10) / 10, inRange: { color: INFERNO }, formatter: (v) => fmt(Math.pow(10, v)), text: ['more hotspots', 'fewer hotspots'] }
+    : { min: -2, max: 2, inRange: { color: DIVERGENTE }, formatter: (v) => (v >= 0 ? '+' : '') + Math.round((Math.pow(2, v) - 1) * 100) + '%', text: ['above normal', 'below normal'] };
   g.setOption({
     animation: false,
     grid: { left: 52, right: 16, top: 8, bottom: 72 },
@@ -499,14 +505,14 @@ function serie(brutos) {
   const anos = noPeriodo(DADOS.totais_por_ano).filter((a) => a.meses === 12);
   const series = [
     { name: 'faixa_base', type: 'line', data: anos.map((a) => (a.faixa_inferior ? a.faixa_inferior : null)), stack: 'faixa', symbol: 'none', lineStyle: { opacity: 0 }, tooltip: { show: false }, silent: true },
-    { name: 'Faixa (2003 a 2011)', type: 'line', data: anos.map((a) => (a.faixa_inferior ? a.faixa_superior - a.faixa_inferior : null)), stack: 'faixa', symbol: 'none', lineStyle: { opacity: 0 }, areaStyle: { color: 'rgba(56,189,248,.25)' }, tooltip: { show: false }, silent: true },
-    { name: 'Focos harmonizados', type: 'line', data: anos.map((a) => a.focos), symbolSize: 6, lineStyle: { width: 3, color: css('--destaque') }, itemStyle: { color: css('--destaque') } },
+    { name: 'Range (2003 to 2011)', type: 'line', data: anos.map((a) => (a.faixa_inferior ? a.faixa_superior - a.faixa_inferior : null)), stack: 'faixa', symbol: 'none', lineStyle: { opacity: 0 }, areaStyle: { color: 'rgba(56,189,248,.25)' }, tooltip: { show: false }, silent: true },
+    { name: 'Harmonized hotspots', type: 'line', data: anos.map((a) => a.focos), symbolSize: 6, lineStyle: { width: 3, color: css('--destaque') }, itemStyle: { color: css('--destaque') } },
   ];
   if (brutos) {
     // série "ingênua": o que se vê juntando os dados sem harmonizar (MODIS até 2011, VIIRS de 2012 em diante)
     const ingenua = anos.map((a) => DADOS.meses.filter((m) => m.ano === a.ano)
       .reduce((s, m) => s + (m.viirs_real !== null && m.viirs_real !== undefined ? m.viirs_real : (m.modis_bruto || 0)), 0));
-    series.push({ name: 'Sem harmonizar (MODIS até 2011, VIIRS depois)', type: 'line', data: ingenua, symbolSize: 5, lineStyle: { type: 'dashed', width: 2, color: '#94a3b8' }, itemStyle: { color: '#94a3b8' } });
+    series.push({ name: 'Not harmonized (MODIS to 2011, VIIRS after)', type: 'line', data: ingenua, symbolSize: 5, lineStyle: { type: 'dashed', width: 2, color: '#94a3b8' }, itemStyle: { color: '#94a3b8' } });
   }
   g.setOption({
     animation: false,
@@ -517,14 +523,14 @@ function serie(brutos) {
       formatter: (ps) => {
         const ano = anos[ps[0].dataIndex];
         let t = `<strong>${ano.ano}</strong><br>`;
-        ps.filter((p) => p.seriesName !== 'faixa_base' && p.seriesName !== 'Faixa (2003 a 2011)' && p.value !== null && p.value !== undefined)
+        ps.filter((p) => p.seriesName !== 'faixa_base' && p.seriesName !== 'Range (2003 to 2011)' && p.value !== null && p.value !== undefined)
           .forEach((p) => { t += `${p.marker}${p.seriesName}: ${fmt(p.value)}<br>`; });
-        if (ano.faixa_inferior) t += `faixa: ${fmt(ano.faixa_inferior)} a ${fmt(ano.faixa_superior)}`;
+        if (ano.faixa_inferior) t += `range: ${fmt(ano.faixa_inferior)} to ${fmt(ano.faixa_superior)}`;
         return t;
       },
     },
     xAxis: { type: 'category', data: anos.map((a) => String(a.ano)), axisLabel: { color: css('--texto-suave') } },
-    yAxis: { type: 'value', axisLabel: { color: css('--texto-suave'), formatter: (v) => (v >= 1000 ? Math.round(v / 1000) + ' mil' : v) }, splitLine: { lineStyle: { color: css('--borda') } } },
+    yAxis: { type: 'value', axisLabel: { color: css('--texto-suave'), formatter: milhar }, splitLine: { lineStyle: { color: css('--borda') } } },
     series,
   }, true);
   document.getElementById('nota-brutos').hidden = !brutos;
@@ -548,7 +554,7 @@ function mesAoLongoDosAnos(numMes) {
     grid: { left: 64, right: 16, top: 16, bottom: 32 },
     tooltip: { confine: true, formatter: (p) => tooltipMes(ms[p.dataIndex]) },
     xAxis: { type: 'category', data: ms.map((m) => String(m.ano)), axisLabel: { color: css('--texto-suave') } },
-    yAxis: { type: 'value', axisLabel: { color: css('--texto-suave'), formatter: (v) => (v >= 1000 ? Math.round(v / 1000) + ' mil' : v) }, splitLine: { lineStyle: { color: css('--borda') } } },
+    yAxis: { type: 'value', axisLabel: { color: css('--texto-suave'), formatter: milhar }, splitLine: { lineStyle: { color: css('--borda') } } },
     series: [{
       type: 'bar',
       data: ms.map((m) => ({ value: m.focos, itemStyle: { color: cor(m), decal: m.faixa_inferior ? { symbol: 'rect', dashArrayX: [1, 0], dashArrayY: [2, 4], rotation: Math.PI / 4, color: 'rgba(255,255,255,.35)' } : undefined } })),
@@ -556,8 +562,8 @@ function mesAoLongoDosAnos(numMes) {
       markLine: {
         silent: true, symbol: 'none',
         data: [
-          { yAxis: normal.mediana[chave], lineStyle: { color: css('--texto'), type: 'dashed' }, label: { position: 'insideEndTop', formatter: 'mediana ' + fmt(normal.mediana[chave]), color: css('--texto-suave') } },
-          ...(normal.media ? [{ yAxis: normal.media[chave], lineStyle: { color: css('--destaque'), type: 'dotted', width: 2 }, label: { position: 'insideStartTop', formatter: 'média ' + fmt(normal.media[chave]), color: css('--destaque') } }] : []),
+          { yAxis: normal.mediana[chave], lineStyle: { color: css('--texto'), type: 'dashed' }, label: { position: 'insideEndTop', formatter: 'median ' + fmt(normal.mediana[chave]), color: css('--texto-suave') } },
+          ...(normal.media ? [{ yAxis: normal.media[chave], lineStyle: { color: css('--destaque'), type: 'dotted', width: 2 }, label: { position: 'insideStartTop', formatter: 'mean ' + fmt(normal.media[chave]), color: css('--destaque') } }] : []),
         ],
       },
     }],
@@ -567,8 +573,8 @@ function mesAoLongoDosAnos(numMes) {
 function topDez() {
   document.getElementById('lista-top').innerHTML = DADOS.top10_meses.map((t) => {
     const m = DADOS.meses.find((x) => x.mes === t.mes);
-    const est = m.faixa_inferior ? ` <span class="est">(estimativa: ${fmt(m.faixa_inferior)} a ${fmt(m.faixa_superior)})</span>` : '';
-    return `<li><strong>${MESES_LONGO[m.mes_num - 1]} de ${m.ano}</strong>: ${fmt(m.focos)} focos${est}</li>`;
+    const est = m.faixa_inferior ? ` <span class="est">(estimate: ${fmt(m.faixa_inferior)} to ${fmt(m.faixa_superior)})</span>` : '';
+    return `<li><strong>${MESES_LONGO[m.mes_num - 1]} ${m.ano}</strong>: ${fmt(m.focos)} hotspots${est}</li>`;
   }).join('');
 }
 
@@ -596,11 +602,11 @@ function mudarPeriodo(ini, fim) {
 }
 
 function baixarCsvArea() {
-  const linhas = [['mes', 'focos_harmonizados', 'faixa_inferior', 'faixa_superior', 'origem', 'anomalia_pct_vs_mediana', 'classe', 'posicao_no_mes']];
+  const linhas = [['month', 'harmonized_hotspots', 'range_low', 'range_high', 'source', 'anomaly_pct_vs_median', 'class', 'rank_within_month']];
   noPeriodo(DADOS.meses).forEach((m) => linhas.push([
-    m.mes, m.focos, m.faixa_inferior ?? '', m.faixa_superior ?? '', m.origem, String(m.anomalia_pct).replace('.', ','), m.classe, m.posicao_no_mes,
+    m.mes, m.focos, m.faixa_inferior ?? '', m.faixa_superior ?? '', rotuloOrigem(m.origem), m.anomalia_pct, rotuloClasse(m.classe), m.posicao_no_mes,
   ]));
-  const texto = '\ufeff' + linhas.map((l) => l.map((c) => (/[;"\n]/.test(String(c)) ? `"${String(c).replace(/"/g, '""')}"` : c)).join(';')).join('\n');
+  const texto = '\ufeff' + linhas.map((l) => l.map((c) => (/[,"\n]/.test(String(c)) ? `"${String(c).replace(/"/g, '""')}"` : c)).join(',')).join('\n');
   const nome = 'regua-de-fogo_' + nomeArea().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
     + `_${estado.anoIni}-${estado.anoFim}.csv`;
   const url = URL.createObjectURL(new Blob([texto], { type: 'text/csv;charset=utf-8' }));
@@ -619,9 +625,9 @@ function abrirMapa() {
   if (!mapaL) {
     const a = OFICIAL.area;
     mapaL = L.map('mapa', { scrollWheelZoom: true });
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 12, attribution: '&copy; colaboradores do OpenStreetMap' }).addTo(mapaL);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 12, attribution: '&copy; OpenStreetMap contributors' }).addTo(mapaL);
     camadas.bahia = L.rectangle([[a.lat_min, a.lon_min], [a.lat_max, a.lon_max]], { color: '#d9480f', weight: 2, fillOpacity: 0.04, dashArray: '4 4' }).addTo(mapaL);
-    camadas.bahia.bindTooltip('Área processada nesta versão: ' + a.descricao);
+    camadas.bahia.bindTooltip('Area processed in this version: bounding rectangle of Bahia (includes parts of neighboring states)');
     mapaL.on('click', (e) => {
       if (desenho.ativo) {
         desenho.pontos.push([e.latlng.lat, e.latlng.lng]);
@@ -659,7 +665,7 @@ function desenharAreaNoMapa() {
 
 // ------------------------------------------------------------------ focos no mapa
 
-const CORES_IDADE = [['#d7191c', 'menos de 24 h'], ['#fdae61', '1 a 3 dias'], ['#ffd34d', '3 a 7 dias']];
+const CORES_IDADE = [['#d7191c', 'less than 24 h'], ['#fdae61', '1 to 3 days'], ['#ffd34d', '3 to 7 days']];
 const COR_DIA = { modis: '#d7191c', viirs: '#f57c00' };
 
 function celulaDoPonto(lat, lon) {
@@ -668,7 +674,7 @@ function celulaDoPonto(lat, lon) {
   return 'L' + String(i).padStart(2, '0') + 'C' + String(j).padStart(2, '0');
 }
 
-function dataBr(iso) { return iso.slice(8, 10) + '/' + iso.slice(5, 7) + '/' + iso.slice(0, 4); }
+function dataBr(iso) { return MESES[Number(iso.slice(5, 7)) - 1] + ' ' + Number(iso.slice(8, 10)) + ', ' + iso.slice(0, 4); }
 
 function idadeHoras(p) {
   const t = Date.parse(`${p[2]}T${p[3].slice(0, 2)}:${p[3].slice(2, 4)}:00Z`);
@@ -695,26 +701,32 @@ async function atualizarCamadaFocos() {
   let url = 'api/pontos?modo=recentes';
   if (sel === 'dia') {
     const dia = document.getElementById('dia-focos').value;
-    if (!dia) { msg.textContent = 'Escolha um dia.'; return; }
+    if (!dia) { msg.textContent = 'Choose a day.'; return; }
     url = `api/pontos?modo=dia&data=${dia}&sat=${document.getElementById('sat-dia').value}`;
   }
-  msg.textContent = 'Buscando os focos na NASA...';
+  msg.textContent = 'Fetching hotspots from NASA...';
   try {
     const r = await fetch(url);
     const j = await r.json();
     if (meuPedido !== focosMapa.pedido) return;
-    if (!r.ok) { msg.textContent = j.erro || 'Não foi possível buscar os focos agora.'; return; }
+    if (!r.ok) {
+      const sat = document.getElementById('sat-dia').value;
+      msg.textContent = r.status === 503 ? 'Looking up a chosen day is not configured on this site yet.'
+        : r.status === 404 ? (sat === 'modis' ? 'MODIS has data from Nov 1, 2000 to today.' : 'VIIRS has data from Jan 20, 2012 to today.')
+          : r.status === 400 ? 'Invalid date.' : 'Could not fetch the hotspots right now.';
+      return;
+    }
     focosMapa.dados = j;
     const render = L.canvas({ padding: 0.3 });
     camadas.focos = L.layerGroup(j.pontos.map((p) => L.circleMarker([p[0], p[1]], {
       renderer: render, radius: 3, weight: 0.5, color: '#3a1a00', fillColor: corDoPonto(p), fillOpacity: 0.9,
-    }).bindPopup(`<strong>${dataBr(p[2])}, ${p[3].slice(0, 2)}h${p[3].slice(2, 4)} UTC</strong><br>potência do fogo (FRP): ${String(p[4]).replace('.', ',')} MW<br>satélite: ${p[5]}`))).addTo(mapaL);
+    }).bindPopup(`<strong>${dataBr(p[2])}, ${p[3].slice(0, 2)}:${p[3].slice(2, 4)} UTC</strong><br>fire radiative power (FRP): ${p[4]} MW<br>satellite: ${p[5]}`))).addTo(mapaL);
     legenda.innerHTML = sel === 'dia'
-      ? `<span><i style="background:${COR_DIA[j.sat]}"></i>${j.sat === 'modis' ? 'MODIS (Aqua e Terra)' : 'VIIRS'}, ${dataBr(j.data)}</span>`
+      ? `<span><i style="background:${COR_DIA[j.sat]}"></i>${j.sat === 'modis' ? 'MODIS (Aqua and Terra)' : 'VIIRS'}, ${dataBr(j.data)}</span>`
       : CORES_IDADE.map(([c, t]) => `<span><i style="background:${c}"></i>${t}</span>`).join('');
     contagemFocos();
   } catch (e) {
-    if (meuPedido === focosMapa.pedido) msg.textContent = 'Não foi possível buscar os focos agora.';
+    if (meuPedido === focosMapa.pedido) msg.textContent = 'Could not fetch the hotspots right now.';
   }
 }
 
@@ -728,17 +740,17 @@ function contagemFocos() {
   if (estado.area.tipo !== 'bahia' && DADOS.celulas_ids) {
     const ids = new Set(DADOS.celulas_ids);
     const k = j.pontos.filter((p) => ids.has(celulaDoPonto(p[0], p[1]))).length;
-    naArea = ` ${fmt(k)} na área escolhida.`;
+    naArea = ` ${fmt(k)} in the chosen area.`;
   }
   if (focosMapa.modo === 'dia') {
-    let txt = `${fmt(n)} focos na Bahia em ${dataBr(j.data)}.${naArea}`;
+    let txt = `${fmt(n)} hotspots in Bahia on ${dataBr(j.data)}.${naArea}`;
     if (j.sat === 'modis') {
       const taxa = OFICIAL.metodo.taxa_por_mes[j.data.slice(5, 7)];
-      txt += ` Na régua do VIIRS, com a taxa de ${MESES_LONGO[Number(j.data.slice(5, 7)) - 1]} (${num1(taxa)}), seriam cerca de ${fmt(n * taxa)} na Bahia. Num dia só, a conversão varia mais que no mês.`;
+      txt += ` On the VIIRS ruler, with the ${MESES_LONGO[Number(j.data.slice(5, 7)) - 1]} rate (${num1(taxa)}), that would be about ${fmt(n * taxa)} in Bahia. For a single day, the conversion varies more than for a month.`;
     }
-    msg.textContent = txt + ` Fonte: ${j.fonte}. Toque num ponto para ver hora e potência.`;
+    msg.textContent = txt + ` Source: NASA FIRMS, ${String(j.produto || '').replace(/_/g, ' ')}. Tap a point to see time and power.`;
   } else {
-    msg.textContent = `${fmt(n)} focos na Bahia nos últimos 7 dias.${naArea} Fonte: ${j.fonte}. Toque num ponto para ver hora e potência.`;
+    msg.textContent = `${fmt(n)} hotspots in Bahia in the last 7 days.${naArea} Source: NASA FIRMS, VIIRS NOAA-20 near real time. Tap a point to see time and power.`;
   }
 }
 
@@ -758,7 +770,7 @@ function iniciarDesenho() {
   desenho.pontos = [];
   mapaL.doubleClickZoom.disable();
   document.getElementById('mapa').classList.add('desenhando');
-  document.getElementById('msg-area').textContent = 'Toque no mapa para marcar os cantos da área. Com 3 pontos ou mais, clique em "Concluir área".';
+  document.getElementById('msg-area').textContent = 'Tap the map to mark the corners of the area. With 3 points or more, click "Finish area".';
   atualizarDesenho();
 }
 
@@ -773,7 +785,7 @@ function atualizarDesenho() {
     camadas.rascunho = L.layerGroup([forma, ...cantos]).addTo(mapaL);
   }
   if (desenho.ativo && pts.length) {
-    document.getElementById('msg-area').textContent = `${pts.length} ${pts.length === 1 ? 'ponto marcado' : 'pontos marcados'}.` + (pts.length < 3 ? ' Marque pelo menos 3.' : ' Clique em "Concluir área" ou continue marcando.');
+    document.getElementById('msg-area').textContent = `${pts.length} ${pts.length === 1 ? 'point marked' : 'points marked'}.` + (pts.length < 3 ? ' Mark at least 3.' : ' Click "Finish area" or keep marking.');
   }
   botoesDesenho();
 }
@@ -794,8 +806,8 @@ function concluirDesenho() {
 
 // ------------------------------------------------------------------ métodos testados
 
-const num1 = (n) => n.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-const num3 = (n) => n.toLocaleString('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+const num1 = (n) => n.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const num3 = (n) => n.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
 const ORDEM_METODOS = ['taxa_unica', 'taxa_por_mes', 'quadradinhos', 'ranking', 'formula_pesos', 'terra', 'mistura'];
 
 function textosMetodos(d) {
@@ -806,39 +818,39 @@ function textosMetodos(d) {
   const nAnos = Object.keys(t1.um_ano_fora_por_ano).length;
   return {
     taxa_unica: {
-      nome: 'Uma taxa só para o ano todo', curto: 'Taxa única', tag: ['descartado', 'descartado'],
-      como: 'Um número só: o total de focos do VIIRS dividido pelo do MODIS Aqua nos anos em que os dois funcionaram juntos.',
-      veredito: 'Usa a mesma taxa na seca e na chuva. Na chuva o fogo é pequeno e o VIIRS enxerga bem mais que o MODIS, então a taxa única erra nesses meses.',
+      nome: 'One single ratio for the whole year', curto: 'Single ratio', tag: ['descartado', 'discarded'],
+      como: 'One number: total VIIRS hotspots divided by total MODIS Aqua hotspots in the years both satellites flew together.',
+      veredito: 'Uses the same ratio in the dry and the rainy season. In the rainy season fires are small and VIIRS sees many more than MODIS, so the single ratio misses those months.',
     },
     taxa_por_mes: {
-      nome: 'Uma taxa para cada mês do ano', curto: 'Taxa por mês', tag: ['usado', 'usado no site'],
-      como: `Para cada mês do ano, quantos focos o VIIRS vê para cada foco do MODIS Aqua. Em setembro, na seca, são ${num1(taxa['09'])}; em janeiro, na chuva, ${num1(taxa['01'])}. O dado antigo é multiplicado pela taxa do seu mês.`,
-      veredito: `Menor erro entre os métodos usados sozinhos, e continuou perto de ${num1(t1.um_ano_fora_erro_pct)}% escondendo cada ano. São 12 números que qualquer pessoa confere numa planilha.`,
+      nome: 'One ratio for each calendar month', curto: 'Monthly ratio', tag: ['usado', 'used in the app'],
+      como: `For each month of the year, how many hotspots VIIRS sees for each MODIS Aqua hotspot. In September (dry season) it is ${num1(taxa['09'])}; in January (rainy season), ${num1(taxa['01'])}. The old record is multiplied by the ratio of its month.`,
+      veredito: `Lowest error among the methods used alone, and it stayed close to ${num1(t1.um_ano_fora_erro_pct)}% when leaving each year out. It is 12 numbers anyone can check in a spreadsheet.`,
     },
     quadradinhos: {
-      nome: 'Contar lugares com fogo em vez de focos', curto: 'Quadradinhos *', tag: ['descartado', 'teste de robustez'],
-      como: 'Divide o mapa em quadradinhos de uns 5,5 km e conta quantos tiveram fogo em cada dia. Depois aplica uma taxa por mês.',
-      veredito: `Quando o fogo é denso, o quadradinho já está aceso e para de contar. Errou mais em anos novos e nos anos de deriva do Aqua (${num1(r.quadradinhos.deriva_erro_pct)}%), e o número não se compara com as contagens oficiais de focos.`,
+      nome: 'Count places with fire instead of hotspots', curto: 'Grid cells *', tag: ['descartado', 'robustness check'],
+      como: 'Splits the map into cells of about 5.5 km and counts how many had fire on each day. Then applies a monthly ratio.',
+      veredito: `When fire is dense, a cell is already lit and stops counting. It erred more in new years and in the Aqua drift years (${num1(r.quadradinhos.deriva_erro_pct)}%), and the number cannot be compared with official hotspot counts.`,
     },
     ranking: {
-      nome: 'Converter pela posição no ranking', curto: 'Posição no ranking', tag: ['descartado', 'descartado'],
-      como: 'Um mês que ficou entre os 30% mais fortes do MODIS recebe o valor dos 30% mais fortes do VIIRS.',
-      veredito: `Decorou os dados: errou ${num1(r.ranking.anos_que_viu_erro_pct)}% nos anos que já tinha visto e ${num1(r.ranking.teste_erro_pct)}% nos que não tinha. Os anos recordes antes de 2012 passam do maior valor que ele conhece.`,
+      nome: 'Convert by rank (quantile mapping)', curto: 'Quantile mapping', tag: ['descartado', 'discarded'],
+      como: 'A month among the 30% strongest for MODIS gets the value of the 30% strongest for VIIRS.',
+      veredito: `It memorized the data: ${num1(r.ranking.anos_que_viu_erro_pct)}% error in the years it had seen and ${num1(r.ranking.teste_erro_pct)}% in the years it had not. The record years before 2012 go beyond the largest value it knows.`,
     },
     formula_pesos: {
-      nome: 'Fórmula com pesos (pedido da mentoria)', curto: 'Fórmula com pesos', tag: ['faixa', 'usado na faixa'],
-      como: 'Uma fórmula estatística que ajusta a taxa pela intensidade do fogo, pela parte de focos noturnos, chuva, umidade, temperatura e altitude, com dados da NASA POWER.',
-      veredito: `Explica por que a taxa muda e manteve os mesmos fatores em todos os testes, mas não errou menos que a taxa por mês (${num1(r.formula_pesos.teste_erro_pct)}% contra ${num1(t1.teste_erro_pct)}%). Nos anos de deriva do Aqua errou menos (${num1(r.formula_pesos.deriva_erro_pct)}% contra ${num1(t1.deriva_erro_pct)}%). Entra na faixa de 2003 a 2011.`,
+      nome: 'Weighted factor model (mentors\' request)', curto: 'Factor model', tag: ['faixa', 'used in the band'],
+      como: 'A statistical model that adjusts the ratio by fire intensity, share of night-time hotspots, rain, humidity, temperature and elevation, with NASA POWER data.',
+      veredito: `It explains why the ratio changes and kept the same factors in every test, but it did not beat the monthly ratio (${num1(r.formula_pesos.teste_erro_pct)}% against ${num1(t1.teste_erro_pct)}%). In the Aqua drift years it erred less (${num1(r.formula_pesos.deriva_erro_pct)}% against ${num1(t1.deriva_erro_pct)}%). It is part of the 2003 to 2011 band.`,
     },
     terra: {
-      nome: 'Converter a partir do MODIS Terra', curto: 'Taxa pelo Terra', tag: ['faixa', 'usado na faixa'],
-      como: 'A mesma taxa por mês, mas partindo do MODIS Terra em vez do Aqua.',
-      veredito: `Errou ${num1(r.terra.teste_erro_pct)}% no teste. O Terra passa de manhã e o Aqua à tarde, quase no horário do VIIRS. Antes de 2012 os dois MODIS discordam, por isso o Terra entra na faixa de incerteza.`,
+      nome: 'Convert from MODIS Terra', curto: 'Terra-based ratio', tag: ['faixa', 'used in the band'],
+      como: 'The same monthly ratio, but starting from MODIS Terra instead of Aqua.',
+      veredito: `${num1(r.terra.teste_erro_pct)}% error on the test. Terra flies in the morning and Aqua in the afternoon, close to the VIIRS overpass. Before 2012 the two MODIS disagree, so Terra is part of the uncertainty band.`,
     },
     mistura: {
-      nome: 'Misturar a taxa por mês com a fórmula', curto: `Mistura ${peso}/${100 - peso}`, tag: ['promissor', 'próximo passo'],
-      como: `${peso}% da taxa por mês e ${100 - peso}% da fórmula com pesos. A proporção foi escolhida só com 2013 a 2019, sem olhar o teste.`,
-      veredito: `Teve o menor erro (${num1(r.mistura.teste_erro_pct)}%) e ganhou da taxa por mês em ${r.mistura.anos_que_ganha_da_taxa_por_mes} de ${nAnos} anos, mas a diferença é de ${num1(t1.teste_erro_pct - r.mistura.teste_erro_pct)} ponto e ainda pode ser acaso. Por isso o número principal não mudou.`,
+      nome: 'Blend of the monthly ratio and the factor model', curto: `Blend ${peso}/${100 - peso}`, tag: ['promissor', 'next step'],
+      como: `${peso}% monthly ratio and ${100 - peso}% factor model. The weight was chosen with 2013 to 2019 only, without looking at the test.`,
+      veredito: `It had the lowest error (${num1(r.mistura.teste_erro_pct)}%) and beat the monthly ratio in ${r.mistura.anos_que_ganha_da_taxa_por_mes} of ${nAnos} years, but the difference is ${num1(t1.teste_erro_pct - r.mistura.teste_erro_pct)} point and may still be chance. So the main number did not change.`,
     },
   };
 }
@@ -848,7 +860,7 @@ async function comparacaoMetodos() {
     try {
       METODOS = await (await fetch('data/metodos.json')).json();
     } catch (e) {
-      document.getElementById('metodos-intro').innerHTML = '<p>Não foi possível carregar a comparação.</p>';
+      document.getElementById('metodos-intro').innerHTML = '<p>Could not load the comparison.</p>';
       return;
     }
   }
@@ -858,8 +870,8 @@ async function comparacaoMetodos() {
   const t1 = r.taxa_por_mes;
   const nAnos = Object.keys(t1.um_ano_fora_por_ano).length;
   document.getElementById('metodos-intro').innerHTML = `
-    <p>Para escolher a conversão, colocamos todos os métodos na mesma prova. Cada um aprendeu só com ${d.periodos.calibracao_teste[0].slice(0, 4)} a 2019 e tentou adivinhar 2020 a 2023, anos que não tinha visto. Depois comparamos com o que o VIIRS mediu de verdade. Para conferir que não foi sorte do período, repetimos escondendo um ano de cada vez, de ${d.periodos.um_ano_fora[0]} a ${d.periodos.um_ano_fora[1]}.</p>
-    <p class="nota">Erro: quanto a conversão errou por mês, em média, contra o VIIRS real (WAPE, em %). Quanto menor, melhor. Mesmos ${t1.teste_n_meses} meses de teste para todos.</p>`;
+    <p>To choose the conversion, we put every method through the same test. Each one learned only from ${d.periodos.calibracao_teste[0].slice(0, 4)} to 2019 and tried to predict 2020 to 2023, years it had not seen. Then we compared with what VIIRS actually measured. To make sure it was not luck of the period, we repeated it leaving one year out at a time, from ${d.periodos.um_ano_fora[0]} to ${d.periodos.um_ano_fora[1]}.</p>
+    <p class="nota">Error: how much the conversion missed per month, on average, against real VIIRS (WAPE, in %). Lower is better. The same ${t1.teste_n_meses} test months for every method.</p>`;
 
   const el = document.getElementById('graf-metodos');
   const g = graficos.metodos || echarts.init(el);
@@ -879,10 +891,10 @@ async function comparacaoMetodos() {
       axisLabel: { color: css('--texto'), fontSize: fonte, formatter: (k) => (destaque(k) ? '{b|' + tx[k].curto + '}' : tx[k].curto), rich: { b: { fontWeight: 700, color: css('--destaque') } } },
     },
     series: [
-      { name: 'Teste 2020 a 2023', type: 'bar', barGap: '15%', itemStyle: { color: css('--destaque'), borderRadius: [0, 4, 4, 0] },
+      { name: 'Test 2020 to 2023', type: 'bar', barGap: '15%', itemStyle: { color: css('--destaque'), borderRadius: [0, 4, 4, 0] },
         label: { show: true, position: 'right', fontSize: fonte, color: css('--texto'), formatter: (p) => num1(p.value) + '%' },
         data: ordem.map((k) => r[k].teste_erro_pct) },
-      { name: `Escondendo um ano de cada vez (${nAnos} anos)`, type: 'bar', itemStyle: { color: css('--destaque-2'), opacity: 0.75, borderRadius: [0, 4, 4, 0] },
+      { name: `Leaving one year out at a time (${nAnos} years)`, type: 'bar', itemStyle: { color: css('--destaque-2'), opacity: 0.75, borderRadius: [0, 4, 4, 0] },
         label: { show: true, position: 'right', fontSize: fonte, color: css('--texto-suave'), formatter: (p) => num1(p.value) + '%' },
         data: ordem.map((k) => r[k].um_ano_fora_erro_pct) },
     ],
@@ -895,9 +907,9 @@ async function comparacaoMetodos() {
       <header><h3>${i + 1}. ${t.nome}</h3><span class="tag ${t.tag[0]}">${t.tag[1]}</span></header>
       <p>${t.como}</p>
       <div class="numeros">
-        <span><strong>${num1(m.teste_erro_pct)}%</strong>no teste</span>
-        <span><strong>${num1(m.um_ano_fora_erro_pct)}%</strong>escondendo cada ano</span>
-        <span><strong>${num1(m.anos_que_viu_erro_pct)}%</strong>nos anos que viu</span>
+        <span><strong>${num1(m.teste_erro_pct)}%</strong>on the test</span>
+        <span><strong>${num1(m.um_ano_fora_erro_pct)}%</strong>leaving each year out</span>
+        <span><strong>${num1(m.anos_que_viu_erro_pct)}%</strong>in the years it saw</span>
       </div>
       <p class="veredito">${t.veredito}</p>
     </article>`;
@@ -905,21 +917,21 @@ async function comparacaoMetodos() {
 
   const c = d.correlacao_ordem_dos_meses;
   document.getElementById('metodos-conclusao').innerHTML = `
-    <h3>Por que o site usa a taxa por mês</h3>
+    <h3>Why the app uses the monthly ratio</h3>
     <ul>
-      <li><strong>Menor erro entre os métodos usados sozinhos:</strong> ${num1(t1.teste_erro_pct)}% no teste e ${num1(t1.um_ano_fora_erro_pct)}% escondendo um ano de cada vez.</li>
-      <li><strong>Não decora:</strong> erra ${num1(t1.anos_que_viu_erro_pct)}% nos anos que viu e ${num1(t1.teste_erro_pct)}% nos que não viu. A posição no ranking ia de ${num1(r.ranking.anos_que_viu_erro_pct)}% para ${num1(r.ranking.teste_erro_pct)}%.</li>
-      <li><strong>Simples de conferir:</strong> 12 números, um por mês, que qualquer pessoa refaz numa planilha.</li>
-      <li><strong>Faz sentido físico:</strong> a taxa sobe na chuva, quando o fogo é pequeno e o VIIRS enxerga mais do que o MODIS.</li>
-      <li><strong>Vale para qualquer área:</strong> as mesmas 12 taxas são usadas quando você escolhe um ponto no mapa.</li>
+      <li><strong>Lowest error among the methods used alone:</strong> ${num1(t1.teste_erro_pct)}% on the test and ${num1(t1.um_ano_fora_erro_pct)}% leaving one year out at a time.</li>
+      <li><strong>It does not memorize:</strong> ${num1(t1.anos_que_viu_erro_pct)}% error in the years it saw and ${num1(t1.teste_erro_pct)}% in the years it did not. Quantile mapping went from ${num1(r.ranking.anos_que_viu_erro_pct)}% to ${num1(r.ranking.teste_erro_pct)}%.</li>
+      <li><strong>Easy to check:</strong> 12 numbers, one per month, that anyone can redo in a spreadsheet.</li>
+      <li><strong>It makes physical sense:</strong> the ratio rises in the rainy season, when fires are small and VIIRS sees more than MODIS.</li>
+      <li><strong>It works for any area:</strong> the same 12 ratios are used when you choose a point on the map.</li>
     </ul>
-    <h3>E a mistura, que errou menos?</h3>
-    <p>Ela ganhou por pouco: ${num1(r.mistura.teste_erro_pct)}% contra ${num1(t1.teste_erro_pct)}% no teste, e em ${r.mistura.anos_que_ganha_da_taxa_por_mes} de ${nAnos} anos. Com tão poucos anos de dado, uma diferença desse tamanho ainda pode ser acaso, e o site ainda não calcula a fórmula com pesos para cada área do mapa. Por isso o número principal segue com a taxa por mês e a mistura fica como próximo teste.</p>
-    <h3>Conferência de fora</h3>
-    <p>Comparamos a série convertida com a do satélite de referência do INPE, que não passa pela nossa conversão. O desenho dos anos bate e o salto de 2012 some. <a href="#inpe" data-janela="inpe">Veja a conferência com o INPE</a>.</p>
-    <h3>Correlação não é prova</h3>
-    <p>A ordem dos meses, do mais fraco ao mais forte, tem correlação de ${num3(c.taxa_por_mes)} com a taxa por mês. Mas o Aqua sem conversão nenhuma já chega a ${num3(c.aqua_sem_conversao)}, porque seca e chuva mandam no ano. Por isso medimos pelo erro em focos, não pela correlação.</p>
-    <p class="nota">* ${d.notas.join(' ')} Os anos de 2024 e 2025 ficam fora da escolha porque a órbita do Aqua mudou; o erro de cada método nesses anos está no JSON.</p>`;
+    <h3>What about the blend, which erred less?</h3>
+    <p>It won by a little: ${num1(r.mistura.teste_erro_pct)}% against ${num1(t1.teste_erro_pct)}% on the test, and in ${r.mistura.anos_que_ganha_da_taxa_por_mes} of ${nAnos} years. With so few years of data, a difference this size may still be chance, and the app does not yet compute the factor model for each area of the map. So the main number keeps the monthly ratio and the blend is the next test.</p>
+    <h3>External check</h3>
+    <p>We compared the converted series with INPE's reference satellite series, which does not go through our conversion. The shape of the years matches and the 2012 jump disappears. <a href="#inpe" data-janela="inpe">See the check against INPE</a>.</p>
+    <h3>Correlation is not proof</h3>
+    <p>The order of the months, from weakest to strongest, has a correlation of ${num3(c.taxa_por_mes)} with the monthly ratio. But raw Aqua, with no conversion at all, already reaches ${num3(c.aqua_sem_conversao)}, because dry and rainy seasons rule the year. That is why we measure the error in hotspots, not the correlation.</p>
+    <p class="nota">* Grid cells: error measured in 0.05 degree cells with fire per day, not in hotspots. Terra: without the months when Terra had missing data. Blend: the weight was chosen with 2013 to 2019 only, without looking at the test. The years 2024 and 2025 are left out of the choice because the Aqua orbit changed; the error of each method in those years is in the JSON.</p>`;
 }
 
 // ------------------------------------------------------------------ conferência com o INPE
@@ -929,31 +941,31 @@ async function comparacaoInpe() {
     try {
       INPE = await (await fetch('data/inpe.json')).json();
     } catch (e) {
-      document.getElementById('inpe-intro').innerHTML = '<p>Não foi possível carregar a comparação.</p>';
+      document.getElementById('inpe-intro').innerHTML = '<p>Could not load the comparison.</p>';
       return;
     }
   }
   const d = INPE;
   const r = d.resumo;
   const anos = d.anos;
-  const num2 = (n) => n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const num2 = (n) => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const iguais = (a, b) => a[0] === b[0];
   document.getElementById('inpe-intro').innerHTML = `
-    <p>O INPE publica os focos de um <strong>satélite de referência</strong>, o mesmo desde 2003, justamente para comparar anos. É uma série que não passa pela nossa conversão. Se a harmonização estiver certa, as duas séries têm que subir e descer juntas, sem salto em 2012.</p>
+    <p>INPE, Brazil's National Institute for Space Research, publishes the hotspots of one <strong>reference satellite</strong>, the same one since 2003, precisely to compare years. This series does not go through our conversion. If the harmonization is right, both series must rise and fall together, with no jump in 2012.</p>
     <div class="metricas">
-      <div><strong>${num3(r.correlacao_anual)}</strong><span>correlação ano a ano com o INPE (sem harmonizar: ${num2(r.correlacao_anual_sem_harmonizar)})</span></div>
-      <div><strong>${num3(r.correlacao_mensal)}</strong><span>correlação mês a mês</span></div>
-      <div><strong>${r.mes_pico_igual} de ${r.n_anos}</strong><span>anos com o mesmo mês de pico</span></div>
-      <div><strong>${r.top5_inpe[0]}</strong><span>${iguais(r.top5_inpe, r.top5_nossa) ? 'ano com mais fogo nas duas séries' : 'ano com mais fogo no INPE (nosso: ' + r.top5_nossa[0] + ')'}</span></div>
+      <div><strong>${num3(r.correlacao_anual)}</strong><span>year-to-year correlation with INPE (not harmonized: ${num2(r.correlacao_anual_sem_harmonizar)})</span></div>
+      <div><strong>${num3(r.correlacao_mensal)}</strong><span>month-to-month correlation</span></div>
+      <div><strong>${r.mes_pico_igual} of ${r.n_anos}</strong><span>years with the same peak month</span></div>
+      <div><strong>${r.top5_inpe[0]}</strong><span>${iguais(r.top5_inpe, r.top5_nossa) ? 'year with the most fire in both series' : 'year with the most fire at INPE (ours: ' + r.top5_nossa[0] + ')'}</span></div>
     </div>`;
 
-  const nomes = { inpe: 'INPE, satélite de referência', nossa: 'Régua de Fogo (harmonizada)', crua: 'Sem harmonizar' };
+  const nomes = { inpe: 'INPE reference satellite', nossa: 'Régua de Fogo (harmonized)', crua: 'Not harmonized' };
   const cores = { inpe: css('--abaixo'), nossa: css('--destaque'), crua: '#94a3b8' };
   const eixo = (fmtY) => ({
     xAxis: { type: 'category', data: anos.map((a) => String(a.ano)), axisLabel: { color: css('--texto-suave') } },
     yAxis: { type: 'value', axisLabel: { color: css('--texto-suave'), formatter: fmtY }, splitLine: { lineStyle: { color: css('--borda') } } },
   });
-  const marca2012 = { silent: true, symbol: 'none', lineStyle: { color: css('--texto-suave'), type: 'dotted' }, label: { formatter: 'chega o VIIRS', color: css('--texto-suave') }, data: [{ xAxis: '2012' }] };
+  const marca2012 = { silent: true, symbol: 'none', lineStyle: { color: css('--texto-suave'), type: 'dotted' }, label: { formatter: 'VIIRS arrives', color: css('--texto-suave') }, data: [{ xAxis: '2012' }] };
   const estreito = document.getElementById('graf-inpe').clientWidth < 520;
   const legenda = { top: 0, left: estreito ? 0 : 'center', orient: estreito ? 'vertical' : 'horizontal', itemGap: 6, textStyle: { color: css('--texto-suave'), fontSize: estreito ? 11 : 12 } };
   const linha = (chave, campo, extra) => ({ name: nomes[chave], type: 'line', data: anos.map((a) => a[campo]), symbolSize: 5, lineStyle: { width: chave === 'crua' ? 2 : 3, color: cores[chave], type: chave === 'crua' ? 'dashed' : 'solid' }, itemStyle: { color: cores[chave] }, ...extra });
@@ -965,7 +977,7 @@ async function comparacaoInpe() {
     grid: { left: 48, right: 16, top: estreito ? 84 : 56, bottom: 28 },
     tooltip: { trigger: 'axis', confine: true, formatter: (ps) => {
       const a = anos[ps[0].dataIndex];
-      return `<strong>${a.ano}</strong><br>INPE: ${fmt(a.inpe)} focos<br>Régua de Fogo: ${fmt(a.nossa)} focos<br>Sem harmonizar: ${fmt(a.sem_harmonizar)} focos<br><span style="opacity:.75">índice: ${ps.map((p) => p.seriesName.split(' ')[0] + ' ' + Math.round(p.value)).join(' · ')}</span>`;
+      return `<strong>${a.ano}</strong><br>INPE: ${fmt(a.inpe)} hotspots<br>Régua de Fogo: ${fmt(a.nossa)} hotspots<br>Not harmonized: ${fmt(a.sem_harmonizar)} hotspots<br><span style="opacity:.75">index: ${ps.map((p) => p.seriesName.split(' ')[0] + ' ' + Math.round(p.value)).join(' · ')}</span>`;
     } },
     ...eixo((v) => v),
     series: [linha('inpe', 'indice_inpe', { markLine: marca2012 }), linha('nossa', 'indice_nossa'), linha('crua', 'indice_sem_harmonizar')],
@@ -976,7 +988,7 @@ async function comparacaoInpe() {
   g2.setOption({
     animation: false, legend: { ...legenda, data: [nomes.nossa, nomes.crua] },
     grid: { left: 48, right: 16, top: estreito ? 70 : 56, bottom: 28 },
-    tooltip: { trigger: 'axis', confine: true, valueFormatter: (v) => num1(v) + ' focos para cada foco do INPE' },
+    tooltip: { trigger: 'axis', confine: true, valueFormatter: (v) => num1(v) + ' hotspots for each INPE hotspot' },
     ...eixo((v) => v + 'x'),
     series: [linha('nossa', 'razao_nossa_inpe', { markLine: marca2012 }), linha('crua', 'razao_sem_harmonizar_inpe')],
   }, true);
@@ -985,19 +997,19 @@ async function comparacaoInpe() {
   const ultimoAntes = h.filter((a) => a.hora_utc_mais_comum_inpe === h[0].hora_utc_mais_comum_inpe).pop();
   const depois = h.filter((a) => a.ano > ultimoAntes.ano);
   document.getElementById('inpe-leitura').innerHTML = `
-    <h3>O que a comparação mostra</h3>
+    <h3>What the comparison shows</h3>
     <ul>
-      <li><strong>O salto de 2012 some.</strong> Sem harmonizar, a nossa contagem passa de ${num1(r.razao_sem_harmonizar_2011)} para ${num1(r.razao_sem_harmonizar_2012)} focos para cada foco do INPE de 2011 para 2012, um salto de ${num1(r.salto_sem_harmonizar_vezes)} vezes só pela troca de satélite. Harmonizada, fica em ${num1(r.razao_media_2003_2011)} de 2003 a 2011 e ${num1(r.razao_media_2012_2021)} de 2012 a 2021: sobra uma diferença de ${num1(r.diferenca_entre_periodos_pct)}%.</li>
-      <li><strong>Os anos sobem e descem juntos.</strong> Correlação de ${num3(r.correlacao_anual)} ano a ano e ${num3(r.correlacao_mensal)} mês a mês. Sem harmonizar, a correlação ano a ano cai para ${num2(r.correlacao_anual_sem_harmonizar)}: a série crua nem aponta na mesma direção.</li>
-      <li><strong>Os piores anos coincidem.</strong> Cinco anos com mais fogo no INPE: ${r.top5_inpe.join(', ')}. Na Régua de Fogo: ${r.top5_nossa.join(', ')}.</li>
-      ${depois.length ? `<li><strong>A mudança de órbita do Aqua aparece no INPE também.</strong> A hora mais comum das passagens era ${h[0].hora_utc_mais_comum_inpe}h UTC até ${ultimoAntes.ano} e passa a ${depois[0].hora_utc_mais_comum_inpe}h UTC em ${depois.map((a) => a.ano).join(' e ')}. É a mesma deriva que encontramos nos dados da NASA, confirmada por outra fonte.</li>` : ''}
+      <li><strong>The 2012 jump disappears.</strong> Without harmonization, our count goes from ${num1(r.razao_sem_harmonizar_2011)} to ${num1(r.razao_sem_harmonizar_2012)} hotspots for each INPE hotspot from 2011 to 2012, a ${num1(r.salto_sem_harmonizar_vezes)}-fold jump caused only by the satellite change. Harmonized, it stays at ${num1(r.razao_media_2003_2011)} from 2003 to 2011 and ${num1(r.razao_media_2012_2021)} from 2012 to 2021: a remaining difference of ${num1(r.diferenca_entre_periodos_pct)}%.</li>
+      <li><strong>The years rise and fall together.</strong> Correlation of ${num3(r.correlacao_anual)} year to year and ${num3(r.correlacao_mensal)} month to month. Without harmonization, the year-to-year correlation drops to ${num2(r.correlacao_anual_sem_harmonizar)}: the raw series does not even point in the same direction.</li>
+      <li><strong>The worst years match.</strong> Five years with the most fire at INPE: ${r.top5_inpe.join(', ')}. In Régua de Fogo: ${r.top5_nossa.join(', ')}.</li>
+      ${depois.length ? `<li><strong>The Aqua orbit change shows up at INPE too.</strong> The most common overpass hour was ${h[0].hora_utc_mais_comum_inpe}:00 UTC until ${ultimoAntes.ano} and becomes ${depois[0].hora_utc_mais_comum_inpe}:00 UTC in ${depois.map((a) => a.ano).join(' and ')}. It is the same drift we found in the NASA data, confirmed by another source.</li>` : ''}
     </ul>
-    <h3>Como ler</h3>
+    <h3>How to read it</h3>
     <ul>
-      <li>O INPE conta bem menos focos que a nossa série: usa outro processamento e só os focos dentro do contorno oficial do estado. Nós usamos um retângulo em volta da Bahia, que pega pedaços dos estados vizinhos. Por isso a comparação é do desenho da série, não do número absoluto.</li>
-      <li>A hora das passagens, por volta das 13h30 na Bahia, indica que o satélite de referência é o MODIS Aqua, o mesmo que usamos como base. Por isso a conferência confirma a forma da série, mas não resolve a diferença entre o Aqua e o Terra antes de 2012. A faixa de incerteza desse período continua.</li>
+      <li>INPE counts far fewer hotspots than our series: it uses another processing and only the hotspots inside the official state border. We use a rectangle around Bahia that includes parts of the neighboring states. So the comparison is about the shape of the series, not the absolute number.</li>
+      <li>The overpass time, around 1:30 pm local time in Bahia, indicates that the reference satellite is MODIS Aqua, the same one we use as the base. So this check confirms the shape of the series, but it does not settle the difference between Aqua and Terra before 2012. The uncertainty band for that period stays.</li>
     </ul>
-    <p class="nota">Fonte: ${d.fonte}, <a href="${d.url_fonte}" target="_blank" rel="noopener">dataserver-coids.inpe.br</a>. Contagem dos focos com estado igual a Bahia, de 2003 a 2025.</p>`;
+    <p class="nota">Source: INPE, Programa Queimadas, reference satellite hotspots (annual files for Brazil), <a href="${d.url_fonte}" target="_blank" rel="noopener">dataserver-coids.inpe.br</a>. Hotspots with state equal to Bahia, from 2003 to 2025.</p>`;
 }
 
 // ------------------------------------------------------------------ detectados e relatados
@@ -1007,22 +1019,22 @@ async function detectadosRelatados() {
     try {
       RELATADOS = await (await fetch('data/relatados.json')).json();
     } catch (e) {
-      document.getElementById('relatados-intro').innerHTML = '<p>Não foi possível carregar os registros.</p>';
+      document.getElementById('relatados-intro').innerHTML = '<p>Could not load the records.</p>';
       return;
     }
   }
   const d = RELATADOS;
   const [a0, a1] = d.anos_com_cobertura;
-  const num2 = (n) => n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const num2 = (n) => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   document.getElementById('relatados-intro').innerHTML = `
-    <p><strong>Detectado</strong> é o foco de calor que o satélite vê. <strong>Relatado</strong> é o incêndio que uma brigada registrou em solo, com data, local, causa e área queimada. Aqui comparamos a nossa série com os Registros de Ocorrência de Incêndio (ROI) das brigadas do IBAMA (Prevfogo) na Bahia.</p>
+    <p><strong>Detected</strong> is a fire hotspot seen by the satellite. <strong>Reported</strong> is a fire that a brigade registered on the ground, with date, place, cause and burned area. Here we compare our series with the Fire Occurrence Records (ROI) of the IBAMA (Prevfogo) federal brigades in Bahia.</p>
     <div class="metricas">
-      <div><strong>${fmt(d.media_ocorrencias_por_ano)}</strong><span>incêndios relatados por ano (${a0} a ${a1})</span></div>
-      <div><strong>${fmt(d.media_focos_por_ano)}</strong><span>focos detectados por ano no mesmo período</span></div>
-      <div><strong>${fmt(d.focos_por_ocorrencia)}</strong><span>focos detectados para cada incêndio relatado</span></div>
-      <div><strong>${d.detectados_por_satelite} de ${fmt(d.total_ocorrencias)}</strong><span>registros em que o fogo foi achado por satélite; os outros vieram de ronda, telefone e observação</span></div>
+      <div><strong>${fmt(d.media_ocorrencias_por_ano)}</strong><span>reported fires per year (${a0} to ${a1})</span></div>
+      <div><strong>${fmt(d.media_focos_por_ano)}</strong><span>detected hotspots per year in the same period</span></div>
+      <div><strong>${fmt(d.focos_por_ocorrencia)}</strong><span>detected hotspots for each reported fire</span></div>
+      <div><strong>${d.detectados_por_satelite} of ${fmt(d.total_ocorrencias)}</strong><span>records where the fire was found by satellite; the others came from patrols, phone calls and lookouts</span></div>
     </div>
-    <p class="nota">${d.cobertura} Por isso o número de relatados não mede todo o fogo do estado: mostra o pedaço que chega a uma equipe em solo.</p>`;
+    <p class="nota">The records only cover areas served by federal brigades: protected areas, indigenous lands, settlements and nearby properties. So the number of reported fires does not measure all the fire in the state: it shows the part that reaches a team on the ground.</p>`;
 
   const estreito = document.getElementById('graf-relatados-mes').clientWidth < 520;
   const legenda = { top: 0, left: estreito ? 0 : 'center', orient: estreito ? 'vertical' : 'horizontal', itemGap: 6, textStyle: { color: css('--texto-suave'), fontSize: estreito ? 11 : 12 } };
@@ -1033,12 +1045,12 @@ async function detectadosRelatados() {
   g1.setOption({
     animation: false, legend: legenda,
     grid: { left: 44, right: 12, top: estreito ? 52 : 34, bottom: 24 },
-    tooltip: { trigger: 'axis', confine: true, valueFormatter: (v) => num1(v) + '% do ano' },
+    tooltip: { trigger: 'axis', confine: true, valueFormatter: (v) => num1(v) + '% of the year' },
     xAxis: { type: 'category', data: MESES, axisLabel: { color: css('--texto-suave') } },
     yAxis: eixoY((v) => v + '%'),
     series: [
-      { name: 'Relatados (IBAMA)', type: 'bar', data: d.sazonal.map((x) => x.relatados_pct), itemStyle: { color: css('--abaixo'), borderRadius: [4, 4, 0, 0] } },
-      { name: 'Detectados (satélite)', type: 'bar', data: d.sazonal.map((x) => x.detectados_pct), itemStyle: { color: css('--destaque'), borderRadius: [4, 4, 0, 0] } },
+      { name: 'Reported (IBAMA)', type: 'bar', data: d.sazonal.map((x) => x.relatados_pct), itemStyle: { color: css('--abaixo'), borderRadius: [4, 4, 0, 0] } },
+      { name: 'Detected (satellite)', type: 'bar', data: d.sazonal.map((x) => x.detectados_pct), itemStyle: { color: css('--destaque'), borderRadius: [4, 4, 0, 0] } },
     ],
   }, true);
 
@@ -1049,81 +1061,118 @@ async function detectadosRelatados() {
     grid: { left: 44, right: 56, top: estreito ? 52 : 34, bottom: 24 },
     tooltip: { trigger: 'axis', confine: true, formatter: (ps) => {
       const x = d.por_ano[ps[0].dataIndex];
-      return `<strong>${x.ano}</strong><br>${x.relatados} incêndios relatados (${fmt(x.area_ha)} ha atingidos)<br>${fmt(x.detectados)} focos detectados`;
+      return `<strong>${x.ano}</strong><br>${x.relatados} reported fires (${fmt(x.area_ha)} ha burned)<br>${fmt(x.detectados)} detected hotspots`;
     } },
     xAxis: { type: 'category', data: d.por_ano.map((x) => String(x.ano)), axisLabel: { color: css('--texto-suave') } },
-    yAxis: [eixoY((v) => v), { ...eixoY((v) => (v >= 1000 ? Math.round(v / 1000) + ' mil' : v)), splitLine: { show: false } }],
+    yAxis: [eixoY((v) => v), { ...eixoY(milhar), splitLine: { show: false } }],
     series: [
-      { name: 'Incêndios relatados (eixo da esquerda)', type: 'bar', data: d.por_ano.map((x) => x.relatados), itemStyle: { color: css('--abaixo'), borderRadius: [4, 4, 0, 0] } },
-      { name: 'Focos detectados (eixo da direita)', type: 'line', yAxisIndex: 1, data: d.por_ano.map((x) => x.detectados), symbolSize: 6, lineStyle: { width: 3, color: css('--destaque') }, itemStyle: { color: css('--destaque') } },
+      { name: 'Reported fires (left axis)', type: 'bar', data: d.por_ano.map((x) => x.relatados), itemStyle: { color: css('--abaixo'), borderRadius: [4, 4, 0, 0] } },
+      { name: 'Detected hotspots (right axis)', type: 'line', yAxisIndex: 1, data: d.por_ano.map((x) => x.detectados), symbolSize: 6, lineStyle: { width: 3, color: css('--destaque') }, itemStyle: { color: css('--destaque') } },
     ],
   }, true);
 
-  const frase = (t) => t.charAt(0) + t.slice(1).toLowerCase();
+  // categorias do IBAMA em português, traduzidas para a tela
+  const CATEGORIAS = {
+    RONDA: 'Patrol', TELEFONE: 'Phone call', 'PONTO DE OBSERVAÇÃO': 'Lookout point', 'INDÍGENA': 'Indigenous people',
+    'ASSENTADO/PROPRIETÁRIO': 'Settler or landowner', 'MONITORAMENTO POR SATÉLITE': 'Satellite monitoring', 'DURANTE COMBATE': 'During firefighting',
+    OUTROS: 'Other', INDETERMINADO: 'Undetermined', VANDALISMO: 'Vandalism', 'QUEIMA DE LIXO': 'Waste burning',
+    'LIMPEZA DE ÁREA PARA CULTIVO': 'Land clearing for crops', 'RENOVAÇÃO DE PASTAGEM NATURAL': 'Natural pasture renewal',
+    'CAÇA': 'Hunting', 'RENOVAÇÃO DE PASTAGEM PLANTADA': 'Planted pasture renewal', 'não informada': 'Not reported', 'não informado': 'Not reported',
+    'PROPRIEDADE RURAL': 'Rural property', 'UNIDADE DE CONSERVAÇÃO': 'Protected area', 'TERRA INDÍGENA': 'Indigenous land',
+    'PROJETO DE ASSENTAMENTO': 'Settlement', 'COMUNIDADE TRADICIONAL': 'Traditional community', 'FLORESTA PÚBLICA': 'Public forest',
+  };
+  const frase = (t) => CATEGORIAS[t] || (t.charAt(0) + t.slice(1).toLowerCase());
   const nomeProprio = (t) => t.toLowerCase().split(' ').map((w, k) => (k > 0 && ['de', 'da', 'do', 'das', 'dos', 'e'].includes(w) ? w : w.charAt(0).toUpperCase() + w.slice(1))).join(' ');
   const lista = (titulo, itens, f = frase) => `<div><h4>${titulo}</h4><ol>${itens.map((i) => `<li>${f(i.nome)}: ${i.n}</li>`).join('')}</ol></div>`;
   document.getElementById('relatados-detalhe').innerHTML = `
-    <h3>O que a comparação mostra</h3>
+    <h3>What the comparison shows</h3>
     <ul>
-      <li><strong>Só uma fração do fogo vira registro.</strong> Para cada incêndio relatado pelas brigadas federais, o satélite detectou cerca de ${fmt(d.focos_por_ocorrencia)} focos na Bahia. Mesmo contando que um incêndio grande gera muitos focos, a maior parte do fogo do estado não aparece nesses registros. Para ver o estado inteiro, o satélite é a única fonte contínua.</li>
-      <li><strong>A época do fogo é parecida.</strong> Os relatados têm pico em ${MESES_LONGO[d.mes_pico_relatados - 1]} e os detectados em ${MESES_LONGO[d.mes_pico_detectados - 1]}; os dois se concentram de julho a outubro (correlação de ${num2(d.correlacao_sazonal)} entre as duas curvas do ano).</li>
-      <li><strong>Mês a mês, os números não andam juntos</strong> (correlação de ${num2(d.correlacao_mensal)}). Os registros dependem de onde há brigada e de quantas equipes estavam em campo, não de quanto fogo houve no estado.</li>
+      <li><strong>Only a fraction of the fire becomes a record.</strong> For each fire reported by the federal brigades, the satellite detected about ${fmt(d.focos_por_ocorrencia)} hotspots in Bahia. Even counting that one large fire produces many hotspots, most of the fire in the state does not appear in these records. To see the whole state, the satellite is the only continuous source.</li>
+      <li><strong>The fire season is similar.</strong> Reported fires peak in ${MESES_LONGO[d.mes_pico_relatados - 1]} and detected hotspots in ${MESES_LONGO[d.mes_pico_detectados - 1]}; both concentrate from July to October (correlation of ${num2(d.correlacao_sazonal)} between the two yearly curves).</li>
+      <li><strong>Month to month, the numbers do not move together</strong> (correlation of ${num2(d.correlacao_mensal)}). Records depend on where brigades exist and how many teams were in the field, not on how much fire there was in the state.</li>
     </ul>
     <div class="listas-relatados">
-      ${lista('Como o fogo foi descoberto', d.deteccao.slice(0, 6))}
-      ${lista('Causa provável', d.causas.slice(0, 6))}
-      ${lista('Onde', d.locais.slice(0, 6))}
-      ${lista('Municípios com mais registros', d.municipios.slice(0, 6), nomeProprio)}
+      ${lista('How the fire was found', d.deteccao.slice(0, 6))}
+      ${lista('Probable cause', d.causas.slice(0, 6))}
+      ${lista('Where', d.locais.slice(0, 6))}
+      ${lista('Municipalities with the most records', d.municipios.slice(0, 6), nomeProprio)}
     </div>
-    <p class="nota">Fonte: ${d.fonte}, <a href="${d.url_fonte}" target="_blank" rel="noopener">dadosabertos.ibama.gov.br</a>. ${fmt(d.total_ocorrencias)} ocorrências na Bahia, contando cada registro uma vez. Anos com menos de ${d.minimo_registros_por_ano} registros ficam fora dos gráficos, porque o arquivo aberto só tem cobertura de ${a0} a ${a1}; ${d.datas_invalidas_descartadas} registros com data inválida foram descartados.</p>`;
+    <p class="nota">Source: IBAMA, Sisfogo, Fire Occurrence Records (ROI), open data, <a href="${d.url_fonte}" target="_blank" rel="noopener">dadosabertos.ibama.gov.br</a>. ${fmt(d.total_ocorrencias)} records in Bahia, each counted once. Years with fewer than ${d.minimo_registros_por_ano} records are left out of the charts, because the open file only covers ${a0} to ${a1}; ${d.datas_invalidas_descartadas} records with invalid dates were discarded.</p>`;
 }
 
 // ------------------------------------------------------------------ método e rodapé
+
+// nomes dos fatores do modelo, que vêm em português no JSON
+const FATOR_EN = {
+  'intensidade do fogo (FRP médio, log)': 'fire intensity (mean FRP, log)', 'fração de focos noturnos': 'share of night-time hotspots',
+  'tamanho do pixel (scan)': 'pixel size (scan)', 'hora de passagem diurna': 'daytime overpass time', 'chuva (mm/dia)': 'rain (mm/day)',
+  'vento a 10 m (m/s)': 'wind at 10 m (m/s)', 'umidade relativa (%)': 'relative humidity (%)', 'temperatura (°C)': 'temperature (°C)', 'altitude (m)': 'elevation (m)',
+};
+const rotuloFator = (f) => FATOR_EN[f] || f;
 
 function metodo() {
   const me = OFICIAL.metodo;
   const f = me.fatores;
   const v = me.validacao;
   const comp = f ? f.comparacao_teste_2020_2023 : null;
+  const fim = OFICIAL.periodo.fim;
+  const fimTexto = `${MESES_LONGO[Number(fim.slice(5, 7)) - 1]} ${fim.slice(0, 4)}`;
   const anual = Object.entries(v.erro_total_anual_pct).map(([a, e]) => `${a}: ${pct(e)}`).join(' · ');
   const pesos = f ? f.pesos.map((p) => {
     const efeito = Math.round((p.multiplica_razao_por_1_desvio - 1) * 1000) / 10;
     const firme = !(p.ic95_peso && p.ic95_peso[0] < 0 && p.ic95_peso[1] > 0);
-    return `<li><strong>${p.fator}</strong>: ${firme ? `${efeito > 0 ? '+' : ''}${efeito.toLocaleString('pt-BR')}% na razão VIIRS/MODIS a cada variação típica` : 'sem efeito firme depois dos outros fatores (intervalo de confiança cruza zero)'}</li>`;
+    return `<li><strong>${rotuloFator(p.fator)}</strong>: ${firme ? `${efeito > 0 ? '+' : ''}${efeito.toLocaleString('en-US')}% in the VIIRS/MODIS ratio for each typical variation` : 'no firm effect once the other factors are in (confidence interval crosses zero)'}</li>`;
   }).join('') : '';
-  const descartados = f ? f.triagem.filter((t) => !t.mantido).map((t) => t.fator).join(', ') : '';
+  const descartados = f ? f.triagem.filter((t) => !t.mantido).map((t) => rotuloFator(t.fator)).join(', ') : '';
+  const media = f ? f.media_anual_2003_2011 : null;
   document.getElementById('metodo-conteudo').innerHTML = `
-    <p>Os satélites MODIS (2000 em diante) e VIIRS (2012 em diante) não se comparam direto: o VIIRS tem pixel de 375 m, contra 1 km do MODIS, e enxerga fogo menor. Na Bahia ele conta cerca de 6 vezes mais focos. Sem harmonizar, a série dá um salto falso em 2012.</p>
-    <h3>O que fazemos</h3>
-    <p>${me.como_funciona}</p>
-    <ul>${me.filtros.map((x) => `<li>${x}</li>`).join('')}</ul>
-    <h3>Quão bem funciona</h3>
-    <p>${v.desenho}.</p>
+    <p>The MODIS (2000 onward) and VIIRS (2012 onward) satellites cannot be compared directly: VIIRS has a 375 m pixel, against 1 km for MODIS, and sees smaller fires. In Bahia it counts about 6 times more hotspots. Without harmonization, the series shows a false jump in 2012.</p>
+    <h3>What we do</h3>
+    <p>In the years both sensors flew together, we divide the total VIIRS hotspots by the total MODIS Aqua hotspots for each calendar month. The months that only have MODIS (2003 to January 2012) are multiplied by that month's ratio. From February 2012 on, the series uses real VIIRS counts.</p>
+    <ul>
+      <li>type = 0 (vegetation fires only)</li>
+      <li>MODIS with confidence 30 or more</li>
+      <li>VIIRS without low confidence</li>
+      <li>MODIS Aqua and VIIRS Suomi NPP pair (similar afternoon overpass time)</li>
+    </ul>
+    <h3>How well it works</h3>
+    <p>Ratios learned from February 2012 to December 2019 and tested on 2020 to 2023, years the model never saw (${v.erro_mensal_48_meses_pct ? '44 valid months, without the months with satellite failures' : 'valid months'}).</p>
     <div class="metricas">
-      <div><strong>${v.erro_mensal_wape_pct.toLocaleString('pt-BR')}%</strong><span>erro por mês (WAPE), meses válidos</span></div>
-      ${v.erro_mensal_48_meses_pct ? `<div><strong>${v.erro_mensal_48_meses_pct.toLocaleString('pt-BR')}%</strong><span>erro por mês contando os 48 meses</span></div>` : ''}
-      <div><strong>${pct(v.vies_pct)}</strong><span>desvio no total</span></div>
-      ${f ? `<div><strong>${f.cobertura_faixa_95}</strong><span>meses de teste dentro da faixa de 95% do modelo com fatores</span></div>` : ''}
+      <div><strong>${v.erro_mensal_wape_pct.toLocaleString('en-US')}%</strong><span>monthly error (WAPE), valid months</span></div>
+      ${v.erro_mensal_48_meses_pct ? `<div><strong>${v.erro_mensal_48_meses_pct.toLocaleString('en-US')}%</strong><span>monthly error counting all 48 months</span></div>` : ''}
+      <div><strong>${pct(v.vies_pct)}</strong><span>total bias</span></div>
+      ${f ? `<div><strong>${f.cobertura_faixa_95.replace(' de ', ' of ')}</strong><span>test months inside the 95% band of the factor model</span></div>` : ''}
     </div>
-    <p class="nota">Erro no total de cada ano de teste, nos meses válidos: ${anual}.${v.acerto_tres_faixas_pct ? ` Acerto ao classificar o mês em abaixo, normal ou acima: ${v.acerto_tres_faixas_pct.toLocaleString('pt-BR')}%.` : ''}</p>
+    <p class="nota">Error in the total of each test year, valid months: ${anual}.${v.acerto_tres_faixas_pct ? ` Accuracy when classifying the month as below, normal or above: ${v.acerto_tres_faixas_pct.toLocaleString('en-US')}%.` : ''}</p>
     ${f ? `
-    <h3>Por que a relação entre os satélites muda</h3>
-    <p>${f.o_que_e}</p>
+    <h3>Why the relation between the satellites changes</h3>
+    <p>A Poisson model per NASA POWER grid cell (about 55 x 68 km) and month, with weights for factors that only use data that existed before 2012 (MODIS and NASA POWER weather). It explains why the VIIRS/MODIS ratio changes and gives the 2003 to 2011 band.</p>
     <ul>${pesos}</ul>
-    <p class="nota">Testados e descartados por não mudarem a relação: ${descartados}. Comparação no teste: taxa por mês ${comp.T1.erro_mensal_pct.toLocaleString('pt-BR')}% de erro, modelo com fatores ${comp.modelo_v2.erro_mensal_pct.toLocaleString('pt-BR')}%. O número principal usa a taxa por mês. <a href="#metodos" data-janela="metodos">Veja a comparação dos 7 métodos testados</a>.</p>
-    <h3>O que descobrimos antes de 2012</h3>
-    <p>${f.descoberta}</p>
-    <p class="nota">Média anual de 2003 a 2011, em focos equivalentes VIIRS: ${fmt(f.media_anual_2003_2011.t1_terra)} pelo Terra, ${fmt(f.media_anual_2003_2011.fatores_aqua)} pelo modelo com fatores e ${fmt(f.media_anual_2003_2011.t1_aqua)} pela taxa por mês do Aqua. VIIRS real de 2012 a 2021: ${fmt(f.viirs_real_media_anual_2012_2021)} por ano.</p>` : ''}
-    <h3>Conferência com o INPE</h3>
-    <p>Comparamos a série harmonizada com a do satélite de referência do INPE, uma fonte independente: o desenho dos anos bate e o salto de 2012 desaparece. <a href="#inpe" data-janela="inpe">Ver a comparação</a>.</p>
-    <h3>Áreas menores</h3>
-    <p>Ao escolher um ponto, o site soma as células da grade NASA POWER (cerca de 55 x 68 km) dentro do raio, usando as mesmas taxas calibradas para a Bahia. A precisão medida (${v.erro_mensal_wape_pct.toLocaleString('pt-BR')}%) vale para a Bahia inteira; em áreas pequenas, com poucos focos, os números variam mais.</p>
-    <h3>Limitações</h3>
-    <ul>${me.limitacoes.map((x) => `<li>${x}</li>`).join('')}</ul>`;
+    <p class="nota">Tested and discarded because they do not change the relation: ${descartados}. Test comparison: monthly ratio ${comp.T1.erro_mensal_pct.toLocaleString('en-US')}% error, factor model ${comp.modelo_v2.erro_mensal_pct.toLocaleString('en-US')}%. The main number uses the monthly ratio. <a href="#metodos" data-janela="metodos">See the comparison of the 7 methods tested</a>.</p>
+    <h3>What we found before 2012</h3>
+    <p>Before 2012 the two MODIS satellites disagree: Terra saw 0.47 hotspots for each Aqua hotspot in 2003 to 2011 and 0.72 from 2012 on (daytime only). According to Aqua, the past had more fire; according to Terra, the level was close to today's. That is why 2003 to 2011 is shown as a band.</p>
+    <p class="nota">Mean per year from 2003 to 2011, in VIIRS-equivalent hotspots: ${fmt(media.t1_terra)} from Terra, ${fmt(media.fatores_aqua)} from the factor model and ${fmt(media.t1_aqua)} from the Aqua monthly ratio. Real VIIRS from 2012 to 2021: ${fmt(f.viirs_real_media_anual_2012_2021)} per year.</p>` : ''}
+    <h3>Check against INPE</h3>
+    <p>We compared the harmonized series with INPE's reference satellite series, an independent source: the shape of the years matches and the 2012 jump disappears. <a href="#inpe" data-janela="inpe">See the comparison</a>.</p>
+    <h3>Smaller areas</h3>
+    <p>When you choose a point or draw an area, the app adds up the NASA POWER grid cells (about 55 x 68 km) inside it, using the same rates calibrated for Bahia. The measured accuracy (${v.erro_mensal_wape_pct.toLocaleString('en-US')}%) is for the whole of Bahia; in small areas, with few hotspots, the numbers vary more.</p>
+    <h3>The method works elsewhere</h3>
+    <p>The scripts recalibrate the rates for any country in the FIRMS archive. Run for Argentina, the monthly ratio had a 10.0% error on unseen years (2020 to 2023), against 16.3% for a single ratio, with different rates (July: 4.0 in Argentina, 5.7 in Bahia). Rates must be recalculated for each region, never copied.</p>
+    <h3>Limitations</h3>
+    <ul>
+      <li>The main number is the calendar-month conversion, which had the lowest error on the test. The factor model explains the variation and gives the 2003 to 2011 band, but it was not more accurate on the test.</li>
+      <li>From 2003 to 2011 there is no VIIRS to check against: the values for that period are estimates, so they come with a band.</li>
+      <li>The normal for each month (median and the range between the 25th and 75th percentiles) uses the years measured by VIIRS, 2012 to 2025.</li>
+      <li>The ${v.erro_mensal_wape_pct.toLocaleString('en-US')}% error is for the whole of Bahia. For 100 km areas, before 2012, the typical measured error is about 25%.</li>
+      <li>From 2022 on, the orbit of the Aqua satellite changed (it passes later), so the calibration only goes to 2021.</li>
+      <li>The area is a rectangle, not the official border of Bahia. Only Bahia is processed in this version.</li>
+      <li>Degraded days are only detected from 2012 on, when VIIRS exists to compare.</li>
+      <li>2026 runs to ${fimTexto}. The months that come from FIRMS near real time data are provisional: they do not carry the hotspot type (they may include industrial sources, less than 1% in Bahia) and will change when the standard processing is released.</li>
+    </ul>`;
 }
 
 function rodape() {
-  document.getElementById('fonte').textContent = 'Fonte: ' + OFICIAL.fonte + '. Clima e altitude: NASA POWER. Unidade: ' + OFICIAL.unidade + '.';
+  document.getElementById('fonte').textContent = 'Source: NASA FIRMS (MODIS C6.1 Aqua; VIIRS 375 m Suomi NPP and NOAA-20), annual country files, standard processing; 2026 from the FIRMS area API. Weather and elevation: NASA POWER. Unit: VIIRS Suomi NPP 375 m equivalent hotspots.';
   document.getElementById('citacao').textContent = OFICIAL.citacao;
 }
 
@@ -1164,7 +1213,7 @@ function ligarControles() {
     const lat = parseFloat(document.getElementById('lat-ponto').value);
     const lon = parseFloat(document.getElementById('lon-ponto').value);
     if (!Number.isFinite(lat) || !Number.isFinite(lon) || lat < -90 || lat > 90 || lon < -180 || lon > 180) {
-      document.getElementById('msg-area').textContent = 'Confira a coordenada: latitude entre -90 e 90, longitude entre -180 e 180 (na Bahia, as duas são negativas).';
+      document.getElementById('msg-area').textContent = 'Check the coordinate: latitude between -90 and 90, longitude between -180 and 180 (in Bahia, both are negative).';
       return;
     }
     definirArea({ tipo: 'ponto', lat, lon, raio: Number(document.getElementById('raio').value), origem: 'coordenada' });
@@ -1191,7 +1240,7 @@ function ligarControles() {
   document.getElementById('desfazer-ponto').addEventListener('click', () => { desenho.pontos.pop(); atualizarDesenho(); });
   document.getElementById('cancelar-desenho').addEventListener('click', () => {
     encerrarDesenho();
-    document.getElementById('msg-area').textContent = 'Desenho cancelado.';
+    document.getElementById('msg-area').textContent = 'Drawing canceled.';
   });
   document.getElementById('raio').addEventListener('change', (e) => {
     if (estado.area.tipo === 'ponto') definirArea({ ...estado.area, raio: Number(e.target.value) });
@@ -1205,6 +1254,6 @@ function ligarControles() {
 }
 
 iniciar().catch((e) => {
-  document.getElementById('cartoes').innerHTML = '<p>Não foi possível carregar os dados. Abra a página por um servidor (veja o README).</p>';
+  document.getElementById('cartoes').innerHTML = '<p>Could not load the data. Open the page through a web server (see the README).</p>';
   console.error(e);
 });

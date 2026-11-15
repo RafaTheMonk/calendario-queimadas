@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Régua de Fogo</title>
-  <meta name="description" content="Régua de Fogo: focos de calor MODIS e VIIRS (NASA FIRMS) numa régua só, de 2003 a 2026, com o mês atual comparado ao normal.">
+  <meta name="description" content="Régua de Fogo (Fire Ruler): MODIS and VIIRS fire hotspots (NASA FIRMS) harmonized into one consistent burning activity calendar for Bahia, Brazil, from 2003 to 2026, with the current month compared to the historical normal.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap">
@@ -14,29 +14,30 @@
 <body>
   <header class="nav">
     <div class="wrap nav-inner">
-      <a class="marca" href="#" aria-label="Régua de Fogo, início">
+      <a class="marca" href="#" aria-label="Régua de Fogo, home">
         <svg class="regua" viewBox="0 0 32 32" aria-hidden="true">
           <rect x="3" y="11" width="26" height="10" rx="2.5" class="regua-corpo"/>
           <path d="M8 11v4.5M12.5 11v3M17 11v4.5M21.5 11v3M26 11v4.5" class="regua-marca"/>
         </svg>
         <span>Régua de Fogo</span>
       </a>
-      <nav class="links" aria-label="Seções">
-        <a href="#calendario" data-janela="calendario">Calendário</a>
-        <a href="#por-ano" data-janela="por-ano">Por ano</a>
-        <a href="#por-mes" data-janela="por-mes">Por mês</a>
-        <a href="#metodos" data-janela="metodos">Métodos</a>
-        <a href="#metodo" data-janela="metodo">Como funciona</a>
+      <nav class="links" aria-label="Sections">
+        <a href="#calendario" data-janela="calendario">Calendar</a>
+        <a href="#por-ano" data-janela="por-ano">By year</a>
+        <a href="#por-mes" data-janela="por-mes">By month</a>
+        <a href="#metodos" data-janela="metodos">Methods</a>
+        <a href="#metodo" data-janela="metodo">How it works</a>
       </nav>
       <div class="acoes">
-        <button class="chip" type="button" data-janela="area" title="Trocar a área">
+        <button class="chip" type="button" data-janela="area" title="Change the area">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
           <span class="nome-area">Bahia</span>
         </button>
-        <a class="icone" href="https://github.com/RafaTheMonk/calendario-queimadas" target="_blank" rel="noopener" aria-label="Código no GitHub">
+        <a class="idioma" href="pt/" lang="pt-BR" hreflang="pt-BR" title="Versão em português">PT</a>
+        <a class="icone" href="https://github.com/RafaTheMonk/calendario-queimadas" target="_blank" rel="noopener" aria-label="Source code on GitHub">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.9 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A11.5 11.5 0 0 0 12 .5z"/></svg>
         </a>
-        <button class="icone" id="botao-tema" type="button" aria-label="Alternar tema claro ou escuro">
+        <button class="icone" id="botao-tema" type="button" aria-label="Toggle light or dark theme">
           <svg class="sol" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg>
           <svg class="lua" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>
         </button>
@@ -47,85 +48,85 @@
   <section class="hero" id="inicio">
     <div class="wrap hero-grid">
       <div class="hero-texto">
-        <p class="eyebrow"><span class="pulso" aria-hidden="true"></span> NASA FIRMS · <span id="periodo-ini">2003</span> a <span id="periodo-fim">2025</span> · <span class="nome-area">Bahia</span></p>
-        <h1>Quando <span id="titulo-area">a Bahia</span><br><span class="grad">pega fogo?</span></h1>
-        <p class="lead">Mais de duas décadas de focos de calor vistos do espaço, numa régua só. Compare o mês de agora com o normal, explore o calendário e veja o que muda quando o satélite muda.</p>
+        <p class="eyebrow"><span class="pulso" aria-hidden="true"></span> NASA FIRMS · <span id="periodo-ini">2003</span> to <span id="periodo-fim">2026</span> · <span class="nome-area">Bahia</span></p>
+        <h1>When does <span id="titulo-area">Bahia</span><br><span class="grad">catch fire?</span></h1>
+        <p class="lead">More than two decades of fire hotspots seen from space, on one consistent ruler. Compare this month with the normal, explore the calendar and see what changes when the satellite changes.</p>
         <div class="ctas">
-          <button class="botao" type="button" data-janela="calendario">Abrir o calendário</button>
-          <button class="botao fantasma" type="button" id="cta-salto">Ver o salto de 2012</button>
+          <button class="botao" type="button" data-janela="calendario">Open the calendar</button>
+          <button class="botao fantasma" type="button" id="cta-salto">See the 2012 jump</button>
         </div>
         <p class="aviso-area" id="aviso-area" aria-live="polite"></p>
       </div>
       <div class="hero-card" aria-live="polite">
         <div class="hero-card-top">
-          <span class="hero-card-titulo" id="agora-titulo">Agora</span>
-          <span class="ao-vivo"><span class="pulso" aria-hidden="true"></span> últimos dias</span>
+          <span class="hero-card-titulo" id="agora-titulo">Now</span>
+          <span class="ao-vivo"><span class="pulso" aria-hidden="true"></span> last days</span>
         </div>
         <div class="agora">
-          <p class="agora-valor"><strong id="agora-valor">carregando</strong> <span id="agora-unidade">focos por dia</span></p>
+          <p class="agora-valor"><strong id="agora-valor">loading</strong> <span id="agora-unidade">hotspots per day</span></p>
           <p class="agora-status"><span class="tag normal" id="agora-tag">...</span> <span id="agora-comparacao"></span></p>
           <p class="agora-normal" id="agora-normal"></p>
         </div>
-        <div id="graf-hero" class="grafico-hero" role="img" aria-label="Mediana de focos por mês do ano, com o mês atual destacado"></div>
-        <p class="hero-foot"><strong id="hero-meses">Setembro e outubro</strong> concentram <strong id="hero-pct">60%</strong> dos focos de um ano típico. Toque num mês para ver todos os anos.</p>
+        <div id="graf-hero" class="grafico-hero" role="img" aria-label="Median hotspots per month of the year, with the current month highlighted"></div>
+        <p class="hero-foot"><strong id="hero-meses">September and October</strong> hold <strong id="hero-pct">60%</strong> of the hotspots of a typical year. Tap a month to see every year.</p>
         <p class="agora-fonte" id="agora-fonte"></p>
-          <button type="button" class="link-mapa" id="ver-focos-mapa" data-janela="area">Ver os focos dos últimos 7 dias no mapa</button>
+          <button type="button" class="link-mapa" id="ver-focos-mapa" data-janela="area">See the last 7 days of hotspots on the map</button>
       </div>
     </div>
   </section>
 
   <main class="wrap painel">
-    <section aria-label="Resumo">
+    <section aria-label="Summary">
       <div class="cartoes" id="cartoes"></div>
     </section>
 
     <section aria-labelledby="t-explorar" class="explorar">
-      <h2 id="t-explorar" class="visualmente-oculto">Explorar</h2>
+      <h2 id="t-explorar" class="visualmente-oculto">Explore</h2>
       <div class="blocos">
         <button type="button" class="bloco-abrir" data-janela="calendario">
           <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span>
-          <span class="bloco-titulo">Calendário do fogo</span>
-          <span class="bloco-texto">Cada mês desde 2003, colorido por focos ou por quanto fugiu do normal.</span>
+          <span class="bloco-titulo">Fire calendar</span>
+          <span class="bloco-texto">Every month since 2003, colored by hotspots or by how far it was from normal.</span>
         </button>
         <button type="button" class="bloco-abrir" data-janela="por-ano">
           <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 19l5-6 4 3 4-7 5 5"/><path d="M3 21h18"/></svg></span>
-          <span class="bloco-titulo">Focos por ano</span>
-          <span class="bloco-texto">A série harmonizada e o salto falso de 2012 quando o satélite muda.</span>
+          <span class="bloco-titulo">Hotspots by year</span>
+          <span class="bloco-texto">The harmonized series and the false 2012 jump when the satellite changes.</span>
         </button>
         <button type="button" class="bloco-abrir" data-janela="por-mes">
           <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 20V10M10 20V5M15 20v-8M20 20V8"/></svg></span>
-          <span class="bloco-titulo">Um mês ao longo dos anos</span>
-          <span class="bloco-texto">O mesmo mês em todos os anos, contra a mediana e a faixa normal.</span>
+          <span class="bloco-titulo">One month across the years</span>
+          <span class="bloco-texto">The same month in every year, against the median, the mean and the normal range.</span>
         </button>
         <button type="button" class="bloco-abrir" data-janela="area">
           <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></span>
-          <span class="bloco-titulo">Área de interesse</span>
-          <span class="bloco-texto">Sua localização, um ponto com raio ou uma área desenhada no mapa.</span>
+          <span class="bloco-titulo">Area of interest</span>
+          <span class="bloco-texto">Your location, a point with a radius or an area drawn on the map.</span>
         </button>
         <button type="button" class="bloco-abrir" data-janela="top">
           <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3c.5 2.6-.8 4.2-2 5.6S7.5 11.4 7.5 13.5a4.5 4.5 0 0 0 9 0c0-1.6-.8-2.9-1.6-3.9-.3 1.1-.8 1.9-1.7 2.3.3-2.9-.3-6.1-1.2-8.9z"/></svg></span>
-          <span class="bloco-titulo">Os 10 meses com mais fogo</span>
-          <span class="bloco-texto">O ranking dos meses mais fortes da série.</span>
+          <span class="bloco-titulo">Top 10 fire months</span>
+          <span class="bloco-texto">The ranking of the strongest months in the series.</span>
         </button>
         <button type="button" class="bloco-abrir" data-janela="metodo">
           <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="7" rx="2"/><path d="M7 9v3M11 9v2M15 9v3M19 9v2"/></svg></span>
-          <span class="bloco-titulo">Como funciona</span>
-          <span class="bloco-texto">Dados da NASA, método, precisão, fatores e download.</span>
+          <span class="bloco-titulo">How it works</span>
+          <span class="bloco-texto">NASA data, method, accuracy, factors and downloads.</span>
         </button>
         <button type="button" class="bloco-abrir bloco-largo" data-janela="metodos">
           <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21v-6h4v6M10 21V9h4v12M15 21v-4h4v4"/><path d="M12 3l1 2 2 .3-1.5 1.4.4 2.1-1.9-1-1.9 1 .4-2.1L9 5.3l2-.3z"/></svg></span>
-          <span class="bloco-titulo">7 métodos testados: qual ganhou e por quê</span>
-          <span class="bloco-texto">Todos na mesma prova, adivinhando anos que não tinham visto. O erro de cada um, o que deu errado e o que ficou no site.</span>
+          <span class="bloco-titulo">7 methods tested: which won and why</span>
+          <span class="bloco-texto">All on the same test, predicting years they had not seen. The error of each one, what went wrong and what the app uses.</span>
         </button>
         <button type="button" class="bloco-abrir bloco-largo" data-janela="inpe">
           <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 16l5-6 4 3 8-8"/><path d="M3 20l5-5 4 3 8-8" stroke-dasharray="2.5 2.5"/></svg></span>
-          <span class="bloco-titulo">Conferência com o INPE</span>
-          <span class="bloco-texto">Nossa série contra a do satélite de referência do INPE, uma fonte independente: mesmo desenho, sem o salto de 2012.</span>
+          <span class="bloco-titulo">Check against INPE</span>
+          <span class="bloco-texto">Our series against the reference satellite series of INPE, an independent source: same shape, no 2012 jump.</span>
         </button>
         <button type="button" class="bloco-abrir bloco-largo" data-janela="relatados">
           <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 21V4h11l-1.5 4L15 12H4"/><path d="M17 15l2 2 3-4"/></svg></span>
-          <span class="bloco-titulo">Detectados e relatados</span>
-          <span class="bloco-texto">Focos vistos pelo satélite contra incêndios registrados pelas brigadas do IBAMA em solo.</span>
+          <span class="bloco-titulo">Detected and reported</span>
+          <span class="bloco-texto">Hotspots seen by satellite against fires registered on the ground by IBAMA brigades.</span>
         </button>
       </div>
     </section>
@@ -135,75 +136,75 @@
   <dialog class="janela" id="janela-calendario" aria-labelledby="t-calendario">
     <div class="janela-topo">
       <div>
-        <h2 id="t-calendario">Calendário do fogo · <span class="nome-area">Bahia</span></h2>
-        <p class="nota">Cada quadrado é um mês. Passe o mouse ou toque para ver os detalhes.</p>
+        <h2 id="t-calendario">Fire calendar · <span class="nome-area">Bahia</span></h2>
+        <p class="nota">Each square is a month. Hover or tap to see the details.</p>
       </div>
-      <button class="fechar" type="button" aria-label="Fechar">×</button>
+      <button class="fechar" type="button" aria-label="Close">×</button>
     </div>
     <div class="janela-corpo">
       <div class="barra-controles">
-      <div class="alternar" role="group" aria-label="O que colorir">
-        <button type="button" class="ativo" data-modo="focos" aria-pressed="true">Focos</button>
-        <button type="button" data-modo="anomalia" aria-pressed="false">Acima ou abaixo do normal</button>
+      <div class="alternar" role="group" aria-label="What to color">
+        <button type="button" class="ativo" data-modo="focos" aria-pressed="true">Hotspots</button>
+        <button type="button" data-modo="anomalia" aria-pressed="false">Above or below normal</button>
       </div>
-      <div class="periodo"><label>De <select class="sel-ano-ini" aria-label="Ano inicial"></select></label><label>até <select class="sel-ano-fim" aria-label="Ano final"></select></label></div>
-      <button type="button" class="botao secundario pequeno baixar-area">Baixar CSV da área e do período</button>
+      <div class="periodo"><label>From <select class="sel-ano-ini" aria-label="First year"></select></label><label>to <select class="sel-ano-fim" aria-label="Last year"></select></label></div>
+      <button type="button" class="botao secundario pequeno baixar-area">Download CSV for this area and period</button>
       </div>
-      <div id="graf-calendario" class="grafico alto" role="img" aria-label="Calendário de meses por anos"></div>
-      <p class="nota legenda-extra"><span class="amostra tracejada" aria-hidden="true"></span> Borda tracejada: de 2003 a 2011 o valor é uma estimativa (só existia o MODIS). O detalhe mostra a faixa entre as leituras dos dois satélites MODIS.</p>
+      <div id="graf-calendario" class="grafico alto" role="img" aria-label="Calendar of months by years"></div>
+      <p class="nota legenda-extra"><span class="amostra tracejada" aria-hidden="true"></span> Dashed border: from 2003 to 2011 the value is an estimate (only MODIS existed). The detail shows the range between the readings of the two MODIS satellites.</p>
     </div>
   </dialog>
 
   <dialog class="janela" id="janela-por-ano" aria-labelledby="t-serie">
     <div class="janela-topo">
       <div>
-        <h2 id="t-serie">Focos por ano · <span class="nome-area">Bahia</span></h2>
-        <p class="nota">Série harmonizada. A área sombreada é a faixa de 2003 a 2011, quando os dois satélites MODIS discordam entre si. O ano em andamento entra aqui quando fechar; até lá, está no calendário.</p>
+        <h2 id="t-serie">Hotspots by year · <span class="nome-area">Bahia</span></h2>
+        <p class="nota">Harmonized series. The shaded area is the 2003 to 2011 range, when the two MODIS satellites disagree with each other. The current year enters this chart when it closes; until then, it is in the calendar.</p>
       </div>
-      <button class="fechar" type="button" aria-label="Fechar">×</button>
+      <button class="fechar" type="button" aria-label="Close">×</button>
     </div>
     <div class="janela-corpo">
       <div class="barra-controles">
-      <label class="chave"><input type="checkbox" id="mostrar-brutos"> Mostrar os dados sem harmonizar</label>
-      <div class="periodo"><label>De <select class="sel-ano-ini" aria-label="Ano inicial"></select></label><label>até <select class="sel-ano-fim" aria-label="Ano final"></select></label></div>
+      <label class="chave"><input type="checkbox" id="mostrar-brutos"> Show the data without harmonization</label>
+      <div class="periodo"><label>From <select class="sel-ano-ini" aria-label="First year"></select></label><label>to <select class="sel-ano-fim" aria-label="Last year"></select></label></div>
       </div>
-      <div id="graf-serie" class="grafico" role="img" aria-label="Total de focos por ano"></div>
-      <p class="nota" id="nota-brutos" hidden>Sem harmonizar, a contagem salta em 2012, quando o VIIRS entra. Não houve mais fogo: o VIIRS enxerga fogo menor e conta cerca de 6 vezes mais focos.</p>
+      <div id="graf-serie" class="grafico" role="img" aria-label="Total hotspots per year"></div>
+      <p class="nota" id="nota-brutos" hidden>Without harmonization, the count jumps in 2012, when VIIRS comes in. There was not more fire: VIIRS sees smaller fires and counts about 6 times more hotspots.</p>
     </div>
   </dialog>
 
   <dialog class="janela" id="janela-por-mes" aria-labelledby="t-mes">
     <div class="janela-topo">
       <div>
-        <h2 id="t-mes">Um mês ao longo dos anos · <span class="nome-area">Bahia</span></h2>
-        <p class="nota">A faixa clara vai do 25º ao 75º percentil; a linha tracejada é a mediana e a pontilhada laranja é a média, as duas dos anos medidos pelo VIIRS (2012 a 2025).</p>
+        <h2 id="t-mes">One month across the years · <span class="nome-area">Bahia</span></h2>
+        <p class="nota">The light band goes from the 25th to the 75th percentile; the dashed line is the median and the dotted orange line is the mean, both from the years measured by VIIRS (2012 to 2025).</p>
       </div>
-      <button class="fechar" type="button" aria-label="Fechar">×</button>
+      <button class="fechar" type="button" aria-label="Close">×</button>
     </div>
     <div class="janela-corpo">
       <div class="barra-controles">
-      <label class="seletor">Mês <select id="sel-mes"></select></label>
-      <div class="periodo"><label>De <select class="sel-ano-ini" aria-label="Ano inicial"></select></label><label>até <select class="sel-ano-fim" aria-label="Ano final"></select></label></div>
+      <label class="seletor">Month <select id="sel-mes"></select></label>
+      <div class="periodo"><label>From <select class="sel-ano-ini" aria-label="First year"></select></label><label>to <select class="sel-ano-fim" aria-label="Last year"></select></label></div>
       </div>
-      <div id="graf-mes" class="grafico" role="img" aria-label="Focos do mês escolhido em cada ano"></div>
+      <div id="graf-mes" class="grafico" role="img" aria-label="Hotspots of the chosen month in each year"></div>
     </div>
   </dialog>
 
   <dialog class="janela" id="janela-area" aria-labelledby="t-area">
     <div class="janela-topo">
       <div>
-        <h2 id="t-area">Área de interesse</h2>
-        <p class="nota">Toque no mapa para escolher um ponto, desenhe o contorno de uma área, use sua localização ou volte para a Bahia inteira. Nesta versão, os dados processados cobrem a Bahia.</p>
+        <h2 id="t-area">Area of interest</h2>
+        <p class="nota">Tap the map to choose a point, draw the outline of an area, use your location or go back to the whole of Bahia. In this version, the processed data covers Bahia, Brazil.</p>
       </div>
-      <button class="fechar" type="button" aria-label="Fechar">×</button>
+      <button class="fechar" type="button" aria-label="Close">×</button>
     </div>
     <div class="janela-corpo duas-colunas">
       <div class="controles-area">
         <div class="botoes-area">
-          <button type="button" class="botao" id="usar-local">Usar minha localização</button>
-          <button type="button" class="botao fantasma" id="bahia-inteira">Bahia inteira</button>
+          <button type="button" class="botao" id="usar-local">Use my location</button>
+          <button type="button" class="botao fantasma" id="bahia-inteira">Whole of Bahia</button>
         </div>
-        <label class="seletor">Raio em volta do ponto
+        <label class="seletor">Radius around the point
           <select id="raio">
             <option value="50">50 km</option>
             <option value="100" selected>100 km</option>
@@ -212,28 +213,28 @@
         </label>
         <div class="desenho">
           <div class="botoes-area">
-            <button type="button" class="botao fantasma" id="desenhar-area">Desenhar área no mapa</button>
-            <button type="button" class="botao pequeno" id="concluir-desenho" hidden disabled>Concluir área</button>
-            <button type="button" class="botao fantasma pequeno" id="desfazer-ponto" hidden disabled>Desfazer ponto</button>
-            <button type="button" class="botao fantasma pequeno" id="cancelar-desenho" hidden>Cancelar</button>
+            <button type="button" class="botao fantasma" id="desenhar-area">Draw an area on the map</button>
+            <button type="button" class="botao pequeno" id="concluir-desenho" hidden disabled>Finish area</button>
+            <button type="button" class="botao fantasma pequeno" id="desfazer-ponto" hidden disabled>Undo point</button>
+            <button type="button" class="botao fantasma pequeno" id="cancelar-desenho" hidden>Cancel</button>
           </div>
-          <p class="nota pequena">Toque no mapa para marcar os cantos (um município, uma reserva, uma fazenda). Com 3 pontos ou mais, clique em "Concluir área". Entram as células da grade com centro dentro do contorno.</p>
+          <p class="nota pequena">Tap the map to mark the corners (a municipality, a reserve, a farm). With 3 points or more, click "Finish area". The grid cells whose center falls inside the outline are included.</p>
         </div>
         <fieldset class="camadas">
-          <legend>Focos no mapa (NASA FIRMS)</legend>
-          <label class="seletor">Mostrar
+          <legend>Hotspots on the map (NASA FIRMS)</legend>
+          <label class="seletor">Show
             <select id="camada-focos">
-              <option value="">nenhum</option>
-              <option value="recentes">últimos 7 dias, cor pela idade</option>
-              <option value="dia">um dia escolhido, desde 2000</option>
+              <option value="">none</option>
+              <option value="recentes">last 7 days, colored by age</option>
+              <option value="dia">a chosen day, since 2000</option>
             </select>
           </label>
           <div class="escolha-dia" id="escolha-dia" hidden>
-            <label>Dia <input type="date" id="dia-focos" min="2000-11-01"></label>
-            <label>Satélite
+            <label>Day <input type="date" id="dia-focos" min="2000-11-01"></label>
+            <label>Satellite
               <select id="sat-dia">
-                <option value="modis">MODIS (desde 2000)</option>
-                <option value="viirs">VIIRS (desde 2012)</option>
+                <option value="modis">MODIS (since 2000)</option>
+                <option value="viirs">VIIRS (since 2012)</option>
               </select>
             </label>
           </div>
@@ -241,21 +242,21 @@
           <p class="nota" id="msg-focos" aria-live="polite"></p>
         </fieldset>
         <form class="coordenada" id="form-coordenada">
-          <label>Latitude <input type="number" step="0.01" id="lat-ponto" placeholder="-12,97"></label>
-          <label>Longitude <input type="number" step="0.01" id="lon-ponto" placeholder="-38,51"></label>
-          <button type="submit" class="botao fantasma">Usar esta coordenada</button>
+          <label>Latitude <input type="number" step="0.01" id="lat-ponto" placeholder="-12.97"></label>
+          <label>Longitude <input type="number" step="0.01" id="lon-ponto" placeholder="-38.51"></label>
+          <button type="submit" class="botao fantasma">Use this coordinate</button>
         </form>
         <p class="nota" id="msg-area" aria-live="polite"></p>
-        <p class="nota pequena">A localização só é pedida quando você clica em "Usar minha localização". Sua coordenada não é enviada: para os últimos dias, o site manda só a lista das células da grade (dezenas de km). Ao abrir o mapa, os blocos do OpenStreetMap da região são baixados. Para mostrar focos no mapa, o site pede à nossa função só o modo e a data.</p>
+        <p class="nota pequena">Your location is only requested when you click "Use my location". Your coordinate is not sent: for the last days, the site only sends the list of grid cells (tens of km). Opening the map downloads the OpenStreetMap tiles of the region. To show hotspots on the map, the site only sends the mode and the date to our function.</p>
       </div>
-      <div id="mapa" class="mapa" role="region" aria-label="Mapa para escolher a área"></div>
+      <div id="mapa" class="mapa" role="region" aria-label="Map to choose the area"></div>
     </div>
   </dialog>
 
   <dialog class="janela" id="janela-top" aria-labelledby="t-top">
     <div class="janela-topo">
-      <h2 id="t-top">Os 10 meses com mais fogo · <span class="nome-area">Bahia</span></h2>
-      <button class="fechar" type="button" aria-label="Fechar">×</button>
+      <h2 id="t-top">Top 10 fire months · <span class="nome-area">Bahia</span></h2>
+      <button class="fechar" type="button" aria-label="Close">×</button>
     </div>
     <div class="janela-corpo">
       <ol id="lista-top" class="lista-top"></ol>
@@ -264,70 +265,70 @@
 
   <dialog class="janela" id="janela-metodos" aria-labelledby="t-metodos">
     <div class="janela-topo">
-      <h2 id="t-metodos">Os métodos que testamos</h2>
-      <button class="fechar" type="button" aria-label="Fechar">×</button>
+      <h2 id="t-metodos">The methods we tested</h2>
+      <button class="fechar" type="button" aria-label="Close">×</button>
     </div>
     <div class="janela-corpo metodo">
-      <div id="metodos-intro"><p>Carregando a comparação...</p></div>
-      <div id="graf-metodos" class="grafico" role="img" aria-label="Erro de cada método no teste de 2020 a 2023 e escondendo um ano de cada vez"></div>
+      <div id="metodos-intro"><p>Loading the comparison...</p></div>
+      <div id="graf-metodos" class="grafico" role="img" aria-label="Error of each method on the 2020 to 2023 test and leaving one year out at a time"></div>
       <div id="metodos-lista" class="lista-metodos"></div>
       <div id="metodos-conclusao"></div>
       <div class="baixar">
-        <a class="botao secundario" href="data/metodos.json" download>JSON da comparação</a>
+        <a class="botao secundario" href="data/metodos.json" download>Comparison JSON</a>
       </div>
     </div>
   </dialog>
 
   <dialog class="janela" id="janela-inpe" aria-labelledby="t-inpe">
     <div class="janela-topo">
-      <h2 id="t-inpe">Conferência com o INPE</h2>
-      <button class="fechar" type="button" aria-label="Fechar">×</button>
+      <h2 id="t-inpe">Check against INPE</h2>
+      <button class="fechar" type="button" aria-label="Close">×</button>
     </div>
     <div class="janela-corpo metodo">
-      <div id="inpe-intro"><p>Carregando a comparação...</p></div>
-      <h3>As duas séries, no mesmo desenho</h3>
-      <p class="nota">Cada série dividida pela própria média de 2012 a 2021 (= 100), para comparar a forma e não o tamanho.</p>
-      <div id="graf-inpe" class="grafico" role="img" aria-label="Focos por ano: INPE, Régua de Fogo e dados sem harmonizar, como índice"></div>
-      <h3>Quantos focos nossos para cada foco do INPE</h3>
-      <p class="nota">Se a conversão estiver certa, essa conta fica parecida antes e depois de 2012.</p>
-      <div id="graf-inpe-razao" class="grafico baixo" role="img" aria-label="Razão entre a nossa série e a do INPE, por ano"></div>
+      <div id="inpe-intro"><p>Loading the comparison...</p></div>
+      <h3>Both series, same shape</h3>
+      <p class="nota">Each series divided by its own 2012 to 2021 mean (= 100), to compare the shape and not the size.</p>
+      <div id="graf-inpe" class="grafico" role="img" aria-label="Hotspots per year: INPE, Régua de Fogo and unharmonized data, as an index"></div>
+      <h3>How many of our hotspots for each INPE hotspot</h3>
+      <p class="nota">If the conversion is right, this ratio stays similar before and after 2012.</p>
+      <div id="graf-inpe-razao" class="grafico baixo" role="img" aria-label="Ratio between our series and INPE, by year"></div>
       <div id="inpe-leitura"></div>
       <div class="baixar">
-        <a class="botao secundario" href="data/inpe.json" download>JSON da comparação</a>
+        <a class="botao secundario" href="data/inpe.json" download>Comparison JSON</a>
       </div>
     </div>
   </dialog>
 
   <dialog class="janela" id="janela-relatados" aria-labelledby="t-relatados">
     <div class="janela-topo">
-      <h2 id="t-relatados">Detectados e relatados</h2>
-      <button class="fechar" type="button" aria-label="Fechar">×</button>
+      <h2 id="t-relatados">Detected and reported</h2>
+      <button class="fechar" type="button" aria-label="Close">×</button>
     </div>
     <div class="janela-corpo metodo">
-      <div id="relatados-intro"><p>Carregando os registros...</p></div>
-      <h3>Em que época do ano</h3>
-      <p class="nota">Parte de cada mês no total do ano, nos anos com registros. Mesma unidade (%) para comparar os dois.</p>
-      <div id="graf-relatados-mes" class="grafico baixo" role="img" aria-label="Parte de cada mês do ano nos incêndios relatados e nos focos detectados"></div>
-      <h3>Ano a ano</h3>
-      <div id="graf-relatados-ano" class="grafico baixo" role="img" aria-label="Incêndios relatados e focos detectados por ano"></div>
+      <div id="relatados-intro"><p>Loading the records...</p></div>
+      <h3>Time of year</h3>
+      <p class="nota">Share of each month in the yearly total, in the years with records. Same unit (%) to compare both.</p>
+      <div id="graf-relatados-mes" class="grafico baixo" role="img" aria-label="Share of each month in reported fires and detected hotspots"></div>
+      <h3>Year by year</h3>
+      <div id="graf-relatados-ano" class="grafico baixo" role="img" aria-label="Reported fires and detected hotspots by year"></div>
       <div id="relatados-detalhe"></div>
       <div class="baixar">
-        <a class="botao secundario" href="data/relatados.json" download>JSON dos relatados</a>
+        <a class="botao secundario" href="data/relatados.json" download>Reported fires JSON</a>
       </div>
     </div>
   </dialog>
 
   <dialog class="janela" id="janela-metodo" aria-labelledby="t-metodo">
     <div class="janela-topo">
-      <h2 id="t-metodo">Como funciona</h2>
-      <button class="fechar" type="button" aria-label="Fechar">×</button>
+      <h2 id="t-metodo">How it works</h2>
+      <button class="fechar" type="button" aria-label="Close">×</button>
     </div>
     <div class="janela-corpo metodo">
       <div id="metodo-conteudo"></div>
       <div class="baixar">
-        <button type="button" class="botao baixar-area">Baixar CSV da área e do período</button>
-        <a class="botao secundario" href="data/calendario_bahia.csv" download>CSV da série mensal da Bahia</a>
-        <a class="botao secundario" href="data/calendario_bahia.json" download>JSON completo</a>
+        <button type="button" class="botao baixar-area">Download CSV for this area and period</button>
+        <a class="botao secundario" href="data/calendario_bahia.csv" download>Bahia monthly series CSV</a>
+        <a class="botao secundario" href="data/calendario_bahia.json" download>Full JSON</a>
       </div>
       <p class="nota" id="fonte"></p>
       <p class="nota citacao" id="citacao"></p>
@@ -336,8 +337,8 @@
 
   <footer class="rodape">
     <div class="wrap">
-      <p><strong>Focos de calor detectados por satélite, não incêndios confirmados.</strong> Um foco é um pixel onde o satélite viu temperatura alta; um incêndio grande pode gerar muitos focos. Dados: NASA FIRMS e NASA POWER.</p>
-      <p class="assinatura">Régua de Fogo · NASA Space Apps Challenge 2026 · equipe Timeout Zero · Salvador</p>
+      <p><strong>Fire hotspots detected by satellite, not confirmed fires.</strong> A hotspot is a pixel where the satellite saw high temperature; one large fire can produce many hotspots. Data: NASA FIRMS and NASA POWER.</p>
+      <p class="assinatura">Régua de Fogo (Fire Ruler) · NASA Space Apps Challenge 2026 · team Timeout Zero · Salvador, Brazil</p>
     </div>
   </footer>
 
