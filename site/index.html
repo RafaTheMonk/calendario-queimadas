@@ -121,6 +121,11 @@
           <span class="bloco-titulo">Conferência com o INPE</span>
           <span class="bloco-texto">Nossa série contra a do satélite de referência do INPE, uma fonte independente: mesmo desenho, sem o salto de 2012.</span>
         </button>
+        <button type="button" class="bloco-abrir bloco-largo" data-janela="relatados">
+          <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 21V4h11l-1.5 4L15 12H4"/><path d="M17 15l2 2 3-4"/></svg></span>
+          <span class="bloco-titulo">Detectados e relatados</span>
+          <span class="bloco-texto">Focos vistos pelo satélite contra incêndios registrados pelas brigadas do IBAMA em solo.</span>
+        </button>
       </div>
     </section>
   </main>
@@ -267,6 +272,25 @@
       <div id="inpe-leitura"></div>
       <div class="baixar">
         <a class="botao secundario" href="data/inpe.json" download>JSON da comparação</a>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="janela" id="janela-relatados" aria-labelledby="t-relatados">
+    <div class="janela-topo">
+      <h2 id="t-relatados">Detectados e relatados</h2>
+      <button class="fechar" type="button" aria-label="Fechar">×</button>
+    </div>
+    <div class="janela-corpo metodo">
+      <div id="relatados-intro"><p>Carregando os registros...</p></div>
+      <h3>Em que época do ano</h3>
+      <p class="nota">Parte de cada mês no total do ano, nos anos com registros. Mesma unidade (%) para comparar os dois.</p>
+      <div id="graf-relatados-mes" class="grafico baixo" role="img" aria-label="Parte de cada mês do ano nos incêndios relatados e nos focos detectados"></div>
+      <h3>Ano a ano</h3>
+      <div id="graf-relatados-ano" class="grafico baixo" role="img" aria-label="Incêndios relatados e focos detectados por ano"></div>
+      <div id="relatados-detalhe"></div>
+      <div class="baixar">
+        <a class="botao secundario" href="data/relatados.json" download>JSON dos relatados</a>
       </div>
     </div>
   </dialog>

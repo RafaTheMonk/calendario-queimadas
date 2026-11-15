@@ -318,7 +318,7 @@ button.chip:hover { filter: brightness(1.05); }
 /* blocos: 6 colunas para caber 3 normais ou 2 largos por linha */
 .blocos { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 .blocos > .bloco-abrir { grid-column: span 2; }
-.blocos > .bloco-largo { grid-column: span 3; }
+.blocos > .bloco-largo { grid-column: span 2; }
 .grafico.baixo { height: 260px; }
 @media (max-width: 900px) {
   .blocos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -328,9 +328,15 @@ button.chip:hover { filter: brightness(1.05); }
   .blocos { grid-template-columns: 1fr; }
 }
 
-/* desenho de área */
+/* desenho de área e listas da janela de relatados */
 .desenho { display: grid; gap: 6px; }
 .desenho .nota { margin: 0; }
 .mapa.desenhando { cursor: crosshair; }
 .mapa.desenhando .leaflet-interactive { cursor: crosshair; }
+.listas-relatados { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 10px 0; }
+.listas-relatados div { border: 1px solid var(--borda); border-radius: 12px; padding: 10px 12px; background: var(--superficie-2); }
+.listas-relatados h4 { margin: 0 0 6px; font-size: 14px; }
+.listas-relatados ol { margin: 0; padding-left: 20px; font-size: 13px; }
+.listas-relatados li { margin: 2px 0; font-variant-numeric: tabular-nums; }
+
 [hidden] { display: none !important; }

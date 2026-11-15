@@ -26,6 +26,7 @@ let CELULAS = null;     // série por célula (carregada sob demanda)
 let DADOS = null;       // série da área ativa, no mesmo formato da oficial
 let METODOS = null;     // comparação dos métodos (carregada sob demanda)
 let INPE = null;        // comparação com o INPE (carregada sob demanda)
+let RELATADOS = null;   // incêndios relatados pelo IBAMA (carregados sob demanda)
 const desenho = { ativo: false, pontos: [] };  // área desenhada no mapa
 const graficos = {};
 const estado = {
@@ -281,6 +282,7 @@ function desenharJanela(nome) {
   else if (nome === 'area') abrirMapa();
   else if (nome === 'metodos') comparacaoMetodos();
   else if (nome === 'inpe') comparacaoInpe();
+  else if (nome === 'relatados') detectadosRelatados();
   Object.values(graficos).forEach((g) => g.resize());
 }
 
@@ -907,6 +909,84 @@ async function comparacaoInpe() {
       <li>A hora das passagens, por volta das 13h30 na Bahia, indica que o satélite de referência é o MODIS Aqua, o mesmo que usamos como base. Por isso a conferência confirma a forma da série, mas não resolve a diferença entre o Aqua e o Terra antes de 2012. A faixa de incerteza desse período continua.</li>
     </ul>
     <p class="nota">Fonte: ${d.fonte}, <a href="${d.url_fonte}" target="_blank" rel="noopener">dataserver-coids.inpe.br</a>. Contagem dos focos com estado igual a Bahia, de 2003 a 2025.</p>`;
+}
+
+// ------------------------------------------------------------------ detectados e relatados
+
+async function detectadosRelatados() {
+  if (!RELATADOS) {
+    try {
+      RELATADOS = await (await fetch('data/relatados.json')).json();
+    } catch (e) {
+      document.getElementById('relatados-intro').innerHTML = '<p>Não foi possível carregar os registros.</p>';
+      return;
+    }
+  }
+  const d = RELATADOS;
+  const [a0, a1] = d.anos_com_cobertura;
+  const num2 = (n) => n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  document.getElementById('relatados-intro').innerHTML = `
+    <p><strong>Detectado</strong> é o foco de calor que o satélite vê. <strong>Relatado</strong> é o incêndio que uma brigada registrou em solo, com data, local, causa e área queimada. Aqui comparamos a nossa série com os Registros de Ocorrência de Incêndio (ROI) das brigadas do IBAMA (Prevfogo) na Bahia.</p>
+    <div class="metricas">
+      <div><strong>${fmt(d.media_ocorrencias_por_ano)}</strong><span>incêndios relatados por ano (${a0} a ${a1})</span></div>
+      <div><strong>${fmt(d.media_focos_por_ano)}</strong><span>focos detectados por ano no mesmo período</span></div>
+      <div><strong>${fmt(d.focos_por_ocorrencia)}</strong><span>focos detectados para cada incêndio relatado</span></div>
+      <div><strong>${d.detectados_por_satelite} de ${fmt(d.total_ocorrencias)}</strong><span>registros em que o fogo foi achado por satélite; os outros vieram de ronda, telefone e observação</span></div>
+    </div>
+    <p class="nota">${d.cobertura} Por isso o número de relatados não mede todo o fogo do estado: mostra o pedaço que chega a uma equipe em solo.</p>`;
+
+  const estreito = document.getElementById('graf-relatados-mes').clientWidth < 520;
+  const legenda = { top: 0, left: estreito ? 0 : 'center', orient: estreito ? 'vertical' : 'horizontal', itemGap: 6, textStyle: { color: css('--texto-suave'), fontSize: estreito ? 11 : 12 } };
+  const eixoY = (f) => ({ type: 'value', axisLabel: { color: css('--texto-suave'), formatter: f }, splitLine: { lineStyle: { color: css('--borda') } } });
+
+  const g1 = graficos.relMes || echarts.init(document.getElementById('graf-relatados-mes'));
+  graficos.relMes = g1;
+  g1.setOption({
+    animation: false, legend: legenda,
+    grid: { left: 44, right: 12, top: estreito ? 52 : 34, bottom: 24 },
+    tooltip: { trigger: 'axis', confine: true, valueFormatter: (v) => num1(v) + '% do ano' },
+    xAxis: { type: 'category', data: MESES, axisLabel: { color: css('--texto-suave') } },
+    yAxis: eixoY((v) => v + '%'),
+    series: [
+      { name: 'Relatados (IBAMA)', type: 'bar', data: d.sazonal.map((x) => x.relatados_pct), itemStyle: { color: css('--abaixo'), borderRadius: [4, 4, 0, 0] } },
+      { name: 'Detectados (satélite)', type: 'bar', data: d.sazonal.map((x) => x.detectados_pct), itemStyle: { color: css('--destaque'), borderRadius: [4, 4, 0, 0] } },
+    ],
+  }, true);
+
+  const g2 = graficos.relAno || echarts.init(document.getElementById('graf-relatados-ano'));
+  graficos.relAno = g2;
+  g2.setOption({
+    animation: false, legend: legenda,
+    grid: { left: 44, right: 56, top: estreito ? 52 : 34, bottom: 24 },
+    tooltip: { trigger: 'axis', confine: true, formatter: (ps) => {
+      const x = d.por_ano[ps[0].dataIndex];
+      return `<strong>${x.ano}</strong><br>${x.relatados} incêndios relatados (${fmt(x.area_ha)} ha atingidos)<br>${fmt(x.detectados)} focos detectados`;
+    } },
+    xAxis: { type: 'category', data: d.por_ano.map((x) => String(x.ano)), axisLabel: { color: css('--texto-suave') } },
+    yAxis: [eixoY((v) => v), { ...eixoY((v) => (v >= 1000 ? Math.round(v / 1000) + ' mil' : v)), splitLine: { show: false } }],
+    series: [
+      { name: 'Incêndios relatados (eixo da esquerda)', type: 'bar', data: d.por_ano.map((x) => x.relatados), itemStyle: { color: css('--abaixo'), borderRadius: [4, 4, 0, 0] } },
+      { name: 'Focos detectados (eixo da direita)', type: 'line', yAxisIndex: 1, data: d.por_ano.map((x) => x.detectados), symbolSize: 6, lineStyle: { width: 3, color: css('--destaque') }, itemStyle: { color: css('--destaque') } },
+    ],
+  }, true);
+
+  const frase = (t) => t.charAt(0) + t.slice(1).toLowerCase();
+  const nomeProprio = (t) => t.toLowerCase().split(' ').map((w, k) => (k > 0 && ['de', 'da', 'do', 'das', 'dos', 'e'].includes(w) ? w : w.charAt(0).toUpperCase() + w.slice(1))).join(' ');
+  const lista = (titulo, itens, f = frase) => `<div><h4>${titulo}</h4><ol>${itens.map((i) => `<li>${f(i.nome)}: ${i.n}</li>`).join('')}</ol></div>`;
+  document.getElementById('relatados-detalhe').innerHTML = `
+    <h3>O que a comparação mostra</h3>
+    <ul>
+      <li><strong>Só uma fração do fogo vira registro.</strong> Para cada incêndio relatado pelas brigadas federais, o satélite detectou cerca de ${fmt(d.focos_por_ocorrencia)} focos na Bahia. Mesmo contando que um incêndio grande gera muitos focos, a maior parte do fogo do estado não aparece nesses registros. Para ver o estado inteiro, o satélite é a única fonte contínua.</li>
+      <li><strong>A época do fogo é parecida.</strong> Os relatados têm pico em ${MESES_LONGO[d.mes_pico_relatados - 1]} e os detectados em ${MESES_LONGO[d.mes_pico_detectados - 1]}; os dois se concentram de julho a outubro (correlação de ${num2(d.correlacao_sazonal)} entre as duas curvas do ano).</li>
+      <li><strong>Mês a mês, os números não andam juntos</strong> (correlação de ${num2(d.correlacao_mensal)}). Os registros dependem de onde há brigada e de quantas equipes estavam em campo, não de quanto fogo houve no estado.</li>
+    </ul>
+    <div class="listas-relatados">
+      ${lista('Como o fogo foi descoberto', d.deteccao.slice(0, 6))}
+      ${lista('Causa provável', d.causas.slice(0, 6))}
+      ${lista('Onde', d.locais.slice(0, 6))}
+      ${lista('Municípios com mais registros', d.municipios.slice(0, 6), nomeProprio)}
+    </div>
+    <p class="nota">Fonte: ${d.fonte}, <a href="${d.url_fonte}" target="_blank" rel="noopener">dadosabertos.ibama.gov.br</a>. ${fmt(d.total_ocorrencias)} ocorrências na Bahia, contando cada registro uma vez. Anos com menos de ${d.minimo_registros_por_ano} registros ficam fora dos gráficos, porque o arquivo aberto só tem cobertura de ${a0} a ${a1}; ${d.datas_invalidas_descartadas} registros com data inválida foram descartados.</p>`;
 }
 
 // ------------------------------------------------------------------ método e rodapé
