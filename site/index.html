@@ -99,7 +99,7 @@
         <button type="button" class="bloco-abrir" data-janela="area">
           <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></span>
           <span class="bloco-titulo">Área de interesse</span>
-          <span class="bloco-texto">Sua localização ou um ponto no mapa, com o raio que quiser.</span>
+          <span class="bloco-texto">Sua localização, um ponto com raio ou uma área desenhada no mapa.</span>
         </button>
         <button type="button" class="bloco-abrir" data-janela="top">
           <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3c.5 2.6-.8 4.2-2 5.6S7.5 11.4 7.5 13.5a4.5 4.5 0 0 0 9 0c0-1.6-.8-2.9-1.6-3.9-.3 1.1-.8 1.9-1.7 2.3.3-2.9-.3-6.1-1.2-8.9z"/></svg></span>
@@ -187,7 +187,7 @@
     <div class="janela-topo">
       <div>
         <h2 id="t-area">Área de interesse</h2>
-        <p class="nota">Toque no mapa para escolher um ponto, use sua localização ou volte para a Bahia inteira. Nesta versão, os dados processados cobrem a Bahia.</p>
+        <p class="nota">Toque no mapa para escolher um ponto, desenhe o contorno de uma área, use sua localização ou volte para a Bahia inteira. Nesta versão, os dados processados cobrem a Bahia.</p>
       </div>
       <button class="fechar" type="button" aria-label="Fechar">×</button>
     </div>
@@ -204,6 +204,15 @@
             <option value="200">200 km</option>
           </select>
         </label>
+        <div class="desenho">
+          <div class="botoes-area">
+            <button type="button" class="botao fantasma" id="desenhar-area">Desenhar área no mapa</button>
+            <button type="button" class="botao pequeno" id="concluir-desenho" hidden disabled>Concluir área</button>
+            <button type="button" class="botao fantasma pequeno" id="desfazer-ponto" hidden disabled>Desfazer ponto</button>
+            <button type="button" class="botao fantasma pequeno" id="cancelar-desenho" hidden>Cancelar</button>
+          </div>
+          <p class="nota pequena">Toque no mapa para marcar os cantos (um município, uma reserva, uma fazenda). Com 3 pontos ou mais, clique em "Concluir área". Entram as células da grade com centro dentro do contorno.</p>
+        </div>
         <form class="coordenada" id="form-coordenada">
           <label>Latitude <input type="number" step="0.01" id="lat-ponto" placeholder="-12,97"></label>
           <label>Longitude <input type="number" step="0.01" id="lon-ponto" placeholder="-38,51"></label>

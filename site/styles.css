@@ -327,3 +327,10 @@ button.chip:hover { filter: brightness(1.05); }
 @media (max-width: 560px) {
   .blocos { grid-template-columns: 1fr; }
 }
+
+/* desenho de área */
+.desenho { display: grid; gap: 6px; }
+.desenho .nota { margin: 0; }
+.mapa.desenhando { cursor: crosshair; }
+.mapa.desenhando .leaflet-interactive { cursor: crosshair; }
+[hidden] { display: none !important; }

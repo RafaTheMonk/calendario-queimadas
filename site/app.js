@@ -26,6 +26,7 @@ let CELULAS = null;     // série por célula (carregada sob demanda)
 let DADOS = null;       // série da área ativa, no mesmo formato da oficial
 let METODOS = null;     // comparação dos métodos (carregada sob demanda)
 let INPE = null;        // comparação com o INPE (carregada sob demanda)
+const desenho = { ativo: false, pontos: [] };  // área desenhada no mapa
 const graficos = {};
 const estado = {
   modo: 'focos', brutos: false, mes: MES_ATUAL,
@@ -72,6 +73,7 @@ function temaAtual() {
 function nomeArea() {
   const a = estado.area;
   if (a.tipo === 'bahia') return 'Bahia';
+  if (a.tipo === 'poligono') return 'Área desenhada';
   const rotulo = { local: 'Perto de você', mapa: 'Ponto escolhido', coordenada: 'Coordenada escolhida' }[a.origem] || 'Ponto escolhido';
   return rotulo + ` (${a.raio} km)`;
 }
@@ -161,16 +163,47 @@ function montarDadosArea(cels) {
   };
 }
 
+// Ponto dentro do polígono (raio cruzando as arestas), com x = longitude e y = latitude.
+function pontoNoPoligono(lat, lon, pts) {
+  let dentro = false;
+  for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+    const [yi, xi] = pts[i];
+    const [yj, xj] = pts[j];
+    if ((yi > lat) !== (yj > lat) && lon < ((xj - xi) * (lat - yi)) / (yj - yi) + xi) dentro = !dentro;
+  }
+  return dentro;
+}
+
+function celulasDaArea(nova) {
+  if (nova.tipo === 'ponto') {
+    if (!dentroDaBahia(nova.lat, nova.lon)) return { cels: [] };
+    return { cels: CELULAS.celulas.filter((c) => distanciaKm(nova.lat, nova.lon, c.lat, c.lon) <= nova.raio) };
+  }
+  const cels = CELULAS.celulas.filter((c) => pontoNoPoligono(c.lat, c.lon, nova.pontos));
+  if (cels.length) return { cels };
+  // área menor que uma célula: usa a célula mais próxima do centro do desenho, se ela estiver perto
+  const cLat = nova.pontos.reduce((t, p) => t + p[0], 0) / nova.pontos.length;
+  const cLon = nova.pontos.reduce((t, p) => t + p[1], 0) / nova.pontos.length;
+  let melhor = null;
+  let dMelhor = Infinity;
+  CELULAS.celulas.forEach((c) => {
+    const d = distanciaKm(cLat, cLon, c.lat, c.lon);
+    if (d < dMelhor) { dMelhor = d; melhor = c; }
+  });
+  return dMelhor <= 45 ? { cels: [melhor], pequena: true } : { cels: [] };
+}
+
 async function definirArea(nova, mensagem) {
   const aviso = document.getElementById('aviso-area');
   const msgJanela = document.getElementById('msg-area');
-  if (nova.tipo === 'ponto') {
+  if (desenho.ativo) encerrarDesenho();
+  if (nova.tipo === 'ponto' || nova.tipo === 'poligono') {
     await carregarCelulas();
-    const cels = CELULAS.celulas.filter((c) => distanciaKm(nova.lat, nova.lon, c.lat, c.lon) <= nova.raio);
-    if (!dentroDaBahia(nova.lat, nova.lon) || cels.length === 0) {
+    const { cels, pequena } = celulasDaArea(nova);
+    if (cels.length === 0) {
       estado.area = { tipo: 'bahia' };
       DADOS = OFICIAL;
-      const txt = 'Esse ponto fica fora da área processada nesta versão (Bahia). Mostrando a Bahia inteira.';
+      const txt = (nova.tipo === 'poligono' ? 'Essa área fica' : 'Esse ponto fica') + ' fora da área processada nesta versão (Bahia). Mostrando a Bahia inteira.';
       aviso.textContent = nova.origem === 'local'
         ? 'Você está fora da área processada nesta versão (Bahia). Mostrando a Bahia inteira; dá para escolher um ponto no chip de área, no topo.'
         : txt;
@@ -180,11 +213,12 @@ async function definirArea(nova, mensagem) {
     }
     estado.area = nova;
     DADOS = montarDadosArea(cels);
-    const mediaAnual = DADOS.totais_por_ano.reduce((s, t) => s + t.focos, 0) / DADOS.totais_por_ano.length;
-    const extra = ' Antes de 2012 a conversão usa a taxa da Bahia inteira: em áreas de 100 km o erro típico medido é de cerca de 25%.'
+    const mediaAnual = DADOS.totais_por_ano.reduce((t, x) => t + x.focos, 0) / DADOS.totais_por_ano.length;
+    const extra = (pequena ? ' A área desenhada é menor que uma célula da grade, então entra a célula mais próxima (cerca de 55 x 68 km).' : '')
+      + ' Antes de 2012 a conversão usa a taxa da Bahia inteira: em áreas de 100 km o erro típico medido é de cerca de 25%.'
       + (mediaAnual < 3000 ? ' Área com poucos focos: os números variam mais.' : '');
     aviso.textContent = (mensagem || `Mostrando ${nomeArea().toLowerCase()}: ${cels.length} células da grade (cerca de 55 x 68 km cada).`) + extra;
-    msgJanela.textContent = `${cels.length} células dentro do raio.` + extra;
+    msgJanela.textContent = `${cels.length} ${cels.length === 1 ? 'célula' : 'células'} da grade ${nova.tipo === 'poligono' ? 'dentro do contorno' : 'dentro do raio'} (em azul no mapa).` + extra;
   } else {
     estado.area = { tipo: 'bahia' };
     DADOS = OFICIAL;
@@ -214,7 +248,7 @@ function atualizarTextosArea() {
   document.querySelectorAll('.nome-area').forEach((el) => { el.textContent = nome; });
   document.getElementById('titulo-area').textContent = estado.area.tipo === 'bahia'
     ? 'a Bahia'
-    : (estado.area.origem === 'local' ? 'perto de você' : 'esse lugar');
+    : (estado.area.tipo === 'poligono' ? 'essa área' : (estado.area.origem === 'local' ? 'perto de você' : 'esse lugar'));
 }
 
 function atualizarTudo() {
@@ -574,22 +608,89 @@ function abrirMapa() {
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 12, attribution: '&copy; colaboradores do OpenStreetMap' }).addTo(mapaL);
     camadas.bahia = L.rectangle([[a.lat_min, a.lon_min], [a.lat_max, a.lon_max]], { color: '#d9480f', weight: 2, fillOpacity: 0.04, dashArray: '4 4' }).addTo(mapaL);
     camadas.bahia.bindTooltip('Área processada nesta versão: ' + a.descricao);
-    mapaL.on('click', (e) => definirArea({ tipo: 'ponto', lat: e.latlng.lat, lon: e.latlng.lng, raio: Number(document.getElementById('raio').value), origem: 'mapa' }));
+    mapaL.on('click', (e) => {
+      if (desenho.ativo) {
+        desenho.pontos.push([e.latlng.lat, e.latlng.lng]);
+        atualizarDesenho();
+        return;
+      }
+      definirArea({ tipo: 'ponto', lat: e.latlng.lat, lon: e.latlng.lng, raio: Number(document.getElementById('raio').value), origem: 'mapa' });
+    });
   }
   setTimeout(() => { mapaL.invalidateSize(); desenharAreaNoMapa(); }, 60);
 }
 
 function desenharAreaNoMapa() {
-  if (camadas.circulo) { mapaL.removeLayer(camadas.circulo); camadas.circulo = null; }
-  if (camadas.ponto) { mapaL.removeLayer(camadas.ponto); camadas.ponto = null; }
+  ['circulo', 'ponto', 'poligono', 'celulas'].forEach((k) => { if (camadas[k]) { mapaL.removeLayer(camadas[k]); camadas[k] = null; } });
   const a = estado.area;
+  if (a.tipo !== 'bahia' && CELULAS && DADOS.celulas_ids) {
+    // as células que o site está somando, para mostrar a resolução real da área
+    const ids = new Set(DADOS.celulas_ids);
+    camadas.celulas = L.layerGroup(CELULAS.celulas.filter((c) => ids.has(c.id)).map((c) => L.rectangle(
+      [[c.lat - MEIA_LAT, c.lon - MEIA_LON], [c.lat + MEIA_LAT, c.lon + MEIA_LON]],
+      { color: '#2d6fae', weight: 1, fillOpacity: 0.12, interactive: false },
+    ))).addTo(mapaL);
+  }
   if (a.tipo === 'ponto') {
-    camadas.circulo = L.circle([a.lat, a.lon], { radius: a.raio * 1000, color: '#38bdf8', weight: 2, fillOpacity: 0.08 }).addTo(mapaL);
+    camadas.circulo = L.circle([a.lat, a.lon], { radius: a.raio * 1000, color: '#38bdf8', weight: 2, fillOpacity: 0.05 }).addTo(mapaL);
     camadas.ponto = L.circleMarker([a.lat, a.lon], { radius: 6, color: '#fff', weight: 2, fillColor: '#d9480f', fillOpacity: 1 }).addTo(mapaL);
     mapaL.fitBounds(camadas.circulo.getBounds(), { padding: [20, 20] });
+  } else if (a.tipo === 'poligono') {
+    camadas.poligono = L.polygon(a.pontos, { color: '#d9480f', weight: 2, fillOpacity: 0.06 }).addTo(mapaL);
+    mapaL.fitBounds(camadas.celulas ? L.featureGroup([camadas.poligono, ...camadas.celulas.getLayers()]).getBounds() : camadas.poligono.getBounds(), { padding: [20, 20] });
   } else {
     mapaL.fitBounds(camadas.bahia.getBounds(), { padding: [12, 12] });
   }
+}
+
+// ------------------------------------------------------------------ desenho de área
+
+function botoesDesenho() {
+  const n = desenho.pontos.length;
+  document.getElementById('desenhar-area').hidden = desenho.ativo;
+  ['concluir-desenho', 'desfazer-ponto', 'cancelar-desenho'].forEach((id) => { document.getElementById(id).hidden = !desenho.ativo; });
+  document.getElementById('concluir-desenho').disabled = n < 3;
+  document.getElementById('desfazer-ponto').disabled = n === 0;
+}
+
+function iniciarDesenho() {
+  if (!mapaL) abrirMapa();
+  desenho.ativo = true;
+  desenho.pontos = [];
+  mapaL.doubleClickZoom.disable();
+  document.getElementById('mapa').classList.add('desenhando');
+  document.getElementById('msg-area').textContent = 'Toque no mapa para marcar os cantos da área. Com 3 pontos ou mais, clique em "Concluir área".';
+  atualizarDesenho();
+}
+
+function atualizarDesenho() {
+  if (camadas.rascunho) { mapaL.removeLayer(camadas.rascunho); camadas.rascunho = null; }
+  const pts = desenho.pontos;
+  if (pts.length) {
+    const forma = pts.length >= 3
+      ? L.polygon(pts, { color: '#d9480f', weight: 2, dashArray: '6 4', fillOpacity: 0.08, interactive: false })
+      : L.polyline(pts, { color: '#d9480f', weight: 2, dashArray: '6 4', interactive: false });
+    const cantos = pts.map((p) => L.circleMarker(p, { radius: 5, color: '#fff', weight: 2, fillColor: '#d9480f', fillOpacity: 1, interactive: false }));
+    camadas.rascunho = L.layerGroup([forma, ...cantos]).addTo(mapaL);
+  }
+  if (desenho.ativo && pts.length) {
+    document.getElementById('msg-area').textContent = `${pts.length} ${pts.length === 1 ? 'ponto marcado' : 'pontos marcados'}.` + (pts.length < 3 ? ' Marque pelo menos 3.' : ' Clique em "Concluir área" ou continue marcando.');
+  }
+  botoesDesenho();
+}
+
+function encerrarDesenho() {
+  desenho.ativo = false;
+  if (camadas.rascunho) { mapaL.removeLayer(camadas.rascunho); camadas.rascunho = null; }
+  if (mapaL) mapaL.doubleClickZoom.enable();
+  document.getElementById('mapa').classList.remove('desenhando');
+  botoesDesenho();
+}
+
+function concluirDesenho() {
+  if (desenho.pontos.length < 3) return;
+  const pontos = desenho.pontos.map((p) => [Math.round(p[0] * 1e4) / 1e4, Math.round(p[1] * 1e4) / 1e4]);
+  definirArea({ tipo: 'poligono', pontos, origem: 'desenho' });
 }
 
 // ------------------------------------------------------------------ métodos testados
@@ -895,6 +996,13 @@ function ligarControles() {
   document.querySelectorAll('.sel-ano-fim').forEach((s) => s.addEventListener('change', (e) => mudarPeriodo(estado.anoIni, Number(e.target.value))));
   document.querySelectorAll('.baixar-area').forEach((b) => b.addEventListener('click', baixarCsvArea));
   document.getElementById('bahia-inteira').addEventListener('click', () => definirArea({ tipo: 'bahia' }));
+  document.getElementById('desenhar-area').addEventListener('click', iniciarDesenho);
+  document.getElementById('concluir-desenho').addEventListener('click', concluirDesenho);
+  document.getElementById('desfazer-ponto').addEventListener('click', () => { desenho.pontos.pop(); atualizarDesenho(); });
+  document.getElementById('cancelar-desenho').addEventListener('click', () => {
+    encerrarDesenho();
+    document.getElementById('msg-area').textContent = 'Desenho cancelado.';
+  });
   document.getElementById('raio').addEventListener('change', (e) => {
     if (estado.area.tipo === 'ponto') definirArea({ ...estado.area, raio: Number(e.target.value) });
   });
