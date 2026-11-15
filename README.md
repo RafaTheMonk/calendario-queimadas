@@ -37,7 +37,23 @@ Area: bounding rectangle of Bahia (longitude -46.62 to -37.34, latitude -18.35 t
 - **Data corrections:** months with Suomi NPP failures filled with adjusted NOAA-20, days with degraded Aqua data excluded, calibration before the Aqua orbit change (it started crossing the area later from 2022 on, which INPE's data also shows).
 - **Finding:** before 2012 the two MODIS satellites disagree. Terra saw 0.47 hotspots for each Aqua hotspot in 2003-2011 and 0.72 from 2012 on, daytime only. So 2003-2011 is shown as a band: from 132 thousand (Terra reading) to 204 thousand (Aqua reading) hotspots per year, against 124 thousand from real VIIRS in 2012-2021. In every reading, 2007 was the year with the most fire.
 - **Detected and reported:** for each fire registered by the federal brigades in Bahia, the satellite detected about 2,085 hotspots; only 12 of the 399 records were found by satellite.
-- **The method works elsewhere:** `Scripts/replicar_regiao.py` recalibrates the rates for any country in the FIRMS archive. For Argentina, the monthly ratio had a 10.0% error on 2020 to 2023 (single ratio: 16.3%) and different rates (July: 4.0 in Argentina, 5.7 in Bahia). Rates must be recalculated for each region, never copied.
+- **The method works elsewhere:** `Scripts/replicar_regiao.py` recalibrates the rates for any country in the FIRMS archive, with the same global satellite outage flags used for Bahia. Same test (calibrate 2012-2019, predict 2020-2023) in 10 countries; summary in `Dados/harmonizado/replicacao_regioes.json`:
+
+  | Region | Monthly ratio | Single ratio | Leave-one-year-out (monthly / single) | Record year |
+  |---|---|---|---|---|
+  | Bahia (Brazil) | 7.2% | 9.2% | 7.1% / 10.2% | 2007 |
+  | Mexico | 6.6% | 11.7% | 6.7% / 13.5% | 2011 |
+  | South Africa | 6.7% | 9.9% | 7.4% / 10.4% | 2023 |
+  | Australia | 7.3% | 13.0% | 6.6% / 11.7% | 2012 |
+  | Argentina | 8.7% | 17.8% | 8.3% / 18.3% | 2020 |
+  | Bolivia | 10.4% | 11.9% | 10.8% / 13.5% | 2024 |
+  | United States | 10.6% | 28.2% | 9.5% / 28.7% | 2020 |
+  | Indonesia | 11.6% | 12.2% | 13.8% / 14.6% | 2015 |
+  | Chile | 12.9% | 28.3% | 13.0% / 25.6% | 2017 |
+  | Canada | 15.9% | 12.2% | 15.9% / 20.7% | 2023 |
+  | Portugal | 26.1% | 18.6% | 20.0% / 18.5% | 2005 |
+
+  The monthly ratio beats a single ratio in 9 of 11 places on the test and in 10 of 11 leaving one year out. It struggles with little fire (Portugal, a median of 99 VIIRS hotspots per month) and with record years outside the calibration (Canada 2023). Rates change a lot between regions (July: 4.0 in Argentina, 14.5 in Canada), so they must be recalculated per region, never copied. The record years match known events (Indonesia 2015, Chile 2017, Canada 2023, Bolivia 2024).
 
 ## Structure
 
@@ -58,6 +74,7 @@ Scripts/
   comparar_inpe.py            check against INPE
   processar_roi_ibama.py      detected and reported fires (IBAMA)
   replicar_regiao.py          runs the method for another country
+  resumo_regioes.py           summary of all regions
 Dados/
   firms_bahia/                completeness report, log and daily counts (raw CSV files are not in the repository)
   harmonizado/                results of the techniques, the factor model and the API check
