@@ -62,6 +62,7 @@ python3 -I Scripts/harmonizacao/avaliar.py                 # técnicas de harmon
 python3 -I Scripts/harmonizacao/fatores/baixar_power.py    # clima da NASA POWER
 python3 -I Scripts/harmonizacao/fatores/versao2.py         # modelo com fatores
 python3 -I Scripts/gerar_json_site.py                      # dados do site
+python3 -I Scripts/harmonizacao/comparar_metodos.py       # comparação dos 7 métodos (janela "Métodos")
 cd site && python3 -m http.server 8000                     # abrir http://localhost:8000
 ```
 
