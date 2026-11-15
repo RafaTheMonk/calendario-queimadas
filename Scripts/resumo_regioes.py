@@ -2,12 +2,14 @@
 """Junta os resultados da replicacao em outros paises (Scripts/replicar_regiao.py) com os da Bahia.
 
 Saida: Dados/harmonizado/replicacao_regioes.json (versionado; os arquivos brutos de cada pais ficam fora do git)
+e copias em site/data/ (replicacao_regioes.json e conferencia_api.json)
 
 Uso: python3 -I Scripts/resumo_regioes.py
 """
 import glob
 import json
 import os
+import shutil
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CAMPOS = ["teste_erro_pct", "teste_erro_taxa_unica_pct", "um_ano_fora_erro_pct", "um_ano_fora_erro_taxa_unica_pct",
@@ -50,6 +52,11 @@ def main():
     destino = os.path.join(RAIZ, "Dados", "harmonizado", "replicacao_regioes.json")
     with open(destino, "w", encoding="utf-8") as f:
         json.dump(saida, f, ensure_ascii=False, indent=1)
+    # copias para a janela de metodologia do site: replicacao e conferencia com a API do FIRMS
+    shutil.copy(destino, os.path.join(RAIZ, "site", "data", "replicacao_regioes.json"))
+    api = os.path.join(RAIZ, "Dados", "harmonizado", "conferencia_api.json")
+    if os.path.exists(api):
+        shutil.copy(api, os.path.join(RAIZ, "site", "data", "conferencia_api.json"))
     print(json.dumps({k: v for k, v in saida.items() if k != "regioes"}, ensure_ascii=False))
     for r in regioes:
         print("%-16s %5.1f%% vs %5.1f%% | 1 fora %5.1f%% vs %5.1f%% | vies %+5.1f%% | salto %s | pico %s" % (
