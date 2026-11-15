@@ -177,10 +177,13 @@ def main():
             "dias_sem_dado_viirs": d["sem_snpp"],
         })
 
-    # normal de cada mes (meses incompletos ficam fora)
+    # normal de cada mes: so os anos medidos pelo VIIRS (2012-02 em diante). Os anos convertidos do
+    # MODIS (2003 a 2011) sao estimativa com faixa larga e puxariam o normal para cima.
     por_mes = defaultdict(list)
+    todos_mes = defaultdict(list)
     for s in serie:
-        if s["qualidade"] != "incompleto":
+        todos_mes[s["mes_num"]].append(s["focos"])
+        if s["qualidade"] != "incompleto" and not s["origem"].startswith("MODIS convertido"):
             por_mes[s["mes_num"]].append(s["focos"])
     chave = lambda k: "%02d" % k
     mediana = {chave(k): round(statistics.median(v)) for k, v in por_mes.items()}
@@ -192,7 +195,7 @@ def main():
         c = chave(s["mes_num"])
         s["anomalia_pct"] = round(100 * (s["focos"] - mediana[c]) / mediana[c], 1)
         s["classe"] = "acima do normal" if s["focos"] > p75[c] else ("abaixo do normal" if s["focos"] < p25[c] else "normal")
-        s["posicao_no_mes"] = 1 + sum(1 for x in por_mes[s["mes_num"]] if x > s["focos"])
+        s["posicao_no_mes"] = 1 + sum(1 for x in todos_mes[s["mes_num"]] if x > s["focos"])
 
     # faixa de 2003 a 2011 (versao 2 do modelo com fatores): T1 pelo Aqua, fatores pelo Aqua e T1 pelo Terra
     arq_leit = os.path.join(RAIZ, "Dados", "harmonizado", "fatores_v2", "serie_pre2012_leituras.csv")
@@ -263,7 +266,7 @@ def main():
         "erro_mensal_wape_pct": round(teste["wape_pct"], 1),
         "vies_pct": round(teste["vies_pct"], 1),
         "spearman": round(teste["spearman"], 3),
-        "acerto_acima_abaixo_do_normal_pct": round(teste["anomalia_2classes_pct"], 1),
+        "acerto_acima_abaixo_da_mediana_pct": round(teste["anomalia_2classes_pct"], 1),
         "erro_total_anual_pct": {a: round(v["erro_pct"], 1) for a, v in teste["erro_anual"].items()},
     }
     if os.path.exists(arq_v2):
@@ -275,7 +278,8 @@ def main():
             "erro_mensal_48_meses_pct": round(t48["wape_pct"], 1),
             "vies_pct": round(t1t["vies_pct"], 1),
             "spearman": round(t1t["spearman"], 3),
-            "acerto_acima_abaixo_do_normal_pct": round(t1t["anomalia_2classes_pct"], 1),
+            "acerto_acima_abaixo_da_mediana_pct": round(t1t["anomalia_2classes_pct"], 1),
+            "acerto_tres_faixas_pct": round(t1t["anomalia_3classes_pct"], 1),
             "erro_total_anual_pct": {a: round(v["erro_pct"], 1) for a, v in t1t["erro_anual"].items()},
         }
 
@@ -295,7 +299,7 @@ def main():
                     "observacao": "2026 ainda não incluído: os arquivos anuais de 2026 não existem e a API do FIRMS pede chave (MAP_KEY)."},
         "meses": serie,
         "normal_por_mes": {"mediana": mediana, "media": media, "p25": p25, "p75": p75,
-                           "anos_usados": "2003 a 2025, sem meses incompletos"},
+                           "anos_usados": "2012 a 2025, anos medidos pelo VIIRS (os anos convertidos do MODIS ficam fora do normal)"},
         "totais_por_ano": totais_ano,
         "top10_meses": [{"mes": s["mes"], "focos": s["focos"], "origem": s["origem"]} for s in ranking],
         "metodo": {
@@ -312,6 +316,9 @@ def main():
             "limitacoes": [
                 "O número central é a conversão por mês do ano (T1), que teve o menor erro no teste. O modelo com fatores explica a variação e dá a faixa de 2003-2011, mas não foi mais preciso no teste.",
                 "De 2003 a 2011 não há VIIRS para conferir: os valores desse período são estimativas, por isso vêm com faixa.",
+                "O normal de cada mês (mediana e faixa entre os percentis 25 e 75) usa os anos medidos pelo VIIRS, de 2012 a 2025.",
+                "Os 7,2% de erro valem para a Bahia inteira. Em áreas de 100 km, antes de 2012, o erro típico medido é de cerca de 25%.",
+                "A série fecha em dezembro de 2025; 2026 aparece só no painel dos últimos dias.",
                 "A partir de 2022 a órbita do satélite Aqua mudou (passa mais tarde), por isso a calibração vai só até 2021.",
                 "Área é um retângulo, não o contorno oficial da Bahia.",
                 "Dias degradados só são detectados de 2012 em diante, quando há o VIIRS para comparar.",
