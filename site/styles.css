@@ -288,3 +288,12 @@ button.chip:hover { filter: brightness(1.05); }
   .janela { width: 100vw; max-height: 100vh; border-radius: 0; }
   .janela .grafico.alto { height: 700px; }
 }
+
+.barra-controles { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-bottom: 10px; }
+.barra-controles .alternar, .barra-controles .chave, .barra-controles .seletor { margin-bottom: 0; }
+.periodo { display: inline-flex; gap: 8px; align-items: center; font-size: 14px; color: var(--texto-suave); }
+.periodo label { display: inline-flex; gap: 6px; align-items: center; }
+.botao.pequeno { padding: 7px 14px; font-size: 13px; }
+.coordenada { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+.coordenada label { display: grid; gap: 4px; font-size: 13px; color: var(--texto-suave); }
+.coordenada input { width: 130px; }

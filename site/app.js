@@ -27,7 +27,8 @@ let DADOS = null;       // série da área ativa, no mesmo formato da oficial
 const graficos = {};
 const estado = {
   modo: 'focos', brutos: false, mes: MES_ATUAL,
-  area: { tipo: 'bahia' },  // ou { tipo: 'ponto', lat, lon, raio, origem: 'local' | 'mapa' }
+  area: { tipo: 'bahia' },  // ou { tipo: 'ponto', lat, lon, raio, origem: 'local' | 'mapa' | 'coordenada' }
+  anoIni: null, anoFim: null,
 };
 let mapaL = null;
 const camadas = {};
@@ -45,9 +46,9 @@ async function iniciar() {
   rodape();
   atualizarTudo();
   ligarControles();
+  montarSeletorPeriodo();
   const hash = location.hash.replace('#', '');
   if (document.getElementById('janela-' + hash)) abrirJanela(hash);
-  localizacaoInicial();
   window.addEventListener('resize', () => Object.values(graficos).forEach((g) => g.resize()));
 }
 
@@ -69,7 +70,8 @@ function temaAtual() {
 function nomeArea() {
   const a = estado.area;
   if (a.tipo === 'bahia') return 'Bahia';
-  return (a.origem === 'local' ? 'Perto de você' : 'Ponto escolhido') + ` (${a.raio} km)`;
+  const rotulo = { local: 'Perto de você', mapa: 'Ponto escolhido', coordenada: 'Coordenada escolhida' }[a.origem] || 'Ponto escolhido';
+  return rotulo + ` (${a.raio} km)`;
 }
 
 function distanciaKm(lat1, lon1, lat2, lon2) {
@@ -115,8 +117,9 @@ function montarDadosArea(cels) {
     };
   });
   const normal = { mediana: {}, media: {}, p25: {}, p75: {} };
+  // normal de cada mês só com os anos medidos pelo VIIRS (2012-02 em diante), como na série da Bahia
   for (let k = 1; k <= 12; k++) {
-    const v = serie.filter((s) => s.mes_num === k).map((s) => s.focos);
+    const v = serie.filter((s, i) => s.mes_num === k && i >= nPre).map((s) => s.focos);
     const c = String(k).padStart(2, '0');
     normal.mediana[c] = Math.max(1, Math.round(quantil(v, 0.5)));
     normal.p25[c] = Math.round(quantil(v, 0.25));
@@ -152,6 +155,7 @@ function montarDadosArea(cels) {
     meses: serie, normal_por_mes: normal, totais_por_ano: totais,
     top10_meses: [...serie].sort((a, b) => b.focos - a.focos).slice(0, 10).map((s) => ({ mes: s.mes, focos: s.focos, origem: s.origem })),
     n_celulas: cels.length,
+    celulas_ids: cels.map((c) => c.id),
   };
 }
 
@@ -175,7 +179,8 @@ async function definirArea(nova, mensagem) {
     estado.area = nova;
     DADOS = montarDadosArea(cels);
     const mediaAnual = DADOS.totais_por_ano.reduce((s, t) => s + t.focos, 0) / DADOS.totais_por_ano.length;
-    const extra = mediaAnual < 3000 ? ' Área com poucos focos: os números variam mais e a estimativa antes de 2012 é mais incerta.' : '';
+    const extra = ' Antes de 2012 a conversão usa a taxa da Bahia inteira: em áreas de 100 km o erro típico medido é de cerca de 25%.'
+      + (mediaAnual < 3000 ? ' Área com poucos focos: os números variam mais.' : '');
     aviso.textContent = (mensagem || `Mostrando ${nomeArea().toLowerCase()}: ${cels.length} células da grade (cerca de 55 x 68 km cada).`) + extra;
     msgJanela.textContent = `${cels.length} células dentro do raio.` + extra;
   } else {
@@ -195,10 +200,6 @@ function pedirLocalizacao(aoFalhar) {
   );
 }
 
-function localizacaoInicial() {
-  if ('geolocation' in navigator) pedirLocalizacao(() => { /* sem permissão: fica a Bahia inteira */ });
-}
-
 function usarMinhaLocalizacao() {
   const msg = document.getElementById('msg-area');
   if (!('geolocation' in navigator)) { msg.textContent = 'Este navegador não informa a localização.'; return; }
@@ -216,6 +217,7 @@ function atualizarTextosArea() {
 
 function atualizarTudo() {
   atualizarTextosArea();
+  if (estado.anoIni !== null) montarSeletorPeriodo();
   heroGrafico();
   agora();
   cartoes();
@@ -316,13 +318,10 @@ async function agora() {
   const tag = document.getElementById('agora-tag');
   document.getElementById('agora-titulo').textContent = `Agora: ${nomeMes} de ${ANO_ATUAL}`;
   document.getElementById('agora-normal').textContent =
-    `Normal de ${nomeMes}: ${fmt(porDia(nm.mediana[chave]))} focos por dia (mediana de 2003 a 2025; faixa normal de ${fmt(porDia(nm.p25[chave]))} a ${fmt(porDia(nm.p75[chave]))}). Esperado para o mês inteiro: cerca de ${fmt(nm.mediana[chave])} focos.`;
+    `Normal de ${nomeMes}: ${fmt(porDia(nm.mediana[chave]))} focos por dia (mediana dos anos medidos pelo VIIRS, 2012 a 2025; faixa normal de ${fmt(porDia(nm.p25[chave]))} a ${fmt(porDia(nm.p75[chave]))}). Esperado para o mês inteiro: cerca de ${fmt(nm.mediana[chave])} focos.`;
   try {
     let url = 'api/recentes';
-    if (estado.area.tipo !== 'bahia') {
-      const a = DADOS.area;
-      url += `?latMin=${a.lat_min.toFixed(2)}&latMax=${a.lat_max.toFixed(2)}&lonMin=${a.lon_min.toFixed(2)}&lonMax=${a.lon_max.toFixed(2)}`;
-    }
+    if (estado.area.tipo !== 'bahia') url += '?celulas=' + DADOS.celulas_ids.join(',');
     const r = await fetch(url);
     if (!r.ok) throw new Error('sem dados');
     const j = await r.json();
@@ -340,7 +339,8 @@ async function agora() {
     tag.className = 'tag ' + classeTag(classe);
     document.getElementById('agora-comparacao').textContent = `${pct(Math.round((media - med) / med * 1000) / 10)} em relação à mediana de ${nomeMes}`;
     const dm = (d) => d.data.slice(8, 10) + '/' + d.data.slice(5, 7);
-    document.getElementById('agora-fonte').textContent = `Média de ${dias.length} dias (${dm(dias[0])} a ${dm(dias[dias.length - 1])}). Fonte: NASA FIRMS, VIIRS NOAA-20 em quase tempo real, convertido para a régua do histórico. Dado provisório.`;
+    const atual = j.atualizado_em ? new Date(j.atualizado_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : '';
+    document.getElementById('agora-fonte').textContent = `Média dos últimos ${dias.length} dias completos (${dm(dias[0])} a ${dm(dias[dias.length - 1])}) contra o normal de ${nomeMes}. Fonte: NASA FIRMS, VIIRS NOAA-20 em quase tempo real, convertido para a régua do histórico${atual ? '; arquivo de ' + atual : ''}. Dado provisório; a série do calendário fecha em dezembro de 2025.`;
   } catch (e) {
     if (meuPedido !== pedidoAgora) return;
     document.getElementById('agora-valor').textContent = fmt(porDia(nm.mediana[chave]));
@@ -365,7 +365,7 @@ function cartoes() {
   const val = OFICIAL.metodo.validacao;
   document.getElementById('cartoes').innerHTML = [
     `<article class="cartao principal">
-      <p class="rotulo">Último mês fechado: ${MESES_LONGO[ultimo.mes_num - 1]} de ${ultimo.ano}</p>
+      <p class="rotulo">Último mês da série: ${MESES_LONGO[ultimo.mes_num - 1]} de ${ultimo.ano}</p>
       <p class="valor">${fmt(ultimo.focos)} focos</p>
       <p class="detalhe"><span class="tag ${classeTag(ultimo.classe)}">${ultimo.classe}</span> ${pct(ultimo.anomalia_pct)} da mediana de ${MESES_LONGO[ultimo.mes_num - 1]}; ${ultimo.posicao_no_mes}º de ${nMesmoMes} desde 2003.</p>
     </article>`,
@@ -379,10 +379,16 @@ function cartoes() {
       <p class="valor">${pct(Math.round(difAno * 10) / 10)}</p>
       <p class="detalhe">${fmt(ultimoAno.focos)} focos no ano, contra média de ${fmt(mediaViirs)}.</p>
     </article>`,
-    `<article class="cartao">
+    estado.area.tipo === 'bahia'
+      ? `<article class="cartao">
       <p class="rotulo">Precisão da conversão</p>
       <p class="valor">${val.erro_mensal_wape_pct.toLocaleString('pt-BR')}%</p>
-      <p class="detalhe">de erro por mês em anos que o modelo não viu; acerta ${val.acerto_acima_abaixo_do_normal_pct.toLocaleString('pt-BR')}% dos meses acima ou abaixo do normal${estado.area.tipo === 'bahia' ? '' : ' (validado na Bahia inteira)'}.</p>
+      <p class="detalhe">de erro por mês em anos que o modelo não viu (2020 a 2023), com desvio de ${pct(val.vies_pct)} no total.</p>
+    </article>`
+      : `<article class="cartao">
+      <p class="rotulo">Precisão nesta escala</p>
+      <p class="valor">cerca de 25%</p>
+      <p class="detalhe">de erro típico antes de 2012 em áreas de 100 km. Na Bahia inteira o erro é de ${val.erro_mensal_wape_pct.toLocaleString('pt-BR')}%. De 2012 em diante a área usa o VIIRS medido.</p>
     </article>`,
   ].join('');
 }
@@ -406,7 +412,7 @@ function calendario(modo) {
   const el = document.getElementById('graf-calendario');
   const g = graficos.cal || echarts.init(el);
   graficos.cal = g;
-  const meses = DADOS.meses;
+  const meses = noPeriodo(DADOS.meses);
   const anos = [...new Set(meses.map((m) => m.ano))];
   const dados = meses.map((m) => {
     let v;
@@ -444,7 +450,7 @@ function serie(brutos) {
   const el = document.getElementById('graf-serie');
   const g = graficos.serie || echarts.init(el);
   graficos.serie = g;
-  const anos = DADOS.totais_por_ano;
+  const anos = noPeriodo(DADOS.totais_por_ano);
   const series = [
     { name: 'faixa_base', type: 'line', data: anos.map((a) => (a.faixa_inferior ? a.faixa_inferior : null)), stack: 'faixa', symbol: 'none', lineStyle: { opacity: 0 }, tooltip: { show: false }, silent: true },
     { name: 'Faixa (2003 a 2011)', type: 'line', data: anos.map((a) => (a.faixa_inferior ? a.faixa_superior - a.faixa_inferior : null)), stack: 'faixa', symbol: 'none', lineStyle: { opacity: 0 }, areaStyle: { color: 'rgba(56,189,248,.25)' }, tooltip: { show: false }, silent: true },
@@ -489,7 +495,7 @@ function mesAoLongoDosAnos(numMes) {
   graficos.mes = g;
   const chave = String(numMes).padStart(2, '0');
   const normal = DADOS.normal_por_mes;
-  const ms = DADOS.meses.filter((m) => m.mes_num === numMes);
+  const ms = noPeriodo(DADOS.meses).filter((m) => m.mes_num === numMes);
   const cor = (m) => (m.classe === 'acima do normal' ? css('--acima') : m.classe === 'abaixo do normal' ? css('--abaixo') : '#9ca3af');
   g.setOption({
     animation: false,
@@ -512,6 +518,47 @@ function topDez() {
     const est = m.faixa_inferior ? ` <span class="est">(estimativa: ${fmt(m.faixa_inferior)} a ${fmt(m.faixa_superior)})</span>` : '';
     return `<li><strong>${MESES_LONGO[m.mes_num - 1]} de ${m.ano}</strong>: ${fmt(m.focos)} focos${est}</li>`;
   }).join('');
+}
+
+// ------------------------------------------------------------------ período e CSV
+
+function noPeriodo(lista) {
+  if (estado.anoIni === null) return lista;
+  return lista.filter((x) => x.ano >= estado.anoIni && x.ano <= estado.anoFim);
+}
+
+function montarSeletorPeriodo() {
+  const anos = [...new Set(OFICIAL.meses.map((m) => m.ano))];
+  if (estado.anoIni === null) { estado.anoIni = anos[0]; estado.anoFim = anos[anos.length - 1]; }
+  const opcoes = (sel) => anos.map((a) => `<option value="${a}" ${a === sel ? 'selected' : ''}>${a}</option>`).join('');
+  document.querySelectorAll('.sel-ano-ini').forEach((s) => { s.innerHTML = opcoes(estado.anoIni); });
+  document.querySelectorAll('.sel-ano-fim').forEach((s) => { s.innerHTML = opcoes(estado.anoFim); });
+}
+
+function mudarPeriodo(ini, fim) {
+  estado.anoIni = Math.min(ini, fim);
+  estado.anoFim = Math.max(ini, fim);
+  montarSeletorPeriodo();
+  const aberta = document.querySelector('dialog.janela[open]');
+  if (aberta) desenharJanela(aberta.id.replace('janela-', ''));
+}
+
+function baixarCsvArea() {
+  const linhas = [['mes', 'focos_harmonizados', 'faixa_inferior', 'faixa_superior', 'origem', 'anomalia_pct_vs_mediana', 'classe', 'posicao_no_mes']];
+  noPeriodo(DADOS.meses).forEach((m) => linhas.push([
+    m.mes, m.focos, m.faixa_inferior ?? '', m.faixa_superior ?? '', m.origem, String(m.anomalia_pct).replace('.', ','), m.classe, m.posicao_no_mes,
+  ]));
+  const texto = '\ufeff' + linhas.map((l) => l.map((c) => (/[;"\n]/.test(String(c)) ? `"${String(c).replace(/"/g, '""')}"` : c)).join(';')).join('\n');
+  const nome = 'regua-de-fogo_' + nomeArea().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+    + `_${estado.anoIni}-${estado.anoFim}.csv`;
+  const url = URL.createObjectURL(new Blob([texto], { type: 'text/csv;charset=utf-8' }));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = nome;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
 }
 
 // ------------------------------------------------------------------ mapa
@@ -563,12 +610,12 @@ function metodo() {
     <h3>Quão bem funciona</h3>
     <p>${v.desenho}.</p>
     <div class="metricas">
-      <div><strong>${v.erro_mensal_wape_pct.toLocaleString('pt-BR')}%</strong><span>erro por mês (WAPE)</span></div>
-      <div><strong>${v.acerto_acima_abaixo_do_normal_pct.toLocaleString('pt-BR')}%</strong><span>meses certos acima ou abaixo do normal</span></div>
-      <div><strong>${pct(v.vies_pct)}</strong><span>viés no total</span></div>
-      ${f ? `<div><strong>${f.cobertura_faixa_95}</strong><span>meses de teste dentro da faixa de 95%</span></div>` : ''}
+      <div><strong>${v.erro_mensal_wape_pct.toLocaleString('pt-BR')}%</strong><span>erro por mês (WAPE), meses válidos</span></div>
+      ${v.erro_mensal_48_meses_pct ? `<div><strong>${v.erro_mensal_48_meses_pct.toLocaleString('pt-BR')}%</strong><span>erro por mês contando os 48 meses</span></div>` : ''}
+      <div><strong>${pct(v.vies_pct)}</strong><span>desvio no total</span></div>
+      ${f ? `<div><strong>${f.cobertura_faixa_95}</strong><span>meses de teste dentro da faixa de 95% do modelo com fatores</span></div>` : ''}
     </div>
-    <p class="nota">Erro no total de cada ano de teste: ${anual}.</p>
+    <p class="nota">Erro no total de cada ano de teste, nos meses válidos: ${anual}.${v.acerto_tres_faixas_pct ? ` Acerto ao classificar o mês em abaixo, normal ou acima: ${v.acerto_tres_faixas_pct.toLocaleString('pt-BR')}%.` : ''}</p>
     ${f ? `
     <h3>Por que a relação entre os satélites muda</h3>
     <p>${f.o_que_e}</p>
@@ -618,6 +665,19 @@ function ligarControles() {
     abrirJanela('por-ano');
   });
   document.getElementById('usar-local').addEventListener('click', usarMinhaLocalizacao);
+  document.getElementById('form-coordenada').addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    const lat = parseFloat(document.getElementById('lat-ponto').value);
+    const lon = parseFloat(document.getElementById('lon-ponto').value);
+    if (!Number.isFinite(lat) || !Number.isFinite(lon) || lat < -90 || lat > 90 || lon < -180 || lon > 180) {
+      document.getElementById('msg-area').textContent = 'Confira a coordenada: latitude entre -90 e 90, longitude entre -180 e 180 (na Bahia, as duas são negativas).';
+      return;
+    }
+    definirArea({ tipo: 'ponto', lat, lon, raio: Number(document.getElementById('raio').value), origem: 'coordenada' });
+  });
+  document.querySelectorAll('.sel-ano-ini').forEach((s) => s.addEventListener('change', (e) => mudarPeriodo(Number(e.target.value), estado.anoFim)));
+  document.querySelectorAll('.sel-ano-fim').forEach((s) => s.addEventListener('change', (e) => mudarPeriodo(estado.anoIni, Number(e.target.value))));
+  document.querySelectorAll('.baixar-area').forEach((b) => b.addEventListener('click', baixarCsvArea));
   document.getElementById('bahia-inteira').addEventListener('click', () => definirArea({ tipo: 'bahia' }));
   document.getElementById('raio').addEventListener('change', (e) => {
     if (estado.area.tipo === 'ponto') definirArea({ ...estado.area, raio: Number(e.target.value) });

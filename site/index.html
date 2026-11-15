@@ -58,7 +58,7 @@
       <div class="hero-card" aria-live="polite">
         <div class="hero-card-top">
           <span class="hero-card-titulo" id="agora-titulo">Agora</span>
-          <span class="ao-vivo"><span class="pulso" aria-hidden="true"></span> últimos 7 dias</span>
+          <span class="ao-vivo"><span class="pulso" aria-hidden="true"></span> últimos dias</span>
         </div>
         <div class="agora">
           <p class="agora-valor"><strong id="agora-valor">carregando</strong> <span id="agora-unidade">focos por dia</span></p>
@@ -124,9 +124,13 @@
       <button class="fechar" type="button" aria-label="Fechar">×</button>
     </div>
     <div class="janela-corpo">
+      <div class="barra-controles">
       <div class="alternar" role="group" aria-label="O que colorir">
         <button type="button" class="ativo" data-modo="focos" aria-pressed="true">Focos</button>
         <button type="button" data-modo="anomalia" aria-pressed="false">Acima ou abaixo do normal</button>
+      </div>
+      <div class="periodo"><label>De <select class="sel-ano-ini" aria-label="Ano inicial"></select></label><label>até <select class="sel-ano-fim" aria-label="Ano final"></select></label></div>
+      <button type="button" class="botao secundario pequeno baixar-area">Baixar CSV da área e do período</button>
       </div>
       <div id="graf-calendario" class="grafico alto" role="img" aria-label="Calendário de meses por anos"></div>
       <p class="nota legenda-extra"><span class="amostra tracejada" aria-hidden="true"></span> Borda tracejada: de 2003 a 2011 o valor é uma estimativa (só existia o MODIS). O detalhe mostra a faixa entre as leituras dos dois satélites MODIS.</p>
@@ -142,7 +146,10 @@
       <button class="fechar" type="button" aria-label="Fechar">×</button>
     </div>
     <div class="janela-corpo">
+      <div class="barra-controles">
       <label class="chave"><input type="checkbox" id="mostrar-brutos"> Mostrar os dados sem harmonizar</label>
+      <div class="periodo"><label>De <select class="sel-ano-ini" aria-label="Ano inicial"></select></label><label>até <select class="sel-ano-fim" aria-label="Ano final"></select></label></div>
+      </div>
       <div id="graf-serie" class="grafico" role="img" aria-label="Total de focos por ano"></div>
       <p class="nota" id="nota-brutos" hidden>Sem harmonizar, a contagem salta em 2012, quando o VIIRS entra. Não houve mais fogo: o VIIRS enxerga fogo menor e conta cerca de 6 vezes mais focos.</p>
     </div>
@@ -157,7 +164,10 @@
       <button class="fechar" type="button" aria-label="Fechar">×</button>
     </div>
     <div class="janela-corpo">
+      <div class="barra-controles">
       <label class="seletor">Mês <select id="sel-mes"></select></label>
+      <div class="periodo"><label>De <select class="sel-ano-ini" aria-label="Ano inicial"></select></label><label>até <select class="sel-ano-fim" aria-label="Ano final"></select></label></div>
+      </div>
       <div id="graf-mes" class="grafico" role="img" aria-label="Focos do mês escolhido em cada ano"></div>
     </div>
   </dialog>
@@ -183,8 +193,13 @@
             <option value="200">200 km</option>
           </select>
         </label>
+        <form class="coordenada" id="form-coordenada">
+          <label>Latitude <input type="number" step="0.01" id="lat-ponto" placeholder="-12,97"></label>
+          <label>Longitude <input type="number" step="0.01" id="lon-ponto" placeholder="-38,51"></label>
+          <button type="submit" class="botao fantasma">Usar esta coordenada</button>
+        </form>
         <p class="nota" id="msg-area" aria-live="polite"></p>
-        <p class="nota pequena">A localização fica no seu navegador. Para os últimos 7 dias, o site envia só o retângulo aproximado da área escolhida.</p>
+        <p class="nota pequena">A localização só é pedida quando você clica em "Usar minha localização". Sua coordenada não é enviada: para os últimos dias, o site manda só a lista das células da grade (dezenas de km). Ao abrir o mapa, os blocos do OpenStreetMap da região são baixados.</p>
       </div>
       <div id="mapa" class="mapa" role="region" aria-label="Mapa para escolher a área"></div>
     </div>
@@ -208,8 +223,9 @@
     <div class="janela-corpo metodo">
       <div id="metodo-conteudo"></div>
       <div class="baixar">
-        <a class="botao" href="data/calendario_bahia.csv" download>Baixar CSV</a>
-        <a class="botao secundario" href="data/calendario_bahia.json" download>Baixar JSON</a>
+        <button type="button" class="botao baixar-area">Baixar CSV da área e do período</button>
+        <a class="botao secundario" href="data/calendario_bahia.csv" download>CSV da série mensal da Bahia</a>
+        <a class="botao secundario" href="data/calendario_bahia.json" download>JSON completo</a>
       </div>
       <p class="nota" id="fonte"></p>
       <p class="nota citacao" id="citacao"></p>
