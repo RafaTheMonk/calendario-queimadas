@@ -1,0 +1,1211 @@
+{
+ "resumo": {
+  "janelas_comparadas": 120,
+  "contagens_iguais": 98,
+  "focos_locais": 64306,
+  "focos_api": 64271,
+  "diferenca_pct": 0.054
+ },
+ "janelas": [
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2003-06-11",
+   "fim": "2003-06-15",
+   "local_bruto": 224,
+   "api_bruto": 224,
+   "local_filtrado": 217,
+   "api_filtrado": 217
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2003-06-11",
+   "fim": "2003-06-15",
+   "local_bruto": 98,
+   "api_bruto": 98,
+   "local_filtrado": 95,
+   "api_filtrado": 95
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2003-09-18",
+   "fim": "2003-09-22",
+   "local_bruto": 1558,
+   "api_bruto": 1558,
+   "local_filtrado": 1515,
+   "api_filtrado": 1512
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2003-09-18",
+   "fim": "2003-09-22",
+   "local_bruto": 589,
+   "api_bruto": 589,
+   "local_filtrado": 560,
+   "api_filtrado": 559
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2004-01-29",
+   "fim": "2004-02-02",
+   "local_bruto": 12,
+   "api_bruto": 12,
+   "local_filtrado": 11,
+   "api_filtrado": 11
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2004-01-29",
+   "fim": "2004-02-02",
+   "local_bruto": 10,
+   "api_bruto": 10,
+   "local_filtrado": 6,
+   "api_filtrado": 6
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2004-11-10",
+   "fim": "2004-11-14",
+   "local_bruto": 954,
+   "api_bruto": 954,
+   "local_filtrado": 925,
+   "api_filtrado": 924
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2004-11-10",
+   "fim": "2004-11-14",
+   "local_bruto": 444,
+   "api_bruto": 444,
+   "local_filtrado": 428,
+   "api_filtrado": 427
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2005-03-07",
+   "fim": "2005-03-11",
+   "local_bruto": 97,
+   "api_bruto": 97,
+   "local_filtrado": 94,
+   "api_filtrado": 93
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2005-03-07",
+   "fim": "2005-03-11",
+   "local_bruto": 14,
+   "api_bruto": 14,
+   "local_filtrado": 13,
+   "api_filtrado": 13
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2005-07-16",
+   "fim": "2005-07-20",
+   "local_bruto": 269,
+   "api_bruto": 269,
+   "local_filtrado": 262,
+   "api_filtrado": 261
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2005-07-16",
+   "fim": "2005-07-20",
+   "local_bruto": 91,
+   "api_bruto": 91,
+   "local_filtrado": 90,
+   "api_filtrado": 90
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2006-04-13",
+   "fim": "2006-04-17",
+   "local_bruto": 40,
+   "api_bruto": 40,
+   "local_filtrado": 36,
+   "api_filtrado": 36
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2006-04-13",
+   "fim": "2006-04-17",
+   "local_bruto": 30,
+   "api_bruto": 30,
+   "local_filtrado": 26,
+   "api_filtrado": 26
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2006-09-07",
+   "fim": "2006-09-11",
+   "local_bruto": 599,
+   "api_bruto": 599,
+   "local_filtrado": 584,
+   "api_filtrado": 581
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2006-09-07",
+   "fim": "2006-09-11",
+   "local_bruto": 341,
+   "api_bruto": 341,
+   "local_filtrado": 329,
+   "api_filtrado": 329
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2007-05-20",
+   "fim": "2007-05-24",
+   "local_bruto": 199,
+   "api_bruto": 199,
+   "local_filtrado": 194,
+   "api_filtrado": 190
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2007-05-20",
+   "fim": "2007-05-24",
+   "local_bruto": 75,
+   "api_bruto": 75,
+   "local_filtrado": 71,
+   "api_filtrado": 71
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2007-10-30",
+   "fim": "2007-11-03",
+   "local_bruto": 2647,
+   "api_bruto": 2647,
+   "local_filtrado": 2567,
+   "api_filtrado": 2563
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2007-10-30",
+   "fim": "2007-11-03",
+   "local_bruto": 1612,
+   "api_bruto": 1613,
+   "local_filtrado": 1528,
+   "api_filtrado": 1524
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2008-01-07",
+   "fim": "2008-01-11",
+   "local_bruto": 121,
+   "api_bruto": 121,
+   "local_filtrado": 111,
+   "api_filtrado": 111
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2008-01-07",
+   "fim": "2008-01-11",
+   "local_bruto": 58,
+   "api_bruto": 58,
+   "local_filtrado": 56,
+   "api_filtrado": 55
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2008-07-05",
+   "fim": "2008-07-09",
+   "local_bruto": 159,
+   "api_bruto": 159,
+   "local_filtrado": 154,
+   "api_filtrado": 153
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2008-07-05",
+   "fim": "2008-07-09",
+   "local_bruto": 111,
+   "api_bruto": 111,
+   "local_filtrado": 105,
+   "api_filtrado": 102
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2009-02-13",
+   "fim": "2009-02-17",
+   "local_bruto": 37,
+   "api_bruto": 37,
+   "local_filtrado": 33,
+   "api_filtrado": 33
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2009-02-13",
+   "fim": "2009-02-17",
+   "local_bruto": 26,
+   "api_bruto": 26,
+   "local_filtrado": 25,
+   "api_filtrado": 25
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2009-08-27",
+   "fim": "2009-08-31",
+   "local_bruto": 224,
+   "api_bruto": 224,
+   "local_filtrado": 216,
+   "api_filtrado": 216
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2009-08-27",
+   "fim": "2009-08-31",
+   "local_bruto": 167,
+   "api_bruto": 167,
+   "local_filtrado": 158,
+   "api_filtrado": 158
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2010-03-22",
+   "fim": "2010-03-26",
+   "local_bruto": 19,
+   "api_bruto": 19,
+   "local_filtrado": 17,
+   "api_filtrado": 17
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2010-03-22",
+   "fim": "2010-03-26",
+   "local_bruto": 9,
+   "api_bruto": 9,
+   "local_filtrado": 9,
+   "api_filtrado": 7
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2010-10-19",
+   "fim": "2010-10-23",
+   "local_bruto": 575,
+   "api_bruto": 575,
+   "local_filtrado": 546,
+   "api_filtrado": 545
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2010-10-19",
+   "fim": "2010-10-23",
+   "local_bruto": 230,
+   "api_bruto": 230,
+   "local_filtrado": 211,
+   "api_filtrado": 211
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2011-04-28",
+   "fim": "2011-05-02",
+   "local_bruto": 60,
+   "api_bruto": 60,
+   "local_filtrado": 58,
+   "api_filtrado": 58
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2011-04-28",
+   "fim": "2011-05-02",
+   "local_bruto": 67,
+   "api_bruto": 67,
+   "local_filtrado": 63,
+   "api_filtrado": 63
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2011-12-11",
+   "fim": "2011-12-15",
+   "local_bruto": 36,
+   "api_bruto": 36,
+   "local_filtrado": 35,
+   "api_filtrado": 35
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2011-12-11",
+   "fim": "2011-12-15",
+   "local_bruto": 11,
+   "api_bruto": 11,
+   "local_filtrado": 11,
+   "api_filtrado": 11
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2012-06-03",
+   "fim": "2012-06-07",
+   "local_bruto": 199,
+   "api_bruto": 199,
+   "local_filtrado": 188,
+   "api_filtrado": 187
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2012-06-03",
+   "fim": "2012-06-07",
+   "local_bruto": 160,
+   "api_bruto": 160,
+   "local_filtrado": 153,
+   "api_filtrado": 151
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2012-08-16",
+   "fim": "2012-08-20",
+   "local_bruto": 602,
+   "api_bruto": 602,
+   "local_filtrado": 582,
+   "api_filtrado": 582
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2012-08-16",
+   "fim": "2012-08-20",
+   "local_bruto": 449,
+   "api_bruto": 449,
+   "local_filtrado": 429,
+   "api_filtrado": 429
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2012-06-03",
+   "fim": "2012-06-07",
+   "local_bruto": 1138,
+   "api_bruto": 1138,
+   "local_filtrado": 1054,
+   "api_filtrado": 1054
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2012-08-16",
+   "fim": "2012-08-20",
+   "local_bruto": 4249,
+   "api_bruto": 4249,
+   "local_filtrado": 3693,
+   "api_filtrado": 3693
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2013-01-22",
+   "fim": "2013-01-26",
+   "local_bruto": 13,
+   "api_bruto": 13,
+   "local_filtrado": 12,
+   "api_filtrado": 12
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2013-01-22",
+   "fim": "2013-01-26",
+   "local_bruto": 9,
+   "api_bruto": 9,
+   "local_filtrado": 7,
+   "api_filtrado": 7
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2013-10-08",
+   "fim": "2013-10-12",
+   "local_bruto": 352,
+   "api_bruto": 352,
+   "local_filtrado": 344,
+   "api_filtrado": 344
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2013-10-08",
+   "fim": "2013-10-12",
+   "local_bruto": 287,
+   "api_bruto": 287,
+   "local_filtrado": 282,
+   "api_filtrado": 282
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2013-01-22",
+   "fim": "2013-01-26",
+   "local_bruto": 121,
+   "api_bruto": 121,
+   "local_filtrado": 112,
+   "api_filtrado": 112
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2013-10-08",
+   "fim": "2013-10-12",
+   "local_bruto": 3023,
+   "api_bruto": 3023,
+   "local_filtrado": 2660,
+   "api_filtrado": 2660
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2014-02-28",
+   "fim": "2014-03-04",
+   "local_bruto": 25,
+   "api_bruto": 25,
+   "local_filtrado": 20,
+   "api_filtrado": 20
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2014-02-28",
+   "fim": "2014-03-04",
+   "local_bruto": 17,
+   "api_bruto": 17,
+   "local_filtrado": 15,
+   "api_filtrado": 15
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2014-11-30",
+   "fim": "2014-12-04",
+   "local_bruto": 112,
+   "api_bruto": 112,
+   "local_filtrado": 104,
+   "api_filtrado": 103
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2014-11-30",
+   "fim": "2014-12-04",
+   "local_bruto": 92,
+   "api_bruto": 92,
+   "local_filtrado": 86,
+   "api_filtrado": 86
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2014-02-28",
+   "fim": "2014-03-04",
+   "local_bruto": 116,
+   "api_bruto": 116,
+   "local_filtrado": 100,
+   "api_filtrado": 100
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2014-11-30",
+   "fim": "2014-12-04",
+   "local_bruto": 1000,
+   "api_bruto": 1000,
+   "local_filtrado": 804,
+   "api_filtrado": 804
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2015-04-06",
+   "fim": "2015-04-10",
+   "local_bruto": 31,
+   "api_bruto": 31,
+   "local_filtrado": 27,
+   "api_filtrado": 27
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2015-04-06",
+   "fim": "2015-04-10",
+   "local_bruto": 18,
+   "api_bruto": 18,
+   "local_filtrado": 15,
+   "api_filtrado": 15
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2015-08-05",
+   "fim": "2015-08-09",
+   "local_bruto": 244,
+   "api_bruto": 244,
+   "local_filtrado": 232,
+   "api_filtrado": 232
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2015-08-05",
+   "fim": "2015-08-09",
+   "local_bruto": 189,
+   "api_bruto": 189,
+   "local_filtrado": 182,
+   "api_filtrado": 182
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2015-04-06",
+   "fim": "2015-04-10",
+   "local_bruto": 288,
+   "api_bruto": 288,
+   "local_filtrado": 259,
+   "api_filtrado": 259
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2015-08-05",
+   "fim": "2015-08-09",
+   "local_bruto": 1579,
+   "api_bruto": 1579,
+   "local_filtrado": 1330,
+   "api_filtrado": 1330
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2016-05-12",
+   "fim": "2016-05-16",
+   "local_bruto": 48,
+   "api_bruto": 48,
+   "local_filtrado": 47,
+   "api_filtrado": 47
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2016-05-12",
+   "fim": "2016-05-16",
+   "local_bruto": 57,
+   "api_bruto": 57,
+   "local_filtrado": 54,
+   "api_filtrado": 54
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2016-09-27",
+   "fim": "2016-10-01",
+   "local_bruto": 190,
+   "api_bruto": 190,
+   "local_filtrado": 180,
+   "api_filtrado": 179
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2016-09-27",
+   "fim": "2016-10-01",
+   "local_bruto": 115,
+   "api_bruto": 115,
+   "local_filtrado": 112,
+   "api_filtrado": 112
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2016-05-12",
+   "fim": "2016-05-16",
+   "local_bruto": 394,
+   "api_bruto": 394,
+   "local_filtrado": 369,
+   "api_filtrado": 369
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2016-09-27",
+   "fim": "2016-10-01",
+   "local_bruto": 1337,
+   "api_bruto": 1337,
+   "local_filtrado": 1083,
+   "api_filtrado": 1083
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2017-06-19",
+   "fim": "2017-06-23",
+   "local_bruto": 75,
+   "api_bruto": 75,
+   "local_filtrado": 74,
+   "api_filtrado": 73
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2017-06-19",
+   "fim": "2017-06-23",
+   "local_bruto": 50,
+   "api_bruto": 50,
+   "local_filtrado": 46,
+   "api_filtrado": 46
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2017-11-19",
+   "fim": "2017-11-23",
+   "local_bruto": 129,
+   "api_bruto": 129,
+   "local_filtrado": 122,
+   "api_filtrado": 122
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2017-11-19",
+   "fim": "2017-11-23",
+   "local_bruto": 81,
+   "api_bruto": 81,
+   "local_filtrado": 71,
+   "api_filtrado": 71
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2017-06-19",
+   "fim": "2017-06-23",
+   "local_bruto": 544,
+   "api_bruto": 544,
+   "local_filtrado": 485,
+   "api_filtrado": 485
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2017-11-19",
+   "fim": "2017-11-23",
+   "local_bruto": 1077,
+   "api_bruto": 1077,
+   "local_filtrado": 941,
+   "api_filtrado": 941
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2018-02-06",
+   "fim": "2018-02-10",
+   "local_bruto": 5,
+   "api_bruto": 5,
+   "local_filtrado": 5,
+   "api_filtrado": 5
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2018-02-06",
+   "fim": "2018-02-10",
+   "local_bruto": 4,
+   "api_bruto": 4,
+   "local_filtrado": 4,
+   "api_filtrado": 4
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2018-07-25",
+   "fim": "2018-07-29",
+   "local_bruto": 157,
+   "api_bruto": 157,
+   "local_filtrado": 147,
+   "api_filtrado": 147
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2018-07-25",
+   "fim": "2018-07-29",
+   "local_bruto": 119,
+   "api_bruto": 119,
+   "local_filtrado": 114,
+   "api_filtrado": 114
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2018-02-06",
+   "fim": "2018-02-10",
+   "local_bruto": 83,
+   "api_bruto": 83,
+   "local_filtrado": 65,
+   "api_filtrado": 65
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2018-07-25",
+   "fim": "2018-07-29",
+   "local_bruto": 973,
+   "api_bruto": 973,
+   "local_filtrado": 850,
+   "api_filtrado": 850
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2019-03-15",
+   "fim": "2019-03-19",
+   "local_bruto": 253,
+   "api_bruto": 254,
+   "local_filtrado": 234,
+   "api_filtrado": 234
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2019-03-15",
+   "fim": "2019-03-19",
+   "local_bruto": 150,
+   "api_bruto": 150,
+   "local_filtrado": 143,
+   "api_filtrado": 143
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2019-09-16",
+   "fim": "2019-09-20",
+   "local_bruto": 1270,
+   "api_bruto": 1270,
+   "local_filtrado": 1235,
+   "api_filtrado": 1235
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2019-09-16",
+   "fim": "2019-09-20",
+   "local_bruto": 809,
+   "api_bruto": 809,
+   "local_filtrado": 782,
+   "api_filtrado": 782
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2019-03-15",
+   "fim": "2019-03-19",
+   "local_bruto": 1595,
+   "api_bruto": 1595,
+   "local_filtrado": 1420,
+   "api_filtrado": 1420
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2019-09-16",
+   "fim": "2019-09-20",
+   "local_bruto": 7654,
+   "api_bruto": 7654,
+   "local_filtrado": 6302,
+   "api_filtrado": 6302
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2020-04-20",
+   "fim": "2020-04-24",
+   "local_bruto": 1,
+   "api_bruto": 1,
+   "local_filtrado": 1,
+   "api_filtrado": 1
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2020-04-20",
+   "fim": "2020-04-24",
+   "local_bruto": 9,
+   "api_bruto": 9,
+   "local_filtrado": 8,
+   "api_filtrado": 8
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2020-11-08",
+   "fim": "2020-11-12",
+   "local_bruto": 500,
+   "api_bruto": 500,
+   "local_filtrado": 492,
+   "api_filtrado": 492
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2020-11-08",
+   "fim": "2020-11-12",
+   "local_bruto": 226,
+   "api_bruto": 226,
+   "local_filtrado": 215,
+   "api_filtrado": 215
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2020-04-20",
+   "fim": "2020-04-24",
+   "local_bruto": 51,
+   "api_bruto": 51,
+   "local_filtrado": 47,
+   "api_filtrado": 47
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2020-11-08",
+   "fim": "2020-11-12",
+   "local_bruto": 4084,
+   "api_bruto": 4084,
+   "local_filtrado": 3656,
+   "api_filtrado": 3656
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2021-05-28",
+   "fim": "2021-06-01",
+   "local_bruto": 134,
+   "api_bruto": 134,
+   "local_filtrado": 131,
+   "api_filtrado": 131
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2021-05-28",
+   "fim": "2021-06-01",
+   "local_bruto": 129,
+   "api_bruto": 129,
+   "local_filtrado": 124,
+   "api_filtrado": 124
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2021-07-14",
+   "fim": "2021-07-18",
+   "local_bruto": 323,
+   "api_bruto": 323,
+   "local_filtrado": 308,
+   "api_filtrado": 308
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2021-07-14",
+   "fim": "2021-07-18",
+   "local_bruto": 194,
+   "api_bruto": 194,
+   "local_filtrado": 188,
+   "api_filtrado": 188
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2021-05-28",
+   "fim": "2021-06-01",
+   "local_bruto": 922,
+   "api_bruto": 922,
+   "local_filtrado": 837,
+   "api_filtrado": 837
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2021-07-14",
+   "fim": "2021-07-18",
+   "local_bruto": 1648,
+   "api_bruto": 1648,
+   "local_filtrado": 1488,
+   "api_filtrado": 1488
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2022-01-15",
+   "fim": "2022-01-19",
+   "local_bruto": 85,
+   "api_bruto": 86,
+   "local_filtrado": 79,
+   "api_filtrado": 80
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2022-01-15",
+   "fim": "2022-01-19",
+   "local_bruto": 107,
+   "api_bruto": 107,
+   "local_filtrado": 97,
+   "api_filtrado": 97
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2022-09-05",
+   "fim": "2022-09-09",
+   "local_bruto": 519,
+   "api_bruto": 519,
+   "local_filtrado": 506,
+   "api_filtrado": 506
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2022-09-05",
+   "fim": "2022-09-09",
+   "local_bruto": 501,
+   "api_bruto": 501,
+   "local_filtrado": 484,
+   "api_filtrado": 484
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2022-01-15",
+   "fim": "2022-01-19",
+   "local_bruto": 664,
+   "api_bruto": 664,
+   "local_filtrado": 583,
+   "api_filtrado": 583
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2022-09-05",
+   "fim": "2022-09-09",
+   "local_bruto": 4276,
+   "api_bruto": 4276,
+   "local_filtrado": 3744,
+   "api_filtrado": 3744
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2023-02-21",
+   "fim": "2023-02-25",
+   "local_bruto": 52,
+   "api_bruto": 52,
+   "local_filtrado": 46,
+   "api_filtrado": 46
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2023-02-21",
+   "fim": "2023-02-25",
+   "local_bruto": 44,
+   "api_bruto": 44,
+   "local_filtrado": 42,
+   "api_filtrado": 42
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2023-10-28",
+   "fim": "2023-11-01",
+   "local_bruto": 733,
+   "api_bruto": 734,
+   "local_filtrado": 724,
+   "api_filtrado": 725
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2023-10-28",
+   "fim": "2023-11-01",
+   "local_bruto": 450,
+   "api_bruto": 450,
+   "local_filtrado": 430,
+   "api_filtrado": 430
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2023-02-21",
+   "fim": "2023-02-25",
+   "local_bruto": 434,
+   "api_bruto": 434,
+   "local_filtrado": 367,
+   "api_filtrado": 367
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2023-10-28",
+   "fim": "2023-11-01",
+   "local_bruto": 4905,
+   "api_bruto": 4905,
+   "local_filtrado": 4326,
+   "api_filtrado": 4326
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2024-03-29",
+   "fim": "2024-04-02",
+   "local_bruto": 42,
+   "api_bruto": 42,
+   "local_filtrado": 37,
+   "api_filtrado": 37
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2024-03-29",
+   "fim": "2024-04-02",
+   "local_bruto": 41,
+   "api_bruto": 41,
+   "local_filtrado": 34,
+   "api_filtrado": 34
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2024-07-03",
+   "fim": "2024-07-07",
+   "local_bruto": 200,
+   "api_bruto": 200,
+   "local_filtrado": 196,
+   "api_filtrado": 196
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2024-07-03",
+   "fim": "2024-07-07",
+   "local_bruto": 156,
+   "api_bruto": 156,
+   "local_filtrado": 150,
+   "api_filtrado": 150
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2024-03-29",
+   "fim": "2024-04-02",
+   "local_bruto": 186,
+   "api_bruto": 186,
+   "local_filtrado": 173,
+   "api_filtrado": 173
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2024-07-03",
+   "fim": "2024-07-07",
+   "local_bruto": 897,
+   "api_bruto": 897,
+   "local_filtrado": 812,
+   "api_filtrado": 812
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2025-05-06",
+   "fim": "2025-05-10",
+   "local_bruto": 111,
+   "api_bruto": 111,
+   "local_filtrado": 107,
+   "api_filtrado": 107
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2025-05-06",
+   "fim": "2025-05-10",
+   "local_bruto": 130,
+   "api_bruto": 130,
+   "local_filtrado": 120,
+   "api_filtrado": 120
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Aqua",
+   "inicio": "2025-08-25",
+   "fim": "2025-08-29",
+   "local_bruto": 680,
+   "api_bruto": 680,
+   "local_filtrado": 657,
+   "api_filtrado": 657
+  },
+  {
+   "produto": "MODIS_SP",
+   "satelite": "Terra",
+   "inicio": "2025-08-25",
+   "fim": "2025-08-29",
+   "local_bruto": 457,
+   "api_bruto": 457,
+   "local_filtrado": 430,
+   "api_filtrado": 430
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2025-05-06",
+   "fim": "2025-05-10",
+   "local_bruto": 570,
+   "api_bruto": 570,
+   "local_filtrado": 530,
+   "api_filtrado": 530
+  },
+  {
+   "produto": "VIIRS_SNPP_SP",
+   "satelite": "N",
+   "inicio": "2025-08-25",
+   "fim": "2025-08-29",
+   "local_bruto": 3704,
+   "api_bruto": 3704,
+   "local_filtrado": 3203,
+   "api_filtrado": 3203
+  }
+ ]
+}
