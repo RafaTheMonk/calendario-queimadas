@@ -18,10 +18,11 @@ Juntando os dois sem ajuste, a série dá um salto falso em 2012: 27.470 focos d
 1. **Harmonizar:** converter os anos que só têm MODIS (2003 a 2011) para a escala do VIIRS, calibrando nos anos em que os dois funcionaram juntos.
 2. **Mostrar:** um calendário de meses por anos, com o mês atual comparado com o normal daquele mês (anos medidos pelo VIIRS, 2012 a 2025), anomalias, ranking, filtro de período, escolha da área e download dos dados.
 
-## Dados (NASA; INPE só para conferir)
+## Dados (NASA; INPE e IBAMA só para conferir)
 
 - **NASA FIRMS:** focos MODIS C6.1 (Terra e Aqua) e VIIRS 375 m (Suomi NPP e NOAA-20), arquivos anuais por país, processamento padrão. 48 arquivos, 40 milhões de focos no Brasil, 3,6 milhões na área de estudo depois dos filtros. Cobertura de dias acima de 99% em todos os satélites.
 - **NASA POWER:** chuva, vento, umidade, temperatura e altitude em grade mensal (0,5 x 0,625 grau), de 2003 a 2025.
+- **IBAMA, Sisfogo (ROI):** Registros de Ocorrência de Incêndio das brigadas do Prevfogo (https://dadosabertos.ibama.gov.br/dados/SISFOGO/ROI.csv). Incêndios relatados em solo na Bahia, 399 de 2015 a 2021, para comparar com os focos detectados; não entram no cálculo.
 - **INPE, Programa Queimadas:** focos do satélite de referência, arquivos anuais de 2003 a 2025 (https://dataserver-coids.inpe.br/queimadas/queimadas/focos/csv/anual/Brasil_sat_ref/). Usados só para conferir a série harmonizada; não entram no cálculo.
 
 Área: retângulo envolvente da Bahia (longitude -46,62 a -37,34, latitude -18,35 a -8,53). Filtros: só focos de vegetação (`type = 0`) e sem confiança baixa.
@@ -66,6 +67,7 @@ python3 -I Scripts/harmonizacao/fatores/versao2.py         # modelo com fatores
 python3 -I Scripts/gerar_json_site.py                      # dados do site
 python3 -I Scripts/harmonizacao/comparar_metodos.py       # comparação dos 7 métodos (janela "Métodos")
 python3 -I Scripts/comparar_inpe.py                        # conferência com o INPE (zips do INPE em Dados/inpe_ref/)
+python3 -I Scripts/processar_roi_ibama.py                  # detectados e relatados (ROI.csv do IBAMA em Dados/ibama_roi/)
 cd site && python3 -m http.server 8000                     # abrir http://localhost:8000
 ```
 
