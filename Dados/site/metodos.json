@@ -190,6 +190,6 @@
  "notas": [
   "Quadradinhos: erro medido em quadradinhos de 0,05 grau com fogo por dia, não em focos.",
   "Terra: sem os meses em que o Terra teve falta de dados.",
-  "Mistura: o peso foi escolhido só com 2013 a 2019, sem olhar o teste."
+  "Mistura: o peso foi otimizado com validação cruzada só em 2013 a 2019, sem olhar o teste."
  ]
 }

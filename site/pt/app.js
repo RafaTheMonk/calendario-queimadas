@@ -841,7 +841,7 @@ function textosMetodos(d) {
     },
     mistura: {
       nome: 'Misturar a taxa por mês com a fórmula', curto: `Mistura ${peso}/${100 - peso}`, tag: ['promissor', 'próximo passo'],
-      como: `${peso}% da taxa por mês e ${100 - peso}% da fórmula com pesos. A proporção foi escolhida só com 2013 a 2019, sem olhar o teste.`,
+      como: `${peso}% da taxa por mês e ${100 - peso}% da fórmula com pesos. A proporção foi otimizada com validação cruzada só em 2013 a 2019 (o peso com menor erro em previsões às cegas), sem olhar o teste.`,
       veredito: `Teve o menor erro (${num1(r.mistura.teste_erro_pct)}%) e ganhou da taxa por mês em ${r.mistura.anos_que_ganha_da_taxa_por_mes} de ${nAnos} anos, mas a diferença é de ${num1(t1.teste_erro_pct - r.mistura.teste_erro_pct)} ponto e ainda pode ser acaso. Por isso o número principal não mudou.`,
     },
   };

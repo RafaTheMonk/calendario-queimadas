@@ -853,7 +853,7 @@ function textosMetodos(d) {
     },
     mistura: {
       nome: 'Blend of the monthly ratio and the factor model', curto: `Blend ${peso}/${100 - peso}`, tag: ['promissor', 'next step'],
-      como: `${peso}% monthly ratio and ${100 - peso}% factor model. The weight was chosen with 2013 to 2019 only, without looking at the test.`,
+      como: `${peso}% monthly ratio and ${100 - peso}% factor model. The weight was optimized with cross-validation on 2013 to 2019 only (the weight with the lowest error on blind predictions), without looking at the test.`,
       veredito: `It had the lowest error (${num1(r.mistura.teste_erro_pct)}%) and beat the monthly ratio in ${r.mistura.anos_que_ganha_da_taxa_por_mes} of ${nAnos} years, but the difference is ${num1(t1.teste_erro_pct - r.mistura.teste_erro_pct)} point and may still be chance. So the main number did not change.`,
     },
   };
@@ -935,7 +935,7 @@ async function comparacaoMetodos() {
     <p>We compared the converted series with INPE's reference satellite series, which does not go through our conversion. The shape of the years matches and the 2012 jump disappears. <a href="#inpe" data-janela="inpe">See the check against INPE</a>.</p>
     <h3>Correlation is not proof</h3>
     <p>The order of the months, from weakest to strongest, has a correlation of ${num3(c.taxa_por_mes)} with the monthly ratio. But raw Aqua, with no conversion at all, already reaches ${num3(c.aqua_sem_conversao)}, because dry and rainy seasons rule the year. That is why we measure the error in hotspots, not the correlation.</p>
-    <p class="nota">* Grid cells: error measured in 0.05 degree cells with fire per day, not in hotspots. Terra: without the months when Terra had missing data. Blend: the weight was chosen with 2013 to 2019 only, without looking at the test. The years 2024 and 2025 are left out of the choice because the Aqua orbit changed; the error of each method in those years is in the JSON.</p>`;
+    <p class="nota">* Grid cells: error measured in 0.05 degree cells with fire per day, not in hotspots. Terra: without the months when Terra had missing data. Blend: the weight was optimized with cross-validation on 2013 to 2019 only, without looking at the test. The years 2024 and 2025 are left out of the choice because the Aqua orbit changed; the error of each method in those years is in the JSON.</p>`;
 }
 
 // ------------------------------------------------------------------ conferência com o INPE

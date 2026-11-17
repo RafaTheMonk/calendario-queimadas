@@ -9,7 +9,7 @@ Mesmos meses para todos (meses validos do Aqua, sem os dias degradados, como na 
 
 Metodos: taxa unica (B0), taxa por mes (T1), quadradinhos com fogo (T2, celulas-dia de 0,05 grau),
 posicao no ranking (T3), formula com pesos (modelo com fatores v2), taxa por mes a partir do Terra
-e mistura T1 + formula com o peso escolhido so com 2013-2019, sem olhar o teste.
+e mistura T1 + formula com o peso otimizado por validacao cruzada so em 2013-2019, sem olhar o teste.
 
 Uso: python3 -I Scripts/harmonizacao/comparar_metodos.py   (cerca de 1 minuto)
 Saida: Dados/site/metodos.json e copia em site/data/metodos.json
@@ -177,7 +177,7 @@ def main():
         "metodos": resultados,
         "notas": ["Quadradinhos: erro medido em quadradinhos de 0,05 grau com fogo por dia, não em focos.",
                   "Terra: sem os meses em que o Terra teve falta de dados.",
-                  "Mistura: o peso foi escolhido só com 2013 a 2019, sem olhar o teste."],
+                  "Mistura: o peso foi otimizado com validação cruzada só em 2013 a 2019, sem olhar o teste."],
     }
     for d in DESTINOS:
         os.makedirs(d, exist_ok=True)
