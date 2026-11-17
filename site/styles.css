@@ -392,3 +392,8 @@ button.chip:hover { filter: brightness(1.05); }
 .link-passo { align-self: flex-start; margin-top: 6px; padding: 0; border: 0; background: none; color: var(--destaque); font: inherit; font-weight: 700; font-size: 14px; cursor: pointer; }
 .link-passo:hover { text-decoration: underline; }
 .link-passo:focus-visible { outline: 3px solid var(--destaque-2); outline-offset: 2px; border-radius: 4px; }
+
+/* Vídeo da história, logo abaixo dos 4 passos */
+.video-historia { margin: 18px auto 0; max-width: 960px; }
+.video-historia video { display: block; width: 100%; aspect-ratio: 16 / 9; border-radius: var(--raio); border: 1px solid var(--borda); background: #0f0c0a; box-shadow: var(--sombra); }
+.video-historia figcaption { margin-top: 8px; font-size: 14px; color: var(--texto-suave); }
