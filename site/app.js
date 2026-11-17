@@ -123,9 +123,10 @@ function limitesExtras(me, v) {
     itens.push(`In ${fora.length} months of 2003 to 2011, Aqua counted more hotspots than in any matching calibration month (furthest case: ${mesTxt(longe.mes)}, ${fmt(longe.aqua)} against at most ${fmt(longe.maximo_na_calibracao)}). In those months, which include ${recordes} of the 10 records, the rate is used outside the range it was learned on.`);
   }
   if (v.erro_mensal_48_meses_pct) itens.push(`The rule for degraded Aqua days was added after August 2020, a test month, showed the problem. Counting all 48 test months, the error is ${v.erro_mensal_48_meses_pct.toLocaleString('en-US')}%.`);
-  const ef = me.efeito_regra_dias_fracos_snpp;
-  if (ef && ef.meses_que_sairiam.length) {
-    itens.push(`Weak S-NPP days do not get the same check: ${Object.keys(me.dias_fracos_snpp_na_calibracao).length} calibration months have 1 or 2 such days. Applying the same rule would drop ${ef.meses_que_sairiam.map(mesTxt).join(', ')} from the calibration and change that month's rate from ${ef.taxas.map((x) => num2b(x.taxa_publicada)).join(', ')} to ${ef.taxas.map((x) => num2b(x.taxa_com_a_regra)).join(', ')}.`);
+  const fracos = me.dias_fracos_snpp_na_calibracao;
+  if (fracos) {
+    const sairam = me.meses_fora_da_calibracao_por_dias_fracos_snpp || [];
+    itens.push(`Days when S-NPP came far below Aqua count as failures, like degraded Aqua days: ${Object.keys(fracos).length} calibration months have such days, and ${sairam.length ? sairam.map(mesTxt).join(', ') : 'no month'} left the calibration because of them.`);
   }
   return itens.map((x) => `<li>${x}</li>`).join('');
 }
@@ -1347,7 +1348,7 @@ function metodo() {
     <h3>Smaller areas</h3>
     <p>When you choose a point or draw an area, the app adds up the NASA POWER grid cells (about 55 x 68 km) inside it, using the same rates calibrated for Bahia. The ${v.erro_mensal_wape_pct.toLocaleString('en-US')}% error is for the whole of Bahia; in the 2020 to 2023 test it was ${num1(erroEscala('bloco_4x4'))}% for areas of about 220 x 270 km, ${num1(erroEscala('bloco_2x2'))}% for about 110 x 135 km and ${num1(erroEscala('celula'))}% for one grid cell.</p>
     <h3>The method works elsewhere</h3>
-    <p>The scripts recalibrate the rates for any country in the FIRMS archive. We ran the same test in 10 countries with very different fire regimes (Argentina, Australia, Bolivia, Canada, Chile, Indonesia, Mexico, Portugal, South Africa and the United States). On unseen years (2020 to 2023), the monthly ratio beat a single ratio in 8 of the 10 countries (plus Bahia) and in 9 of 10 when leaving one year out at a time. The error stayed between 6.6% and 10.6% in Mexico, South Africa, Australia, Argentina, Bolivia and the United States. It struggles where there is little fire (Portugal, a median of 99 VIIRS hotspots per month) and with record years outside the calibration (Canada 2023). The rates change a lot between regions (July: from 4.0 in Argentina to 14.5 in Canada), so they must be recalculated for each region, never copied.</p>
+    <p>The scripts recalibrate the rates for any country in the FIRMS archive. We ran the same test in 10 countries with very different fire regimes (Argentina, Australia, Bolivia, Canada, Chile, Indonesia, Mexico, Portugal, South Africa and the United States). On unseen years (2020 to 2023), the monthly ratio beat a single ratio in 8 of the 10 countries (plus Bahia) and in 9 of 10 when leaving one year out at a time. The error stayed between 6.7% and 10.6% in Mexico, South Africa, Australia, Argentina, Bolivia and the United States. It struggles where there is little fire (Portugal, a median of 99 VIIRS hotspots per month) and with record years outside the calibration (Canada 2023). The rates change a lot between regions (July: from 4.0 in Argentina to 14.5 in Canada), so they must be recalculated for each region, never copied.</p>
     <h3>Limitations</h3>
     <ul>
       <li>The main number is the monthly ratio, which had the lowest error among the simple methods on the test. The blend with the factor model erred a little less, but the difference may be chance. The factor model explains the variation and helps give the 2003 to 2011 band.</li>
