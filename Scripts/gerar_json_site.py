@@ -388,7 +388,7 @@ def main():
             "lat_min": comum.LAT_MIN, "lat_max": comum.LAT_MAX,
         },
         "unidade": "focos equivalentes VIIRS Suomi NPP 375 m",
-        "fonte": "NASA FIRMS (MODIS C6.1 Aqua; VIIRS 375 m Suomi NPP e NOAA-20), arquivos anuais por país, processamento padrão",
+        "fonte": "NASA FIRMS (MODIS C6.1 Aqua, e o Terra só na faixa de 2003 a 2011; VIIRS 375 m Suomi NPP e NOAA-20), arquivos anuais por país, processamento padrão",
         "citacao": "We acknowledge the use of imagery from the NASA LANCE FIRMS (https://earthdata.nasa.gov/firms), part of the NASA Earth Science Data and Information System (ESDIS).",
         "periodo": {"inicio": meses[0], "fim": meses[-1],
                     "observacao": "2026 ainda não incluído: os arquivos anuais de 2026 não existem e a API do FIRMS pede chave (MAP_KEY)."},

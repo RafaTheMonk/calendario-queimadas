@@ -10,7 +10,7 @@
   "lat_max": -8.53
  },
  "unidade": "focos equivalentes VIIRS Suomi NPP 375 m",
- "fonte": "NASA FIRMS (MODIS C6.1 Aqua; VIIRS 375 m Suomi NPP e NOAA-20), arquivos anuais por país, processamento padrão",
+ "fonte": "NASA FIRMS (MODIS C6.1 Aqua, e o Terra só na faixa de 2003 a 2011; VIIRS 375 m Suomi NPP e NOAA-20), arquivos anuais por país, processamento padrão",
  "citacao": "We acknowledge the use of imagery from the NASA LANCE FIRMS (https://earthdata.nasa.gov/firms), part of the NASA Earth Science Data and Information System (ESDIS).",
  "periodo": {
   "inicio": "2003-01",
