@@ -76,6 +76,37 @@
   </section>
 
   <main class="wrap painel">
+    <section class="historia" aria-labelledby="t-historia">
+      <h2 id="t-historia">The story in 4 steps</h2>
+      <p class="historia-lead">New here? This is what the numbers below mean.</p>
+      <ol class="passos-historia">
+        <li class="passo-historia">
+          <span class="passo-num" aria-hidden="true">1</span>
+          <h3>The jump that never happened</h3>
+          <p>In 2012, hotspots in Bahia jumped from <strong>26,477</strong> to <strong>210,941</strong>. It was not more fire: the new satellite (VIIRS) sees smaller fires and counts about <strong>6 times more</strong> than the old one (MODIS).</p>
+          <button type="button" class="link-passo" onclick="document.getElementById('cta-salto').click()">See the 2012 jump →</button>
+        </li>
+        <li class="passo-historia">
+          <span class="passo-num" aria-hidden="true">2</span>
+          <h3>One ruler for both</h3>
+          <p>For each calendar month we learned how many VIIRS hotspots match one MODIS hotspot (from <strong>9.6</strong> in the rainy season to <strong>5.7</strong> in the dry season) and converted 2003 to 2011 to the new scale.</p>
+          <button type="button" class="link-passo" data-janela="metodo">How it works →</button>
+        </li>
+        <li class="passo-historia">
+          <span class="passo-num" aria-hidden="true">3</span>
+          <h3>How to read the app</h3>
+          <p>In the calendar, each square is a month and the color shows how many hotspots there were; the other tab shows if the month was above or below normal. The <strong>Now</strong> panel compares the last 7 days with the normal for this month.</p>
+          <button type="button" class="link-passo" data-janela="calendario">Open the calendar →</button>
+        </li>
+        <li class="passo-historia">
+          <span class="passo-num" aria-hidden="true">4</span>
+          <h3>Why trust it</h3>
+          <p>On years the method never saw, the monthly error is <strong>7.2%</strong>. Against INPE's independent series, the correlation is <strong>0.985</strong> (without the conversion, it is negative).</p>
+          <button type="button" class="link-passo" data-janela="metodologia">Methodology and tests →</button>
+        </li>
+      </ol>
+    </section>
+
     <section aria-label="Summary">
       <div class="cartoes" id="cartoes"></div>
     </section>

@@ -378,3 +378,17 @@ button.chip:hover { filter: brightness(1.05); }
 .tabela-regioes tr.destaque td { font-weight: 700; }
 .tabela-rolagem { overflow-x: auto; }
 .comandos { font-family: "Liberation Mono", ui-monospace, monospace; font-size: 12px; background: var(--superficie-2); border: 1px solid var(--borda); border-radius: 10px; padding: 10px 12px; overflow-x: auto; white-space: pre; line-height: 1.5; }
+
+/* A história em 4 passos: a linha narrativa antes dos indicadores */
+.historia { margin: 6px 0 22px; }
+.historia h2 { margin: 0 0 4px; font-size: 22px; }
+.historia-lead { margin: 0 0 14px; color: var(--texto-suave); }
+.passos-historia { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; counter-reset: none; }
+.passo-historia { position: relative; background: var(--superficie); border: 1px solid var(--borda); border-radius: var(--raio); box-shadow: var(--sombra); padding: 18px 18px 14px; display: flex; flex-direction: column; gap: 6px; }
+.passo-num { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--destaque); color: #fff; font-weight: 700; font-size: 17px; }
+.passo-historia h3 { margin: 4px 0 0; font-size: 17px; }
+.passo-historia p { margin: 0; font-size: 14.5px; line-height: 1.5; color: var(--texto-suave); flex: 1; }
+.passo-historia p strong { color: var(--texto); font-variant-numeric: tabular-nums; }
+.link-passo { align-self: flex-start; margin-top: 6px; padding: 0; border: 0; background: none; color: var(--destaque); font: inherit; font-weight: 700; font-size: 14px; cursor: pointer; }
+.link-passo:hover { text-decoration: underline; }
+.link-passo:focus-visible { outline: 3px solid var(--destaque-2); outline-offset: 2px; border-radius: 4px; }

@@ -76,6 +76,37 @@
   </section>
 
   <main class="wrap painel">
+    <section class="historia" aria-labelledby="t-historia">
+      <h2 id="t-historia">A história em 4 passos</h2>
+      <p class="historia-lead">Chegou agora? É isto que os números abaixo querem dizer.</p>
+      <ol class="passos-historia">
+        <li class="passo-historia">
+          <span class="passo-num" aria-hidden="true">1</span>
+          <h3>O salto que não existiu</h3>
+          <p>Em 2012, os focos na Bahia saltaram de <strong>26.477</strong> para <strong>210.941</strong>. Não foi mais fogo: o satélite novo (VIIRS) enxerga fogo menor e conta umas <strong>6 vezes mais</strong> que o antigo (MODIS).</p>
+          <button type="button" class="link-passo" onclick="document.getElementById('cta-salto').click()">Ver o salto de 2012 →</button>
+        </li>
+        <li class="passo-historia">
+          <span class="passo-num" aria-hidden="true">2</span>
+          <h3>Uma régua para os dois</h3>
+          <p>Para cada mês do ano, aprendemos quantos focos do VIIRS valem um do MODIS (de <strong>9,6</strong> na chuva a <strong>5,7</strong> na seca) e convertemos 2003 a 2011 para a escala nova.</p>
+          <button type="button" class="link-passo" data-janela="metodo">Como funciona →</button>
+        </li>
+        <li class="passo-historia">
+          <span class="passo-num" aria-hidden="true">3</span>
+          <h3>Como ler o site</h3>
+          <p>No calendário, cada quadrado é um mês e a cor mostra quantos focos houve; a outra aba mostra se o mês ficou acima ou abaixo do normal. O painel <strong>Agora</strong> compara os últimos 7 dias com o normal do mês.</p>
+          <button type="button" class="link-passo" data-janela="calendario">Abrir o calendário →</button>
+        </li>
+        <li class="passo-historia">
+          <span class="passo-num" aria-hidden="true">4</span>
+          <h3>Por que confiar</h3>
+          <p>Em anos que o método nunca viu, o erro mensal é de <strong>7,2%</strong>. Contra a série independente do INPE, a correlação é <strong>0,985</strong> (sem a conversão, ela é negativa).</p>
+          <button type="button" class="link-passo" data-janela="metodologia">Metodologia e testes →</button>
+        </li>
+      </ol>
+    </section>
+
     <section aria-label="Resumo">
       <div class="cartoes" id="cartoes"></div>
     </section>
