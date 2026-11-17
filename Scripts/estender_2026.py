@@ -114,7 +114,7 @@ def main():
             "mes": m, "ano": 2026, "mes_num": k, "focos": focos,
             "origem": "VIIRS NOAA-20 ajustado" if usa_n20 else "VIIRS",
             "qualidade": "provisorio" if provisorio else ("corrigido" if usa_n20 else "completo"),
-            "modis_bruto": None, "viirs_real": focos, "modis_convertido": None,
+            "modis_bruto": None, "viirs_real": snpp[m], "modis_convertido": None,  # S-NPP medido, como de 2012 a 2025
             "dias_sem_dado_aqua": None, "dias_degradados_aqua": None, "dias_sem_dado_viirs": sem_snpp,
             "anomalia_pct": anom, "classe": classe, "faixa_inferior": None, "faixa_superior": None,
         })

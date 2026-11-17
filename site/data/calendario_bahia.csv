@@ -277,11 +277,11 @@ mes,ano,mes_num,focos,faixa_inferior,faixa_superior,origem,qualidade,anomalia_pc
 2025-12,2025,12,3410,,,VIIRS,completo,21.5,normal,13,598,3410,4925,1,1,0
 2026-01,2026,1,2254,,,VIIRS,completo,-10.7,normal,18,,2254,,,,0
 2026-02,2026,2,2088,,,VIIRS,completo,10.4,normal,14,,2088,,,,0
-2026-03,2026,3,1766,,,VIIRS NOAA-20 ajustado,corrigido,-42.0,abaixo do normal,22,,1766,,,,4
-2026-04,2026,4,2303,,,VIIRS NOAA-20 ajustado,corrigido,17.2,normal,10,,2303,,,,3
+2026-03,2026,3,1766,,,VIIRS NOAA-20 ajustado,corrigido,-42.0,abaixo do normal,22,,1329,,,,4
+2026-04,2026,4,2303,,,VIIRS NOAA-20 ajustado,corrigido,17.2,normal,10,,1914,,,,3
 2026-05,2026,5,3663,,,VIIRS,completo,31.5,normal,6,,3663,,,,0
 2026-06,2026,6,4483,,,VIIRS,completo,21.2,normal,10,,4483,,,,2
-2026-07,2026,7,5185,,,VIIRS NOAA-20 ajustado,corrigido,-9.1,normal,17,,5185,,,,6
+2026-07,2026,7,5185,,,VIIRS NOAA-20 ajustado,corrigido,-9.1,normal,17,,4216,,,,6
 2026-08,2026,8,13283,,,VIIRS,provisorio,19.2,normal,12,,13283,,,,1
 2026-09,2026,9,24123,,,VIIRS,provisorio,-21.6,abaixo do normal,22,,24123,,,,0
 2026-10,2026,10,24009,,,VIIRS,provisorio,-35.2,normal,19,,24009,,,,0
