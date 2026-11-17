@@ -1,0 +1,51 @@
+{
+ "descricao": "Erro mensal (WAPE) da conversão por mês do ano quando aplicada a áreas menores que a Bahia. Taxas da Bahia inteira calibradas em 2012-2019, erro medido contra o VIIRS real em 2020-2023.",
+ "periodo_calibracao": [
+  "2012-02",
+  "2019-12"
+ ],
+ "periodo_teste": [
+  "2020-01",
+  "2023-12"
+ ],
+ "n_meses_teste": 44,
+ "min_focos_para_mediana": 2000,
+ "escalas": [
+  {
+   "escala": "celula",
+   "descricao": "1 célula, cerca de 55 x 68 km",
+   "celulas_por_area": 1,
+   "n_areas": 309,
+   "erro_mensal_wape_pct": 37.2,
+   "mediana_por_area_pct": 29.2,
+   "n_areas_na_mediana": 87
+  },
+  {
+   "escala": "bloco_2x2",
+   "descricao": "2 x 2 células, cerca de 110 x 135 km",
+   "celulas_por_area": 4,
+   "n_areas": 83,
+   "erro_mensal_wape_pct": 26.0,
+   "mediana_por_area_pct": 26.6,
+   "n_areas_na_mediana": 66
+  },
+  {
+   "escala": "bloco_4x4",
+   "descricao": "4 x 4 células, cerca de 220 x 270 km",
+   "celulas_por_area": 16,
+   "n_areas": 24,
+   "erro_mensal_wape_pct": 19.1,
+   "mediana_por_area_pct": 20.0,
+   "n_areas_na_mediana": 22
+  },
+  {
+   "escala": "bahia",
+   "descricao": "Bahia inteira",
+   "celulas_por_area": 309,
+   "n_areas": 1,
+   "erro_mensal_wape_pct": 7.2,
+   "mediana_por_area_pct": 7.2,
+   "n_areas_na_mediana": 1
+  }
+ ]
+}
