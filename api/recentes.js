@@ -29,6 +29,12 @@ function celulaDe(lat, lon) {
 }
 
 export async function GET(request) {
+  // só o parâmetro que o site usa: qualquer outro mudaria a URL e furaria o cache
+  if (request && request.url && [...new URL(request.url).searchParams.keys()].some((k) => k !== 'celulas')) {
+    return new Response(JSON.stringify({ erro: 'parâmetro desconhecido' }), {
+      status: 400, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'public, s-maxage=3600' },
+    });
+  }
   const celulas = request && request.url ? celulasDaUrl(request.url) : null;
   try {
     const resp = await fetch(URL_FIRMS, { headers: { 'User-Agent': 'regua-de-fogo' } });

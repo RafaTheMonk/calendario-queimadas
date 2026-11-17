@@ -69,9 +69,22 @@ async function produtoDoDia(chave, data, sat) {
   return opcoes.find((p) => disponibilidade[p] && disponibilidade[p][0] <= data && data <= disponibilidade[p][1]) || null;
 }
 
+// Só os parâmetros que o site usa: qualquer outro mudaria a URL e furaria o cache, gastando a cota da chave.
+const PARAMETROS = { recentes: ['modo'], dia: ['modo', 'data', 'sat'] };
+
+function dataValida(data) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(data)) return false;
+  const d = new Date(data + 'T00:00:00Z');
+  return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === data;  // recusa 2026-02-31
+}
+
 export async function GET(request) {
   const q = new URL(request.url).searchParams;
   const modo = q.get('modo') || 'recentes';
+  if (!PARAMETROS[modo]) return resposta({ erro: 'modo inválido' }, 400, 'public, s-maxage=3600');
+  if ([...q.keys()].some((k) => !PARAMETROS[modo].includes(k))) {
+    return resposta({ erro: 'parâmetro desconhecido' }, 400, 'public, s-maxage=3600');
+  }
   try {
     if (modo === 'recentes') {
       const r = await fetch(URL_RECENTES, { headers: { 'User-Agent': 'regua-de-fogo' } });
@@ -83,11 +96,15 @@ export async function GET(request) {
         removidos: fora, pontos,
       }, 200, 'public, s-maxage=900, stale-while-revalidate=1800');
     }
-    if (modo !== 'dia') return resposta({ erro: 'modo inválido' }, 400, 'public, s-maxage=3600');
     const data = q.get('data') || '';
-    const sat = q.get('sat') === 'viirs' ? 'viirs' : 'modis';
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(data) || Number.isNaN(Date.parse(data))) {
+    const sat = q.get('sat') || 'modis';
+    if (sat !== 'modis' && sat !== 'viirs') return resposta({ erro: 'sat inválido (use modis ou viirs)' }, 400, 'public, s-maxage=3600');
+    if (!dataValida(data)) {
       return resposta({ erro: 'data inválida (use AAAA-MM-DD)' }, 400, 'public, s-maxage=3600');
+    }
+    const hoje = new Date().toISOString().slice(0, 10);
+    if (data < (sat === 'modis' ? '2000-11-01' : '2012-01-20') || data > hoje) {
+      return resposta({ erro: sat === 'modis' ? 'O MODIS tem dados de 01/11/2000 até hoje.' : 'O VIIRS tem dados de 20/01/2012 até hoje.' }, 404, 'public, s-maxage=3600');
     }
     const chave = (process.env.FIRMS_MAP_KEY || '').trim();
     if (chave.length !== 32) {
