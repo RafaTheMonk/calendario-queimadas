@@ -10,9 +10,9 @@ Satellite fire hotspots on one consistent ruler: a harmonized burning activity c
 Satellites have recorded fire hotspots for more than 20 years, but the record is split between two sensors that cannot be compared directly:
 
 - **MODIS** (Terra and Aqua satellites, since 2000): 1 km pixel, misses small fires. It is being retired.
-- **VIIRS** (Suomi NPP, NOAA-20 and NOAA-21, since 2012): 375 m pixel, sees smaller fires and counts about 6 times more hotspots in Bahia.
+- **VIIRS** (Suomi NPP since 2012 and NOAA-20 since 2018; NOAA-21, since 2023, is not used here): 375 m pixel, sees smaller fires and counts about 6 times more hotspots in Bahia.
 
-Joining both records without adjustment creates a false jump in 2012: 26,477 MODIS Aqua hotspots in 2011 against 210,941 VIIRS hotspots in 2012. There was not more fire; the sensor changed.
+Joining both records without adjustment creates a false jump in 2012: 26,477 MODIS Aqua hotspots in 2011 against 210,941 in 2012 (VIIRS from February on). Raw Aqua grew only 28% that year (26,477 to 33,865), so almost all of the jump is the sensor change, not more fire.
 
 ## The solution
 
@@ -21,21 +21,21 @@ Joining both records without adjustment creates a false jump in 2012: 26,477 MOD
 
 ## Data (NASA; INPE and IBAMA only for checking)
 
-- **NASA FIRMS:** MODIS C6.1 (Terra and Aqua) and VIIRS 375 m (Suomi NPP and NOAA-20) active fire hotspots, annual country files, standard processing. 48 files, 40 million hotspots in Brazil, 3.6 million in the study area after filters. Day coverage above 99% for every satellite. 2026 comes from the FIRMS area API. A sample check against the FIRMS API matched VIIRS exactly in 28 of 28 windows and MODIS within 0.15% (the annual files use a newer processing version, 6.2, than the API, 6.03).
+- **NASA FIRMS:** MODIS C6.1 (Terra and Aqua) and VIIRS 375 m (Suomi NPP and NOAA-20) active fire hotspots, annual country files, standard processing. 48 files, 40 million hotspots in Brazil, 3.6 million in the study area after filters. Day coverage above 99% for every satellite. 2026 comes from the FIRMS area API. A sample check against the FIRMS API: 98 of 120 windows identical and 0.054% total difference; VIIRS matched exactly in 28 of 28 windows and MODIS within 0.15% (the MODIS annual files mix processing versions: 6.2 up to 2017, 6.03 from 2018 to 2022 and 61.03 from 2023). NOAA-20 and 2026 are not part of this check.
 - **NASA POWER:** rain, wind, humidity, temperature and elevation on a monthly grid (0.5 x 0.625 degree), 2003 to 2025.
 - **INPE, Programa Queimadas** (Brazil's National Institute for Space Research): reference satellite hotspots, annual files 2003 to 2025 (https://dataserver-coids.inpe.br/queimadas/queimadas/focos/csv/anual/Brasil_sat_ref/). Used only to check the harmonized series.
-- **IBAMA, Sisfogo (ROI):** Fire Occurrence Records of the Prevfogo federal brigades (https://dadosabertos.ibama.gov.br/dados/SISFOGO/ROI.csv). Fires reported on the ground in Bahia, 399 from 2015 to 2021, compared with the detected hotspots. Not used in the calculation.
+- **IBAMA, Sisfogo (ROI):** Fire Occurrence Records of the Prevfogo federal brigades (https://dadosabertos.ibama.gov.br/dados/SISFOGO/ROI.csv). Fires reported on the ground in Bahia, 399 records (397 from 2015 to 2021 and 2 outside that period), compared with the detected hotspots. Not used in the calculation.
 
 Area: bounding rectangle of Bahia (longitude -46.62 to -37.34, latitude -18.35 to -8.53). Filters: vegetation fires only (`type = 0`), MODIS confidence 30 or more, VIIRS without low confidence.
 
 ## Method and results
 
-- **Main conversion (one ratio per calendar month):** for each month of the year, total VIIRS hotspots divided by total MODIS Aqua hotspots (Aqua flies in the afternoon, close to the VIIRS overpass). The ratio goes from 5.8 in September (dry season) to 9.6 in January (rainy season, small fires). Calibrated on 2012 to 2019 and tested on 2020 to 2023, years the model never saw: **7.2% monthly error** (8.7% counting the months with satellite failures) and **+0.2% total bias**. Leaving one year out at a time, from 2013 to 2023: 7.1%. This error is for the whole of Bahia; for 100 km areas, before 2012, the typical error is about 25%.
+- **Main conversion (one ratio per calendar month):** for each month of the year, total VIIRS hotspots divided by total MODIS Aqua hotspots (Aqua flies in the afternoon, close to the VIIRS overpass). The ratio goes from 5.7 in August (dry season) to 9.6 in January (rainy season, small fires). Calibrated on 2012 to 2019 and tested on 2020 to 2023, years the model never saw: **7.2% monthly error** (8.7% counting the months with satellite failures) and **+0.2% total bias**. Leaving one year out at a time, from 2013 to 2023: 7.1%. After the test, the published rates were refit with the same method on February 2012 to December 2021. This error is for the whole of Bahia; in smaller areas it grows (same test, `Scripts/harmonizacao/erro_por_area.py`): 19.1% for blocks of about 220 x 270 km, 26.0% for about 110 x 135 km and 37.2% for one grid cell of about 55 x 68 km. Before 2012 there is no VIIRS to measure it, so the 2020-2023 error is the best reference.
 - **7 methods compared on the same test** ("Methods" window of the app): single ratio 9.2%, monthly ratio 7.2%, grid cells with fire per day 9.8%, quantile mapping 8.1% (2.7% on the calibration years, a sign that it memorizes), factor model 7.9%, Terra-based monthly ratio 11.8% and a 70% ratio + 30% factor model blend 6.6%. The blend beat the monthly ratio in 8 of 11 years, but the difference may still be chance, so the main number keeps the monthly ratio.
-- **External check against INPE** ("Check against INPE" window): year-to-year correlation of 0.985 with the reference satellite series (not harmonized: -0.13), 0.992 month to month and the same peak month in 21 of 23 years. Without harmonization, the ratio against INPE jumps 6.2 times in 2012; harmonized, the difference between 2003-2011 and 2012-2021 is 11%.
+- **Check against INPE** ("Check against INPE" window): INPE's reference satellite is MODIS Aqua itself (another processing of the same sensor), so this checks the shape of the series, not the conversion rate before 2012. The evidence is the 2012 jump: without harmonization, the ratio against INPE jumps 6.2 times in 2012; harmonized, the difference between 2003-2011 and 2012-2021 is 11%. The year-to-year correlation is 0.985 (0.992 month to month, same peak month in 21 of 23 years), but raw Aqua with no conversion already reaches 0.984, so the correlation alone proves little; the -0.13 is for MODIS and VIIRS joined without harmonization.
 - **Factor model (Poisson regression per grid cell and month):** explains why the relation between the sensors changes, using only data that existed before 2012. Strongest factors: share of night-time hotspots (VIIRS is much more sensitive at night) and humidity. Tested and discarded: pixel size, overpass time and wind. The 95% band covered 42 of 44 test months.
-- **Data corrections:** months with Suomi NPP failures filled with adjusted NOAA-20, days with degraded Aqua data excluded, calibration before the Aqua orbit change (it started crossing the area later from 2022 on, which INPE's data also shows).
-- **Finding:** before 2012 the two MODIS satellites disagree. Terra saw 0.47 hotspots for each Aqua hotspot in 2003-2011 and 0.72 from 2012 on, daytime only. So 2003-2011 is shown as a band: from 132 thousand (Terra reading) to 204 thousand (Aqua reading) hotspots per year, against 124 thousand from real VIIRS in 2012-2021. In every reading, 2007 was the year with the most fire.
+- **Data corrections:** months with Suomi NPP failures filled with adjusted NOAA-20, days with degraded Aqua data excluded, calibration before the Aqua orbit change (it started crossing the area later from 2022 on; in INPE's data the most common overpass hour moves from 16 to 17 UTC in 2024).
+- **Finding:** before 2012 the two MODIS satellites disagree. Terra saw 0.47 hotspots for each Aqua hotspot in 2003-2011 and 0.72 from 2012 on (day and night together). So 2003-2011 is shown as a band: from 132 thousand (Terra reading) to 204 thousand (Aqua reading) hotspots per year, against 124 thousand from real VIIRS in 2012-2021. In every reading, 2007 was the year with the most fire. The central number shown for 2003-2011 is the Aqua reading, almost always at the top of the band, so records and rankings from that period depend on that choice.
 - **Detected and reported:** for each fire registered by the federal brigades in Bahia, the satellite detected about 2,085 hotspots; only 12 of the 399 records were found by satellite.
 - **The method works elsewhere:** `Scripts/replicar_regiao.py` recalibrates the rates for any country in the FIRMS archive, with the same global satellite outage flags used for Bahia. Same test (calibrate 2012-2019, predict 2020-2023) in 10 countries; summary in `Dados/harmonizado/replicacao_regioes.json`:
 
@@ -53,7 +53,7 @@ Area: bounding rectangle of Bahia (longitude -46.62 to -37.34, latitude -18.35 t
   | Canada | 15.9% | 12.2% | 15.9% / 20.7% | 2023 |
   | Portugal | 26.1% | 18.6% | 20.0% / 18.5% | 2005 |
 
-  The monthly ratio beats a single ratio in 9 of 11 places on the test and in 10 of 11 leaving one year out. It struggles with little fire (Portugal, a median of 99 VIIRS hotspots per month) and with record years outside the calibration (Canada 2023). Rates change a lot between regions (July: 4.0 in Argentina, 14.5 in Canada), so they must be recalculated per region, never copied. The record years match known events (Indonesia 2015, Chile 2017, Canada 2023, Bolivia 2024).
+  The monthly ratio beats a single ratio in 8 of the 10 countries on the test (plus Bahia) and in 9 of 10 leaving one year out. It struggles with little fire (Portugal, a median of 99 VIIRS hotspots per month) and with record years outside the calibration (Canada 2023). Rates change a lot between regions (July: 4.0 in Argentina, 14.5 in Canada), so they must be recalculated per region, never copied. The record years match known events (Indonesia 2015, Chile 2017, Canada 2023, Bolivia 2024).
 
 ## Structure
 
@@ -94,6 +94,7 @@ python3 -I Scripts/completude_firms.py                     # completeness
 python3 -I Scripts/harmonizacao/avaliar.py                 # harmonization techniques
 python3 -I Scripts/harmonizacao/fatores/baixar_power.py    # NASA POWER weather
 python3 -I Scripts/harmonizacao/fatores/versao2.py         # factor model
+python3 -I Scripts/harmonizacao/erro_por_area.py          # error by area size (read by the next step)
 python3 -I Scripts/gerar_json_site.py                      # app data
 python3 -I Scripts/baixar_firms_2026.py                    # 2026 from the FIRMS API
 python3 -I Scripts/estender_2026.py                        # adds the complete months of 2026
@@ -111,6 +112,7 @@ The app is static, with two small Vercel functions (`api/recentes` and `api/pont
 
 - Pilot area: Bahia. The method works for any area (see the Argentina run), but only Bahia is processed in the app.
 - The years 2003 to 2011 cannot be checked against VIIRS (it did not exist), so they come with a band.
+- The 7.2% error is for the whole of Bahia; smaller areas have larger errors (37.2% for one grid cell in the 2020-2023 test).
 - 2026 only includes complete months, from the FIRMS API (VIIRS Suomi NPP, with adjusted NOAA-20 where Suomi NPP is missing). Months from near real time data are provisional: they do not carry the hotspot type and will change when the standard processing is released. NOAA-21 is not included yet.
 - Fire hotspots are satellite detections, not confirmed fires.
 
@@ -119,3 +121,9 @@ The app is static, with two small Vercel functions (`api/recentes` and `api/pont
 We acknowledge the use of imagery from the NASA LANCE FIRMS (https://earthdata.nasa.gov/firms), part of the NASA Earth Science Data and Information System (ESDIS).
 
 These data were obtained from the NASA Langley Research Center (LaRC) POWER Project funded through the NASA Earth Science/Applied Science Program (https://power.larc.nasa.gov).
+
+INPE, Programa Queimadas: reference satellite fire hotspots, annual files for Brazil (https://dataserver-coids.inpe.br/queimadas/queimadas/focos/csv/anual/Brasil_sat_ref/), used only to check the series.
+
+IBAMA, Sisfogo, Registros de Ocorrência de Incêndio (ROI), open data (https://dadosabertos.ibama.gov.br/dados/SISFOGO/ROI.csv), used only to compare detected and reported fires.
+
+Map tiles: © OpenStreetMap contributors (https://www.openstreetmap.org/copyright).
