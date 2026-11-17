@@ -15,7 +15,7 @@
  "periodo": {
   "inicio": "2003-01",
   "fim": "2026-10",
-  "observacao": "2026 vai de janeiro a 10, pela API do FIRMS (VIIRS). Meses do quase tempo real ficam como provisórios. O mês corrente aparece só no painel dos últimos dias."
+  "observacao": "2026 vai de janeiro a outubro, pela API do FIRMS (VIIRS). Meses do quase tempo real ficam como provisórios. O mês corrente aparece só no painel dos últimos dias."
  },
  "meses": [
   {
@@ -6361,7 +6361,34 @@
     "2021": -5.1,
     "2022": -0.5,
     "2023": 4.3
-   }
+   },
+   "taxas_publicadas": "As taxas do teste foram aprendidas só com 2012-2019. As taxas publicadas foram refeitas depois, com o mesmo método, usando 2012-02 a 2021-12.",
+   "erro_por_area": [
+    {
+     "escala": "celula",
+     "descricao": "1 célula, cerca de 55 x 68 km",
+     "celulas_por_area": 1,
+     "erro_mensal_wape_pct": 37.2
+    },
+    {
+     "escala": "bloco_2x2",
+     "descricao": "2 x 2 células, cerca de 110 x 135 km",
+     "celulas_por_area": 4,
+     "erro_mensal_wape_pct": 26.0
+    },
+    {
+     "escala": "bloco_4x4",
+     "descricao": "4 x 4 células, cerca de 220 x 270 km",
+     "celulas_por_area": 16,
+     "erro_mensal_wape_pct": 19.1
+    },
+    {
+     "escala": "bahia",
+     "descricao": "Bahia inteira",
+     "celulas_por_area": 309,
+     "erro_mensal_wape_pct": 7.2
+    }
+   ]
   },
   "fatores": {
    "o_que_e": "Modelo de Poisson por célula da grade NASA POWER (cerca de 55 x 68 km) e mês, com pesos para fatores que só usam dados existentes antes de 2012 (MODIS e clima da NASA POWER). Serve para explicar por que a razão VIIRS/MODIS muda e para dar a faixa de 2003 a 2011.",
@@ -6496,17 +6523,19 @@
     "t1_terra": 132033
    },
    "viirs_real_media_anual_2012_2021": 123674,
-   "descoberta": "Antes de 2012 os dois MODIS discordam: o Terra via 0,47 foco por foco do Aqua em 2003-2011 e 0,72 de 2012 em diante (só de dia). Pelo Aqua, o passado teve mais fogo; pelo Terra, o nível foi parecido com o de hoje. Por isso 2003-2011 aparece como faixa."
+   "descoberta": "Antes de 2012 os dois MODIS discordam: o Terra via 0,47 foco por foco do Aqua em 2003-2011 e 0,72 de 2012 em diante (dia e noite juntos). Pelo Aqua, o passado teve mais fogo; pelo Terra, o nível foi parecido com o de hoje. Por isso 2003-2011 aparece como faixa."
   },
   "limitacoes": [
-   "O número central é a conversão por mês do ano (T1), que teve o menor erro no teste. O modelo com fatores explica a variação e dá a faixa de 2003-2011, mas não foi mais preciso no teste.",
+   "O número central é a taxa por mês, que teve o menor erro entre os métodos simples no teste. A mistura com o modelo de fatores errou um pouco menos, mas a diferença pode ser acaso. O modelo de fatores explica a variação e ajuda a dar a faixa de 2003-2011.",
+   "De 2003 a 2011 o número central é a leitura do Aqua, que fica quase sempre no teto da faixa; a leitura do Terra dá menos fogo. Recordes e posições desse período dependem dessa escolha.",
+   "As taxas do teste foram aprendidas só com 2012-2019. As taxas publicadas foram refeitas depois, com o mesmo método, usando 2012-02 a 2021-12.",
    "De 2003 a 2011 não há VIIRS para conferir: os valores desse período são estimativas, por isso vêm com faixa.",
    "O normal de cada mês (mediana e faixa entre os percentis 25 e 75) usa os anos medidos pelo VIIRS, de 2012 a 2025.",
-   "Os 7,2% de erro valem para a Bahia inteira. Em áreas de 100 km, antes de 2012, o erro típico medido é de cerca de 25%.",
+   "Os 7,2% de erro valem para a Bahia inteira. Em áreas menores o erro cresce: no teste de 2020-2023 foi de 26,0% em blocos de cerca de 110 x 135 km e de 37,2% numa célula de cerca de 55 x 68 km. Antes de 2012 não há VIIRS para medir; o erro de 2020-2023 é a melhor referência.",
    "A partir de 2022 a órbita do satélite Aqua mudou (passa mais tarde), por isso a calibração vai só até 2021.",
    "Área é um retângulo, não o contorno oficial da Bahia.",
    "Dias degradados só são detectados de 2012 em diante, quando há o VIIRS para comparar.",
-   "2026 vai de janeiro a 2026-10. Os meses que vêm do quase tempo real do FIRMS são provisórios: não trazem o tipo do foco (podem incluir fontes industriais, menos de 1% na Bahia) e mudam quando sair o processamento padrão."
+   "2026 vai de janeiro a outubro. Os meses que vêm do quase tempo real do FIRMS são provisórios: não trazem o tipo do foco (podem incluir fontes industriais, menos de 1% na Bahia) e mudam quando sair o processamento padrão."
   ]
  }
 }

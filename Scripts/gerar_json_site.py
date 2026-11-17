@@ -99,6 +99,10 @@ def dias_degradados_aqua():
 
 # ---------------------------------------------------------------- calculo
 
+def fmt_pct(x):
+    return ("%.1f" % x).replace(".", ",")
+
+
 def percentil(valores, p):
     v = sorted(valores)
     if not v:
@@ -256,7 +260,7 @@ def main():
             "cobertura_faixa_95": v2["faixa_previsao"]["cobertura_teste"],
             "media_anual_2003_2011": {k: round(v) for k, v in v2["pre_2012"]["media_anual_2003_2011"].items()},
             "viirs_real_media_anual_2012_2021": round(v2["pre_2012"]["viirs_real_media_anual_2012_2021"]),
-            "descoberta": "Antes de 2012 os dois MODIS discordam: o Terra via 0,47 foco por foco do Aqua em 2003-2011 e 0,72 de 2012 em diante (só de dia). Pelo Aqua, o passado teve mais fogo; pelo Terra, o nível foi parecido com o de hoje. Por isso 2003-2011 aparece como faixa.",
+            "descoberta": "Antes de 2012 os dois MODIS discordam: o Terra via 0,47 foco por foco do Aqua em 2003-2011 e 0,72 de 2012 em diante (dia e noite juntos). Pelo Aqua, o passado teve mais fogo; pelo Terra, o nível foi parecido com o de hoje. Por isso 2003-2011 aparece como faixa.",
         }
 
     # validacao da T1: usa a avaliacao mais recente (versao 2), que tira tambem os meses com Aqua degradado
@@ -282,6 +286,24 @@ def main():
             "acerto_tres_faixas_pct": round(t1t["anomalia_3classes_pct"], 1),
             "erro_total_anual_pct": {a: round(v["erro_pct"], 1) for a, v in t1t["erro_anual"].items()},
         }
+    validacao["taxas_publicadas"] = ("As taxas do teste foram aprendidas só com 2012-2019. As taxas publicadas foram refeitas depois, "
+                                     "com o mesmo método, usando %s a %s." % (CALIB_INI, CALIB_FIM))
+    # erro em areas menores que a Bahia (Scripts/harmonizacao/erro_por_area.py)
+    arq_area = os.path.join(RAIZ, "Dados", "harmonizado", "erro_por_area.json")
+    erro_area = None
+    if os.path.exists(arq_area):
+        ea = json.load(open(arq_area, encoding="utf-8"))
+        erro_area = {e["escala"]: e for e in ea["escalas"]}
+        validacao["erro_por_area"] = [{k: e[k] for k in ("escala", "descricao", "celulas_por_area", "erro_mensal_wape_pct")}
+                                      for e in ea["escalas"]]
+    if erro_area:
+        lim_area = ("Os %s%% de erro valem para a Bahia inteira. Em áreas menores o erro cresce: no teste de 2020-2023 foi de "
+                    "%s%% em blocos de cerca de 110 x 135 km e de %s%% numa célula de cerca de 55 x 68 km. Antes de 2012 não há VIIRS "
+                    "para medir; o erro de 2020-2023 é a melhor referência." % (
+                        fmt_pct(validacao["erro_mensal_wape_pct"]), fmt_pct(erro_area["bloco_2x2"]["erro_mensal_wape_pct"]),
+                        fmt_pct(erro_area["celula"]["erro_mensal_wape_pct"])))
+    else:
+        lim_area = "Os %s%% de erro valem para a Bahia inteira; em áreas menores o erro é maior." % fmt_pct(validacao["erro_mensal_wape_pct"])
 
     saida = {
         "versao": 2,
@@ -314,10 +336,12 @@ def main():
             "validacao": validacao,
             "fatores": fatores_resumo,
             "limitacoes": [
-                "O número central é a conversão por mês do ano (T1), que teve o menor erro no teste. O modelo com fatores explica a variação e dá a faixa de 2003-2011, mas não foi mais preciso no teste.",
+                "O número central é a taxa por mês, que teve o menor erro entre os métodos simples no teste. A mistura com o modelo de fatores errou um pouco menos, mas a diferença pode ser acaso. O modelo de fatores explica a variação e ajuda a dar a faixa de 2003-2011.",
+                "De 2003 a 2011 o número central é a leitura do Aqua, que fica quase sempre no teto da faixa; a leitura do Terra dá menos fogo. Recordes e posições desse período dependem dessa escolha.",
+                validacao["taxas_publicadas"],
                 "De 2003 a 2011 não há VIIRS para conferir: os valores desse período são estimativas, por isso vêm com faixa.",
                 "O normal de cada mês (mediana e faixa entre os percentis 25 e 75) usa os anos medidos pelo VIIRS, de 2012 a 2025.",
-                "Os 7,2% de erro valem para a Bahia inteira. Em áreas de 100 km, antes de 2012, o erro típico medido é de cerca de 25%.",
+                lim_area,
                 "A série fecha em dezembro de 2025; 2026 aparece só no painel dos últimos dias.",
                 "A partir de 2022 a órbita do satélite Aqua mudou (passa mais tarde), por isso a calibração vai só até 2021.",
                 "Área é um retângulo, não o contorno oficial da Bahia.",

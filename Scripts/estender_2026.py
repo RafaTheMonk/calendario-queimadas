@@ -35,6 +35,8 @@ LON0, DLON, NLON = -46.875, 0.625, 16
 LAT0, DLAT, NLAT = -18.5, 0.5, 21
 LIMITE_DIAS_SEM_DADO = 3
 MIN_FOCOS_DIA_N20 = 5
+MESES_PT = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro",
+            "novembro", "dezembro"]
 
 
 def celula(lat, lon):
@@ -136,12 +138,13 @@ def main():
                           for s in sorted(cal["meses"], key=lambda s: -s["focos"])[:10]]
     fim = cal["meses"][-1]["mes"]
     cal["periodo"]["fim"] = fim
+    nome_fim = MESES_PT[int(fim[5:7]) - 1]
     cal["periodo"]["observacao"] = ("2026 vai de janeiro a %s, pela API do FIRMS (VIIRS). Meses do quase tempo real ficam como "
-                                    "provisórios. O mês corrente aparece só no painel dos últimos dias." % fim[5:7])
+                                    "provisórios. O mês corrente aparece só no painel dos últimos dias." % nome_fim)
     cal["metodo"]["limitacoes"] = [x for x in cal["metodo"]["limitacoes"] if "fecha em dezembro de 2025" not in x and not x.startswith("2026 vai")]
     cal["metodo"]["limitacoes"].append(
         "2026 vai de janeiro a %s. Os meses que vêm do quase tempo real do FIRMS são provisórios: não trazem o tipo do foco "
-        "(podem incluir fontes industriais, menos de 1%% na Bahia) e mudam quando sair o processamento padrão." % fim)
+        "(podem incluir fontes industriais, menos de 1%% na Bahia) e mudam quando sair o processamento padrão." % nome_fim)
 
     # celulas: mesma regra mes a mes
     cel["meses"] += [s["mes"] for s in novos]
