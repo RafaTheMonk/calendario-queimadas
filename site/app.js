@@ -766,7 +766,8 @@ function contagemFocos() {
     let txt = `${fmt(n)} hotspots in Bahia on ${dataBr(j.data)}.${naArea}`;
     if (j.sat === 'modis') {
       const taxa = OFICIAL.metodo.taxa_por_mes[j.data.slice(5, 7)];
-      txt += ` On the VIIRS ruler, with the ${MESES_LONGO[Number(j.data.slice(5, 7)) - 1]} rate (${num1(taxa)}), that would be about ${fmt(n * taxa)} in Bahia. For a single day, the conversion varies more than for a month.`;
+      const nAqua = j.pontos.filter((p) => p[5] === 'Aqua').length;  // a taxa foi calibrada só com o Aqua
+      txt += ` On the VIIRS ruler, the ${fmt(nAqua)} Aqua hotspots times the ${MESES_LONGO[Number(j.data.slice(5, 7)) - 1]} rate (${num1(taxa)}) give about ${fmt(nAqua * taxa)} in Bahia (the rate was calibrated on Aqua only). For a single day, the conversion varies more than for a month.`;
     }
     msg.textContent = txt + ` Source: NASA FIRMS, ${String(j.produto || '').replace(/_/g, ' ')}. Tap a point to see time and power.`;
   } else {

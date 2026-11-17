@@ -754,7 +754,8 @@ function contagemFocos() {
     let txt = `${fmt(n)} focos na Bahia em ${dataBr(j.data)}.${naArea}`;
     if (j.sat === 'modis') {
       const taxa = OFICIAL.metodo.taxa_por_mes[j.data.slice(5, 7)];
-      txt += ` Na régua do VIIRS, com a taxa de ${MESES_LONGO[Number(j.data.slice(5, 7)) - 1]} (${num1(taxa)}), seriam cerca de ${fmt(n * taxa)} na Bahia. Num dia só, a conversão varia mais que no mês.`;
+      const nAqua = j.pontos.filter((p) => p[5] === 'Aqua').length;  // a taxa foi calibrada só com o Aqua
+      txt += ` Na régua do VIIRS, os ${fmt(nAqua)} focos do Aqua vezes a taxa de ${MESES_LONGO[Number(j.data.slice(5, 7)) - 1]} (${num1(taxa)}) dão cerca de ${fmt(nAqua * taxa)} na Bahia (a taxa foi calibrada só com o Aqua). Num dia só, a conversão varia mais que no mês.`;
     }
     msg.textContent = txt + ` Fonte: ${j.fonte}. Toque num ponto para ver hora e potência.`;
   } else {
