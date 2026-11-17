@@ -97,10 +97,54 @@ def dias_degradados_aqua():
     return saida
 
 
+def dias_fracos_snpp():
+    """{mes: dias em que o S-NPP veio muito abaixo do Aqua no Brasil inteiro}: a regra dos dias degradados
+    do Aqua, invertida. So informativo: hoje esses dias nao tiram o mes da calibracao."""
+    aqua = contagem_diaria_brasil("modis", "Aqua")
+    snpp = contagem_diaria_brasil("viirs-snpp", "N")
+    razoes = defaultdict(dict)
+    for d, v in aqua.items():
+        if d in snpp and v > 0:
+            razoes[d[:7]][d] = snpp[d] / v
+    saida = {}
+    for mes, rs in razoes.items():
+        med = statistics.median(rs.values())
+        n = sum(1 for r in rs.values() if r < FATOR_DEGRADADO * med)
+        if n:
+            saida[mes] = n
+    return saida
+
+
+def razao_terra_aqua_por_ano():
+    """Focos Terra / focos Aqua por ano (dia e noite), pela tabela por celula do modelo com fatores."""
+    arq = os.path.join(RAIZ, "Dados", "harmonizado", "fatores", "tabela_celula_mes.csv")
+    if not os.path.exists(arq):
+        return None
+    t, a = defaultdict(float), defaultdict(float)
+    with open(arq, newline="", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            ano = int(r["mes"][:4])
+            t[ano] += float(r["T_terra"] or 0)
+            a[ano] += float(r["A_aqua"] or 0)
+    return {str(ano): round(t[ano] / a[ano], 3) for ano in sorted(a) if a[ano]}
+
+
 # ---------------------------------------------------------------- calculo
 
 def fmt_pct(x):
     return ("%.1f" % x).replace(".", ",")
+
+
+MESES_PT = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro",
+            "novembro", "dezembro"]
+
+
+def nome_mes(m):
+    return "%s de %s" % (MESES_PT[int(m[5:7]) - 1], m[:4])
+
+
+def fmt_num(x, casas=0):
+    return ("{:,.%df}" % casas).format(x).replace(",", "X").replace(".", ",").replace("X", ".")
 
 
 def percentil(valores, p):
@@ -238,6 +282,29 @@ def main():
                    "faixa_superior": faixa_ano[a][1] if a in faixa_ano else None} for a, v in sorted(totais.items())]
     ranking = sorted(serie, key=lambda s: s["focos"], reverse=True)[:10]
 
+    # meses de 2003 a 2012-01 em que o Aqua contou mais focos que em qualquer mes igual da calibracao:
+    # ali a taxa e usada fora da faixa que foi vista
+    max_calib = defaultdict(float)
+    for m in comum.lista_meses(CALIB_INI, CALIB_FIM):
+        if m not in excluidos:
+            max_calib[int(m[5:7])] = max(max_calib[int(m[5:7])], dados[m]["aqua"])
+    fora_calib = [{"mes": s["mes"], "aqua": s["modis_bruto"], "maximo_na_calibracao": int(max_calib[s["mes_num"]])}
+                  for s in serie if s["mes"] < comum.PRIMEIRO_MES_VIIRS and s["modis_bruto"] and s["modis_bruto"] > max_calib[s["mes_num"]]]
+    meses_fora = {x["mes"] for x in fora_calib}
+    recordes_fora = sum(1 for s in ranking if s["mes"] in meses_fora)
+    maior_fora = max(fora_calib, key=lambda x: x["aqua"] / x["maximo_na_calibracao"]) if fora_calib else None
+
+    # dias fracos do S-NPP: quanto mudaria a taxa se a regra do Aqua valesse tambem para ele
+    fracos = dias_fracos_snpp()
+    calib_ok = [m for m in comum.lista_meses(CALIB_INI, CALIB_FIM) if m not in excluidos]
+    sairiam = [m for m in calib_ok if (dados[m]["sem_snpp"] or 0) + fracos.get(m, 0) >= LIMITE]
+    efeito_snpp = []
+    for k in sorted({int(m[5:7]) for m in sairiam}):
+        ms = [m for m in calib_ok if int(m[5:7]) == k and m not in sairiam]
+        nova = sum(dados[m]["snpp"] for m in ms) / sum(dados[m]["aqua"] for m in ms)
+        efeito_snpp.append({"mes_do_ano": chave(k), "taxa_publicada": round(razao[k], 3), "taxa_com_a_regra": round(nova, 3)})
+    meses_fracos_calib = {m: n for m, n in sorted(fracos.items()) if m in calib_ok}
+
     res = json.load(open(ARQ_RESULTADOS, encoding="utf-8"))
     t1r = res["tecnicas"]["T1_fator_sazonal"]
     teste = t1r["teste"]
@@ -262,6 +329,12 @@ def main():
             "viirs_real_media_anual_2012_2021": round(v2["pre_2012"]["viirs_real_media_anual_2012_2021"]),
             "descoberta": "Antes de 2012 os dois MODIS discordam: o Terra via 0,47 foco por foco do Aqua em 2003-2011 e 0,72 de 2012 em diante (dia e noite juntos). Pelo Aqua, o passado teve mais fogo; pelo Terra, o nível foi parecido com o de hoje. Por isso 2003-2011 aparece como faixa.",
         }
+        rta = razao_terra_aqua_por_ano()
+        if rta:
+            fatores_resumo["razao_terra_aqua_por_ano"] = rta
+            fatores_resumo["descoberta"] += (" A razão também sobe aos poucos dentro do período (%s em 2003, %s em 2011), então não dá para "
+                                             "garantir que a relação entre os sensores ficou parada de 2003 a 2011." % (
+                                                 fmt_num(rta["2003"], 2), fmt_num(rta["2011"], 2)))
 
     # validacao da T1: usa a avaliacao mais recente (versao 2), que tira tambem os meses com Aqua degradado
     # e calcula a referencia de anomalia so com a calibracao; sem ela, usa resultados.json
@@ -331,6 +404,9 @@ def main():
             "meses_usados_por_mes": {chave(k): usados[k] for k in range(1, 13)},
             "periodo_calibracao": [CALIB_INI, CALIB_FIM],
             "meses_excluidos_da_calibracao": excluidos,
+            "meses_fora_da_calibracao": fora_calib,
+            "dias_fracos_snpp_na_calibracao": meses_fracos_calib,
+            "efeito_regra_dias_fracos_snpp": {"meses_que_sairiam": sairiam, "taxas": efeito_snpp},
             "razao_snpp_noaa20": round(razao_snpp_n20, 4),
             "filtros": ["type = 0 (fogo em vegetação)", "MODIS com confiança 30 ou mais", "VIIRS sem confiança baixa", "par MODIS Aqua x VIIRS Suomi NPP (mesmo horário de passagem)"],
             "validacao": validacao,
@@ -342,6 +418,17 @@ def main():
                 "De 2003 a 2011 não há VIIRS para conferir: os valores desse período são estimativas, por isso vêm com faixa.",
                 "O normal de cada mês (mediana e faixa entre os percentis 25 e 75) usa os anos medidos pelo VIIRS, de 2012 a 2025.",
                 lim_area,
+                ("Em %d meses de 2003 a 2011 o Aqua contou mais focos que em qualquer mês igual da calibração (o caso mais longe: %s, "
+                 "%s focos contra no máximo %s). Nesses meses, que incluem %d dos 10 recordes, a taxa é usada fora da faixa que foi vista." % (
+                     len(fora_calib), nome_mes(maior_fora["mes"]), fmt_num(maior_fora["aqua"]), fmt_num(maior_fora["maximo_na_calibracao"]), recordes_fora))
+                if fora_calib else "Nenhum mês de 2003 a 2011 passa do maior mês igual da calibração.",
+                ("A regra de dias degradados do Aqua foi criada depois que agosto de 2020, um mês do teste, mostrou o problema. "
+                 "Contando os 48 meses do teste, o erro é de %s%%." % fmt_pct(validacao.get("erro_mensal_48_meses_pct", validacao["erro_mensal_wape_pct"]))),
+                ("Os dias fracos do S-NPP não passam pela mesma checagem: %d meses da calibração têm 1 ou 2 dias assim. Aplicar a mesma regra "
+                 "tiraria %s da calibração e mudaria a taxa desse mês do ano de %s para %s." % (
+                     len(meses_fracos_calib), ", ".join(nome_mes(m) for m in sairiam), ", ".join(fmt_num(e["taxa_publicada"], 2) for e in efeito_snpp),
+                     ", ".join(fmt_num(e["taxa_com_a_regra"], 2) for e in efeito_snpp)))
+                if sairiam else "Os dias fracos do S-NPP não passam pela mesma checagem, mas aplicar a regra não tiraria nenhum mês da calibração.",
                 "A série fecha em dezembro de 2025; 2026 aparece só no painel dos últimos dias.",
                 "A partir de 2022 a órbita do satélite Aqua mudou (passa mais tarde), por isso a calibração vai só até 2021.",
                 "Área é um retângulo, não o contorno oficial da Bahia.",

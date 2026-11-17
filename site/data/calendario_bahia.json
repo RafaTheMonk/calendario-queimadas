@@ -6341,6 +6341,138 @@
   "meses_excluidos_da_calibracao": [
    "2020-08"
   ],
+  "meses_fora_da_calibracao": [
+   {
+    "mes": "2003-01",
+    "aqua": 687,
+    "maximo_na_calibracao": 394
+   },
+   {
+    "mes": "2003-04",
+    "aqua": 733,
+    "maximo_na_calibracao": 686
+   },
+   {
+    "mes": "2003-09",
+    "aqua": 17310,
+    "maximo_na_calibracao": 14109
+   },
+   {
+    "mes": "2005-01",
+    "aqua": 510,
+    "maximo_na_calibracao": 394
+   },
+   {
+    "mes": "2005-10",
+    "aqua": 17090,
+    "maximo_na_calibracao": 10578
+   },
+   {
+    "mes": "2006-01",
+    "aqua": 473,
+    "maximo_na_calibracao": 394
+   },
+   {
+    "mes": "2006-02",
+    "aqua": 552,
+    "maximo_na_calibracao": 511
+   },
+   {
+    "mes": "2007-01",
+    "aqua": 622,
+    "maximo_na_calibracao": 394
+   },
+   {
+    "mes": "2007-05",
+    "aqua": 840,
+    "maximo_na_calibracao": 777
+   },
+   {
+    "mes": "2007-06",
+    "aqua": 1609,
+    "maximo_na_calibracao": 972
+   },
+   {
+    "mes": "2007-07",
+    "aqua": 3096,
+    "maximo_na_calibracao": 2216
+   },
+   {
+    "mes": "2007-08",
+    "aqua": 8712,
+    "maximo_na_calibracao": 4267
+   },
+   {
+    "mes": "2007-09",
+    "aqua": 18946,
+    "maximo_na_calibracao": 14109
+   },
+   {
+    "mes": "2007-10",
+    "aqua": 13952,
+    "maximo_na_calibracao": 10578
+   },
+   {
+    "mes": "2007-11",
+    "aqua": 6115,
+    "maximo_na_calibracao": 3268
+   },
+   {
+    "mes": "2008-01",
+    "aqua": 556,
+    "maximo_na_calibracao": 394
+   },
+   {
+    "mes": "2008-10",
+    "aqua": 13435,
+    "maximo_na_calibracao": 10578
+   },
+   {
+    "mes": "2008-11",
+    "aqua": 6577,
+    "maximo_na_calibracao": 3268
+   },
+   {
+    "mes": "2010-01",
+    "aqua": 542,
+    "maximo_na_calibracao": 394
+   },
+   {
+    "mes": "2010-06",
+    "aqua": 1262,
+    "maximo_na_calibracao": 972
+   },
+   {
+    "mes": "2010-08",
+    "aqua": 6382,
+    "maximo_na_calibracao": 4267
+   },
+   {
+    "mes": "2011-06",
+    "aqua": 975,
+    "maximo_na_calibracao": 972
+   }
+  ],
+  "dias_fracos_snpp_na_calibracao": {
+   "2012-03": 2,
+   "2014-08": 1,
+   "2014-09": 1,
+   "2015-03": 1,
+   "2019-03": 1,
+   "2021-08": 1
+  },
+  "efeito_regra_dias_fracos_snpp": {
+   "meses_que_sairiam": [
+    "2012-03"
+   ],
+   "taxas": [
+    {
+     "mes_do_ano": "03",
+     "taxa_publicada": 7.482,
+     "taxa_com_a_regra": 7.663
+    }
+   ]
+  },
   "razao_snpp_noaa20": 1.0547,
   "filtros": [
    "type = 0 (fogo em vegetação)",
@@ -6523,7 +6655,32 @@
     "t1_terra": 132033
    },
    "viirs_real_media_anual_2012_2021": 123674,
-   "descoberta": "Antes de 2012 os dois MODIS discordam: o Terra via 0,47 foco por foco do Aqua em 2003-2011 e 0,72 de 2012 em diante (dia e noite juntos). Pelo Aqua, o passado teve mais fogo; pelo Terra, o nível foi parecido com o de hoje. Por isso 2003-2011 aparece como faixa."
+   "descoberta": "Antes de 2012 os dois MODIS discordam: o Terra via 0,47 foco por foco do Aqua em 2003-2011 e 0,72 de 2012 em diante (dia e noite juntos). Pelo Aqua, o passado teve mais fogo; pelo Terra, o nível foi parecido com o de hoje. Por isso 2003-2011 aparece como faixa. A razão também sobe aos poucos dentro do período (0,38 em 2003, 0,57 em 2011), então não dá para garantir que a relação entre os sensores ficou parada de 2003 a 2011.",
+   "razao_terra_aqua_por_ano": {
+    "2003": 0.381,
+    "2004": 0.402,
+    "2005": 0.438,
+    "2006": 0.431,
+    "2007": 0.492,
+    "2008": 0.471,
+    "2009": 0.505,
+    "2010": 0.523,
+    "2011": 0.566,
+    "2012": 0.719,
+    "2013": 0.745,
+    "2014": 0.734,
+    "2015": 0.659,
+    "2016": 0.726,
+    "2017": 0.745,
+    "2018": 0.788,
+    "2019": 0.774,
+    "2020": 0.74,
+    "2021": 0.734,
+    "2022": 0.674,
+    "2023": 0.814,
+    "2024": 0.707,
+    "2025": 0.674
+   }
   },
   "limitacoes": [
    "O número central é a taxa por mês, que teve o menor erro entre os métodos simples no teste. A mistura com o modelo de fatores errou um pouco menos, mas a diferença pode ser acaso. O modelo de fatores explica a variação e ajuda a dar a faixa de 2003-2011.",
@@ -6532,6 +6689,9 @@
    "De 2003 a 2011 não há VIIRS para conferir: os valores desse período são estimativas, por isso vêm com faixa.",
    "O normal de cada mês (mediana e faixa entre os percentis 25 e 75) usa os anos medidos pelo VIIRS, de 2012 a 2025.",
    "Os 7,2% de erro valem para a Bahia inteira. Em áreas menores o erro cresce: no teste de 2020-2023 foi de 26,0% em blocos de cerca de 110 x 135 km e de 37,2% numa célula de cerca de 55 x 68 km. Antes de 2012 não há VIIRS para medir; o erro de 2020-2023 é a melhor referência.",
+   "Em 22 meses de 2003 a 2011 o Aqua contou mais focos que em qualquer mês igual da calibração (o caso mais longe: agosto de 2007, 8.712 focos contra no máximo 4.267). Nesses meses, que incluem 5 dos 10 recordes, a taxa é usada fora da faixa que foi vista.",
+   "A regra de dias degradados do Aqua foi criada depois que agosto de 2020, um mês do teste, mostrou o problema. Contando os 48 meses do teste, o erro é de 8,7%.",
+   "Os dias fracos do S-NPP não passam pela mesma checagem: 6 meses da calibração têm 1 ou 2 dias assim. Aplicar a mesma regra tiraria março de 2012 da calibração e mudaria a taxa desse mês do ano de 7,48 para 7,66.",
    "A partir de 2022 a órbita do satélite Aqua mudou (passa mais tarde), por isso a calibração vai só até 2021.",
    "Área é um retângulo, não o contorno oficial da Bahia.",
    "Dias degradados só são detectados de 2012 em diante, quando há o VIIRS para comparar.",
