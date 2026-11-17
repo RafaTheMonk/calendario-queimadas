@@ -1,9 +1,10 @@
 # Dados do site: calendário de queimadas da Bahia
 
-Versão 2, gerada em 14/11/2026 por `Scripts/gerar_json_site.py` (a versão 2 acrescenta a faixa de 2003 a 2011 e o resumo do modelo com fatores; os campos da versão 1 continuam iguais) (rodar de novo: `python3 -I Scripts/gerar_json_site.py`, uns 10 segundos).
+Versão 2, gerada por `Scripts/gerar_json_site.py` e completada com 2026 por `Scripts/estender_2026.py` (a versão 2 acrescenta a faixa de 2003 a 2011 e o resumo do modelo com fatores; os campos da versão 1 continuam iguais). Para refazer: `python3 -I Scripts/harmonizacao/erro_por_area.py`, `python3 -I Scripts/gerar_json_site.py` e `python3 -I Scripts/estender_2026.py` (este último lê os CSV de 2026 já baixados, não chama a API).
 
-- `calendario_bahia.json` (110 KB): tudo o que o site precisa
+- `calendario_bahia.json` (cerca de 150 KB): tudo o que o site precisa
 - `calendario_bahia.csv`: a mesma série mês a mês, para o botão "Baixar CSV"
+- `celulas_bahia.json`: a série de cada uma das 309 células da grade NASA POWER, para o site somar uma área. `f` = focos harmonizados por mês (antes de 2012-02, a leitura do Aqua), `t` = leitura do Terra de 2003-01 a 2012-01, `a` = Aqua sem harmonizar. A faixa de uma área sai de somar cada leitura nas células e só depois tirar o mínimo e o máximo.
 
 ## O que tem no JSON
 
@@ -12,13 +13,16 @@ Versão 2, gerada em 14/11/2026 por `Scripts/gerar_json_site.py` (a versão 2 ac
 | `area` | nome e retângulo (lon/lat) | título, destacar no mapa |
 | `unidade` | "focos equivalentes VIIRS Suomi NPP 375 m" | legenda |
 | `fonte`, `citacao` | NASA FIRMS e a frase oficial de citação | rodapé e página "como funciona" |
-| `periodo` | 2003-01 a 2025-12 e por que 2026 não entrou | aviso na tela |
-| `meses` | 276 meses, um objeto por mês (ver abaixo) | calendário, gráfico, CSV |
+| `periodo` | 2003-01 a 2026-10; 2026 vem da API do FIRMS e os meses do quase tempo real são provisórios | aviso na tela |
+| `meses` | 286 meses, um objeto por mês (ver abaixo) | calendário, gráfico, CSV |
 | `normal_por_mes` | mediana, média, p25 e p75 de cada mês do ano (chaves "01" a "12") | cartão "mês x normal", legenda |
 | `totais_por_ano` | total de focos, meses, mês de pico e, de 2003 a 2012, a faixa do ano | coluna de totais ao lado da grade |
 | `top10_meses` | os 10 meses com mais fogo | destaque |
-| `metodo` | técnica, taxas por mês, período de calibração, filtros, validação (erro de 7,9% por mês, 91% de acerto acima ou abaixo do normal) e limitações | página "como funciona" |
-| `metodo.fatores` | pesos dos fatores, triagem, comparação com a T1 no teste, cobertura da faixa e a descoberta dos dois MODIS | página "como funciona" |
+| `metodo` | técnica, taxas por mês (calibradas com 2012-02 a 2021-12), filtros, validação (erro de 7,2% por mês nos 44 meses válidos de 2020-2023 com taxas de 2012-2019, viés de +0,2%, 93,2% de acerto acima ou abaixo da mediana) e limitações | página "como funciona" |
+| `metodo.validacao.erro_por_area` | erro no mesmo teste por tamanho de área (célula, 2 x 2, 4 x 4, Bahia) | cartão de precisão de uma área |
+| `metodo.meses_fora_da_calibracao` | meses de 2003-2011 em que o Aqua passou do maior mês igual da calibração (a taxa é extrapolada) | limitações |
+| `metodo.dias_fracos_snpp_na_calibracao`, `metodo.efeito_regra_dias_fracos_snpp` | dias em que o S-NPP veio muito abaixo do Aqua e o que mudaria se a regra do Aqua valesse para ele | limitações |
+| `metodo.fatores` | pesos dos fatores, triagem, comparação com a T1 no teste, cobertura da faixa, a descoberta dos dois MODIS e a razão Terra/Aqua por ano | página "como funciona" |
 
 Cada item de `meses`:
 
@@ -42,7 +46,7 @@ Cada item de `meses`:
 - **Faixa de 2003 a 2011:** no calendário, um marcador discreto (hachura ou ícone) nesses meses, e no tooltip "entre X e Y focos". No gráfico anual, uma área sombreada entre `faixa_inferior` e `faixa_superior`. É a forma honesta de mostrar que, antes de 2012, os dois satélites MODIS discordam.
 
 - **Calendário:** linhas = anos (2003 a 2025), colunas = meses. Cor por `focos` numa escala acessível (viridis ou similar) com legenda em números. Meses de setembro e outubro passam de 30 mil, janeiro fica perto de 3 mil: escala logarítmica ou por quantis deixa a grade mais legível.
-- **Cartão do mês:** para o último mês disponível (2025-12), mostrar `focos`, `anomalia_pct` e `posicao_no_mes`. Avisar que 2026 ainda não está na base.
+- **Cartão do mês:** para o último mês disponível, mostrar `focos`, `anomalia_pct` e `posicao_no_mes`.
 - **Gráfico antes e depois:** `modis_bruto` e `viirs_real` em linhas separadas mostram o salto de 2012. A linha de `focos` mostra a série harmonizada, sem o salto.
 - **Filtro de datas:** recortar `meses` por ano e mês no próprio navegador.
 - **CSV:** baixar `calendario_bahia.csv`, ou gerar do recorte filtrado.
@@ -53,9 +57,10 @@ Cada item de `meses`:
   - meses em que o Suomi NPP ficou 3 ou mais dias sem dado completados com o NOAA-20 x 1,0547 (2022-07, 2022-08, 2024-06, 2024-07, 2024-11)
   - dias degradados do Aqua contados como falha (agosto de 2020 saiu da calibração)
   - meses incompletos fora do "normal" de cada mês
-- Não faz ainda: o modelo com fatores e pesos pedido pela mentoria, o contorno oficial da Bahia (é um retângulo), 2026, outras áreas.
+- Também faz: a faixa de 2003-2011 com o modelo com fatores (versão 2), 2026 até o último mês completo e qualquer área pela grade de células.
+- Não faz: o contorno oficial da Bahia (é um retângulo) nem o NOAA-21.
 - Quando o modelo melhorar, só a conversão muda. Os campos do JSON continuam os mesmos, então o site não precisa ser refeito.
 
-## Para o pitch
+## Resumo
 
-O número central (`focos`) continua sendo a T1, que teve o menor erro no teste. A faixa de 2003 a 2011 vem da discordância entre os dois MODIS. 2007 é o ano mais forte em todas as leituras.
+O número central (`focos`) é a T1, que teve o menor erro entre os métodos simples no teste (a mistura com o modelo com fatores errou um pouco menos, mas a diferença pode ser acaso). Antes de 2012 esse número é a leitura do Aqua, quase sempre no teto da faixa. A faixa de 2003 a 2011 vem da discordância entre os dois MODIS. 2007 é o ano mais forte em todas as leituras.

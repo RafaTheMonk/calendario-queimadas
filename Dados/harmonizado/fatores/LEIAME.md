@@ -1,5 +1,7 @@
 # Modelo com fatores (fase A), MODIS x VIIRS na Bahia
 
+> Fase A, substituída pela versão 2 em `../fatores_v2/`. Na versão 2, que é a usada no site, o modelo com fatores dá 7,9% de erro no teste e a faixa de 95% cobre 42 de 44 meses. Os números abaixo são da fase A e ficam como registro.
+
 Gerado em 14/11/2026 por `python3 -I Scripts/harmonizacao/fatores/avaliar_fatores.py` (a partir da pasta NasaSpaceApps, uns 4 minutos). O clima vem de `Dados/nasa_power/` (baixado por `baixar_power.py`, 1 chamada por parâmetro).
 
 ## O que tem aqui
