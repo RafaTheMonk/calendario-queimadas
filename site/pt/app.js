@@ -16,6 +16,7 @@ const MEIA_LON = 0.3125;
 const HOJE = new Date();
 const MES_ATUAL = HOJE.getMonth() + 1;
 const ANO_ATUAL = HOJE.getFullYear();
+const ULTIMO_ANO_NORMAL = 2025;  // o normal usa os anos medidos pelo VIIRS de 2012 a 2025, como a série da Bahia
 
 const fmt = (n) => (n === null || n === undefined) ? 'sem dado' : Math.round(n).toLocaleString('pt-BR');
 const pct = (n) => (n > 0 ? '+' : '') + n.toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + '%';
@@ -138,9 +139,9 @@ function montarDadosArea(cels) {
     };
   });
   const normal = { mediana: {}, media: {}, p25: {}, p75: {} };
-  // normal de cada mês só com os anos medidos pelo VIIRS (2012-02 em diante), como na série da Bahia
+  // normal de cada mês só com os anos medidos pelo VIIRS (2012-02 a 2025), como na série da Bahia
   for (let k = 1; k <= 12; k++) {
-    const v = serie.filter((s, i) => s.mes_num === k && i >= nPre).map((s) => s.focos);
+    const v = serie.filter((s, i) => s.mes_num === k && i >= nPre && s.ano <= ULTIMO_ANO_NORMAL).map((s) => s.focos);
     const c = String(k).padStart(2, '0');
     normal.mediana[c] = Math.max(1, Math.round(quantil(v, 0.5)));
     normal.p25[c] = Math.round(quantil(v, 0.25));
