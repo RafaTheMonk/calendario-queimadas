@@ -1210,6 +1210,7 @@ async function metodologia() {
     <p>Tudo está no repositório aberto: <a href="https://github.com/RafaTheMonk/calendario-queimadas" target="_blank" rel="noopener">github.com/RafaTheMonk/calendario-queimadas</a>. Python 3 com numpy; os scripts de 2026 e da API precisam de uma chave gratuita do FIRMS (MAP_KEY).</p>
     <div class="comandos">Scripts/baixar_firms_bahia.sh                    # baixa o FIRMS e recorta a área
 python3 -I Scripts/completude_firms.py           # completude dos dados
+python3 -I Scripts/harmonizacao/erro_por_area.py  # erro por tamanho de área (antes da linha seguinte)
 python3 -I Scripts/gerar_json_site.py            # monta a série harmonizada
 python3 -I Scripts/harmonizacao/comparar_metodos.py   # 7 métodos, mesma prova
 python3 -I Scripts/comparar_inpe.py              # conferência com o INPE
