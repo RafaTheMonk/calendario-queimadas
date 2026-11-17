@@ -2,7 +2,7 @@
 
 Gerados por `python3 -I Scripts/harmonizacao/avaliar.py` (a partir da pasta NasaSpaceApps).
 
-**Qual número vale:** `resultados.json` é a primeira avaliação (14/11/2026), com 45 meses de teste e sem a regra de dias degradados do Aqua; nela a T1 dá 7,9%. O número publicado (7,2% em 44 meses, viés de +0,2%) vem de `fatores_v2/resultados_v2.json` (`Scripts/harmonizacao/fatores/versao2.py`), que também tira agosto de 2020 (Aqua com 5 dias degradados). As taxas do site são recalculadas por `Scripts/gerar_json_site.py` com 2012-02 a 2021-12, não com o período de produção deste arquivo (2012-02 a 2023-12).
+**Qual número vale:** `resultados.json` é a primeira avaliação (14/11/2026), com 45 meses de teste e sem a regra de dias degradados do Aqua; nela a T1 dá 7,9%. O número publicado (7,2% em 44 meses, viés de +0,3%) vem de `fatores_v2/resultados_v2.json` (`Scripts/harmonizacao/fatores/versao2.py`), que também tira agosto de 2020 (Aqua com 5 dias degradados) e março de 2012 (S-NPP com 1 dia sem dado e 2 dias fracos). As taxas do site são recalculadas por `Scripts/gerar_json_site.py` com 2012-02 a 2021-12, não com o período de produção deste arquivo (2012-02 a 2023-12).
 
 Outros arquivos desta pasta:
 

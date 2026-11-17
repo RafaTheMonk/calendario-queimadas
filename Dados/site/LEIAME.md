@@ -18,10 +18,10 @@ Versão 2, gerada por `Scripts/gerar_json_site.py` e completada com 2026 por `Sc
 | `normal_por_mes` | mediana, média, p25 e p75 de cada mês do ano (chaves "01" a "12") | cartão "mês x normal", legenda |
 | `totais_por_ano` | total de focos, meses, mês de pico e, de 2003 a 2012, a faixa do ano | coluna de totais ao lado da grade |
 | `top10_meses` | os 10 meses com mais fogo | destaque |
-| `metodo` | técnica, taxas por mês (calibradas com 2012-02 a 2021-12), filtros, validação (erro de 7,2% por mês nos 44 meses válidos de 2020-2023 com taxas de 2012-2019, viés de +0,2%, 93,2% de acerto acima ou abaixo da mediana) e limitações | página "como funciona" |
+| `metodo` | técnica, taxas por mês (calibradas com 2012-02 a 2021-12), filtros, validação (erro de 7,2% por mês nos 44 meses válidos de 2020-2023 com taxas de 2012-2019, viés de +0,3%, 97,7% de acerto acima ou abaixo da mediana) e limitações | página "como funciona" |
 | `metodo.validacao.erro_por_area` | erro no mesmo teste por tamanho de área (célula, 2 x 2, 4 x 4, Bahia) | cartão de precisão de uma área |
 | `metodo.meses_fora_da_calibracao` | meses de 2003-2011 em que o Aqua passou do maior mês igual da calibração (a taxa é extrapolada) | limitações |
-| `metodo.dias_fracos_snpp_na_calibracao`, `metodo.efeito_regra_dias_fracos_snpp` | dias em que o S-NPP veio muito abaixo do Aqua e o que mudaria se a regra do Aqua valesse para ele | limitações |
+| `metodo.dias_fracos_snpp_na_calibracao`, `metodo.meses_fora_da_calibracao_por_dias_fracos_snpp` | dias em que o S-NPP veio muito abaixo do Aqua (contam como falha, como os degradados do Aqua) e os meses que saíram da calibração por causa deles | limitações |
 | `metodo.fatores` | pesos dos fatores, triagem, comparação com a T1 no teste, cobertura da faixa, a descoberta dos dois MODIS e a razão Terra/Aqua por ano | página "como funciona" |
 
 Cada item de `meses`:
@@ -55,7 +55,7 @@ Cada item de `meses`:
 
 - Faz: técnica T1 (uma taxa por mês do ano), calibrada com 2012-02 a 2021-12 (antes da mudança de órbita do Aqua), com três correções de dado:
   - meses em que o Suomi NPP ficou 3 ou mais dias sem dado completados com o NOAA-20 x 1,0547 (2022-07, 2022-08, 2024-06, 2024-07, 2024-11)
-  - dias degradados do Aqua contados como falha (agosto de 2020 saiu da calibração)
+  - dias degradados do Aqua e dias fracos do S-NPP contados como falha (agosto de 2020 e março de 2012 saíram da calibração)
   - meses incompletos fora do "normal" de cada mês
 - Também faz: a faixa de 2003-2011 com o modelo com fatores (versão 2), 2026 até o último mês completo e qualquer área pela grade de células.
 - Não faz: o contorno oficial da Bahia (é um retângulo) nem o NOAA-21.
