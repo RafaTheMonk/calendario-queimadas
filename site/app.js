@@ -1384,8 +1384,9 @@ function ligarControles() {
   document.getElementById('bahia-inteira').addEventListener('click', () => definirArea({ tipo: 'bahia' }));
   document.getElementById('desenhar-area').addEventListener('click', iniciarDesenho);
   const diaFocos = document.getElementById('dia-focos');
-  const ontem = new Date(Date.now() - 86400000);
-  diaFocos.max = ontem.toISOString().slice(0, 10);
+  const ontem = new Date();
+  ontem.setDate(ontem.getDate() - 1);  // ontem no fuso de quem usa, não em UTC
+  diaFocos.max = `${ontem.getFullYear()}-${String(ontem.getMonth() + 1).padStart(2, '0')}-${String(ontem.getDate()).padStart(2, '0')}`;
   diaFocos.value = '2007-09-10';
   document.getElementById('camada-focos').addEventListener('change', () => { if (!mapaL) abrirMapa(); atualizarCamadaFocos(); });
   document.getElementById('ver-focos-mapa').addEventListener('click', () => {
