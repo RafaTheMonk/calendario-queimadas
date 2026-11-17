@@ -111,6 +111,25 @@ function dentroDaBahia(lat, lon) {
   return lat > a.lat_min && lat < a.lat_max && lon > a.lon_min && lon < a.lon_max;
 }
 
+// Limitações calculadas pelo gerador (Scripts/gerar_json_site.py); em português o site lê o texto pronto do JSON.
+function limitesExtras(me, v) {
+  const mesTxt = (m) => `${MESES_LONGO[Number(m.slice(5, 7)) - 1]} ${m.slice(0, 4)}`;
+  const itens = [];
+  const fora = me.meses_fora_da_calibracao || [];
+  if (fora.length) {
+    const longe = fora.reduce((a, b) => (b.aqua / b.maximo_na_calibracao > a.aqua / a.maximo_na_calibracao ? b : a));
+    const meses = new Set(fora.map((x) => x.mes));
+    const recordes = OFICIAL.top10_meses.filter((x) => meses.has(x.mes)).length;
+    itens.push(`In ${fora.length} months of 2003 to 2011, Aqua counted more hotspots than in any matching calibration month (furthest case: ${mesTxt(longe.mes)}, ${fmt(longe.aqua)} against at most ${fmt(longe.maximo_na_calibracao)}). In those months, which include ${recordes} of the 10 records, the rate is used outside the range it was learned on.`);
+  }
+  if (v.erro_mensal_48_meses_pct) itens.push(`The rule for degraded Aqua days was added after August 2020, a test month, showed the problem. Counting all 48 test months, the error is ${v.erro_mensal_48_meses_pct.toLocaleString('en-US')}%.`);
+  const ef = me.efeito_regra_dias_fracos_snpp;
+  if (ef && ef.meses_que_sairiam.length) {
+    itens.push(`Weak S-NPP days do not get the same check: ${Object.keys(me.dias_fracos_snpp_na_calibracao).length} calibration months have 1 or 2 such days. Applying the same rule would drop ${ef.meses_que_sairiam.map(mesTxt).join(', ')} from the calibration and change that month's rate from ${ef.taxas.map((x) => num2b(x.taxa_publicada)).join(', ')} to ${ef.taxas.map((x) => num2b(x.taxa_com_a_regra)).join(', ')}.`);
+  }
+  return itens.map((x) => `<li>${x}</li>`).join('');
+}
+
 // Erro medido no teste de 2020-2023 para a escala mais parecida com a área (Scripts/harmonizacao/erro_por_area.py).
 const TAMANHO_AREA = { celula: 'one grid cell (about 55 x 68 km)', bloco_2x2: 'areas of about 110 x 135 km', bloco_4x4: 'areas of about 220 x 270 km' };
 function erroDaArea(nCelulas) {
@@ -1321,7 +1340,7 @@ function metodo() {
     <ul>${pesos}</ul>
     <p class="nota">Tested and discarded because they do not change the relation: ${descartados}. Test comparison: monthly ratio ${comp.T1.erro_mensal_pct.toLocaleString('en-US')}% error, factor model ${comp.modelo_v2.erro_mensal_pct.toLocaleString('en-US')}%. The main number uses the monthly ratio. <a href="#metodos" data-janela="metodos">See the comparison of the 7 methods tested</a>.</p>
     <h3>What we found before 2012</h3>
-    <p>Before 2012 the two MODIS satellites disagree: Terra saw 0.47 hotspots for each Aqua hotspot in 2003 to 2011 and 0.72 from 2012 on (day and night together). According to Aqua, the past had more fire; according to Terra, the level was close to today's. That is why 2003 to 2011 is shown as a band.</p>
+    <p>Before 2012 the two MODIS satellites disagree: Terra saw 0.47 hotspots for each Aqua hotspot in 2003 to 2011 and 0.72 from 2012 on (day and night together). According to Aqua, the past had more fire; according to Terra, the level was close to today's. That is why 2003 to 2011 is shown as a band.${f.razao_terra_aqua_por_ano ? ` The ratio also rises slowly within the period (${num2b(f.razao_terra_aqua_por_ano['2003'])} in 2003, ${num2b(f.razao_terra_aqua_por_ano['2011'])} in 2011), so we cannot assume the relation between the sensors stayed fixed from 2003 to 2011.` : ''}</p>
     <p class="nota">Mean per year from 2003 to 2011, in VIIRS-equivalent hotspots: ${fmt(media.t1_terra)} from Terra, ${fmt(media.fatores_aqua)} from the factor model and ${fmt(media.t1_aqua)} from the Aqua monthly ratio. Real VIIRS from 2012 to 2021: ${fmt(f.viirs_real_media_anual_2012_2021)} per year.</p>` : ''}
     <h3>Check against INPE</h3>
     <p>We compared the harmonized series with INPE's reference satellite series. That satellite is MODIS Aqua, the one we convert, so a high correlation alone proves little: raw Aqua correlates almost as well. The evidence is that the ratio between our series and INPE's stays about the same before and after 2012, while without harmonization it jumps in 2012. <a href="#inpe" data-janela="inpe">See the comparison</a>.</p>
@@ -1336,6 +1355,7 @@ function metodo() {
       <li>From 2003 to 2011 there is no VIIRS to check against: the values for that period are estimates, so they come with a band.</li>
       <li>The normal for each month (median and the range between the 25th and 75th percentiles) uses the years measured by VIIRS, 2012 to 2025.</li>
       <li>The ${v.erro_mensal_wape_pct.toLocaleString('en-US')}% error is for the whole of Bahia. In smaller areas the error grows: in the 2020 to 2023 test it was ${num1(erroEscala('bloco_2x2'))}% for about 110 x 135 km and ${num1(erroEscala('celula'))}% for one grid cell. Before 2012 there is no VIIRS to measure it; the 2020 to 2023 error is the best reference.</li>
+      ${limitesExtras(me, v)}
       <li>From 2022 on, the orbit of the Aqua satellite changed (it passes later), so the calibration only goes to 2021.</li>
       <li>The area is a rectangle, not the official border of Bahia. Only Bahia is processed in this version.</li>
       <li>Degraded days are only detected from 2012 on, when VIIRS exists to compare.</li>
