@@ -98,7 +98,11 @@ function distanciaKm(lat1, lon1, lat2, lon2) {
 }
 
 async function carregarCelulas() {
-  if (!CELULAS) CELULAS = await (await fetch('data/celulas_bahia.json')).json();
+  if (!CELULAS) {
+    const r = await fetch('data/celulas_bahia.json');
+    if (!r.ok) throw new Error('celulas ' + r.status);
+    CELULAS = await r.json();
+  }
   return CELULAS;
 }
 
@@ -222,7 +226,13 @@ async function definirArea(nova, mensagem) {
   const msgJanela = document.getElementById('msg-area');
   if (desenho.ativo) encerrarDesenho();
   if (nova.tipo === 'ponto' || nova.tipo === 'poligono') {
-    await carregarCelulas();
+    try {
+      await carregarCelulas();
+    } catch (e) {
+      msgJanela.textContent = 'Could not load the grid cells. Reload the page and try again.';
+      aviso.textContent = 'Could not load the grid cells. Reload the page and try again.';
+      return;
+    }
     const { cels, pequena } = celulasDaArea(nova);
     if (cels.length === 0) {
       estado.area = { tipo: 'bahia' };
