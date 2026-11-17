@@ -136,8 +136,9 @@ function montarDadosArea(cels) {
     return {
       mes: m, ano: Number(m.slice(0, 4)), mes_num: Number(m.slice(5, 7)), focos,
       origem: of.origem, qualidade: of.qualidade,
-      faixa_inferior: pre ? cels.reduce((s, c) => s + c.i[i], 0) : null,
-      faixa_superior: pre ? cels.reduce((s, c) => s + c.s[i], 0) : null,
+      // faixa: soma cada leitura (Aqua em f, Terra em t) nas células e só então tira o mínimo e o máximo
+      faixa_inferior: pre ? Math.min(focos, cels.reduce((s, c) => s + c.t[i], 0)) : null,
+      faixa_superior: pre ? Math.max(focos, cels.reduce((s, c) => s + c.t[i], 0)) : null,
       modis_bruto: pre ? cels.reduce((s, c) => s + c.a[i], 0) : null,
       viirs_real: pre ? null : focos,
     };

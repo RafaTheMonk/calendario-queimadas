@@ -493,22 +493,21 @@ def gerar_celulas(serie, razao, razao_snpp_n20):
             c["N"][i] = float(r["N20"] or 0)
     saida = []
     for nome, c in sorted(cel.items()):
-        f, ii, ss, aa = [], [], [], []
+        f, tt, aa = [], [], []
         for i, m in enumerate(meses):
             k = int(m[5:7])
             if m < comum.PRIMEIRO_MES_VIIRS:
                 ca, ct = razao[k] * c["A"][i], r_terra[k] * c["T"][i]
                 f.append(round(ca))
-                ii.append(round(min(ca, ct)))
-                ss.append(round(max(ca, ct)))
+                tt.append(round(ct))
                 aa.append(round(c["A"][i]))
             elif m in ajustados:
                 f.append(round(c["N"][i] * razao_snpp_n20))
             else:
                 f.append(round(c["V"][i]))
-        saida.append({"id": nome, "lon": c["lon"], "lat": c["lat"], "f": f, "i": ii, "s": ss, "a": aa})
+        saida.append({"id": nome, "lon": c["lon"], "lat": c["lat"], "f": f, "t": tt, "a": aa})
     corpo = {"meses": meses, "n_pre": len(pre), "grade": "NASA POWER 0,5 x 0,625 grau",
-             "nota": "f = focos harmonizados por mes; i e s = faixa de 2003-01 a 2012-01 (leituras do Aqua e do Terra); a = focos MODIS Aqua sem harmonizar no mesmo periodo",
+             "nota": "f = focos harmonizados por mes (antes de 2012-02, a leitura do Aqua); t = leitura do Terra de 2003-01 a 2012-01; a = focos MODIS Aqua sem harmonizar no mesmo periodo. A faixa de uma area sai de somar cada leitura nas celulas e so depois tirar o minimo e o maximo",
              "celulas": saida}
     texto = json.dumps(corpo, ensure_ascii=False, separators=(",", ":"))
     for pasta in (SAIDA, os.path.join(RAIZ, "site", "data")):
