@@ -235,6 +235,20 @@ select, input[type="number"] {
   .hero-grid { grid-template-columns: 1fr; gap: 28px; }
   .hero { padding: 36px 0 28px; }
 }
+@media (max-width: 480px) {
+  /* cabeçalho cabe em 360 px sem rolagem lateral */
+  .nav-inner { gap: 8px; }
+  .marca { gap: 6px; }
+  .marca span { font-size: 14px; }
+  .regua { width: 26px; height: 26px; }
+  .acoes { gap: 2px; }
+  .icone { width: 30px; height: 30px; }
+  .chip { max-width: 110px; min-width: 0; }
+  .chip .nome-area { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+@media (max-width: 340px) {
+  .marca span { display: none; }  /* em telas muito estreitas fica só o ícone da régua */
+}
 @media (max-width: 760px) {
   .duas-colunas { grid-template-columns: 1fr; }
   .grafico.alto { height: 760px; }
