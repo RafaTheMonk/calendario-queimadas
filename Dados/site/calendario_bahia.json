@@ -31,6 +31,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 160.5,
    "classe": "acima do normal",
    "posicao_no_mes": 1,
@@ -38,7 +39,7 @@
    "faixa_superior": 6576,
    "leituras": {
     "t1_aqua": 6576,
-    "fatores_aqua": 4146,
+    "fatores_aqua": 4140,
     "t1_terra": 2656
    }
   },
@@ -55,6 +56,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 93.9,
    "classe": "acima do normal",
    "posicao_no_mes": 6,
@@ -62,7 +64,7 @@
    "faixa_superior": 3666,
    "leituras": {
     "t1_aqua": 3666,
-    "fatores_aqua": 2973,
+    "fatores_aqua": 2970,
     "t1_terra": 2176
    }
   },
@@ -70,24 +72,25 @@
    "mes": "2003-03",
    "ano": 2003,
    "mes_num": 3,
-   "focos": 3996,
+   "focos": 4092,
    "origem": "MODIS convertido",
    "qualidade": "completo",
    "modis_bruto": 534,
    "viirs_real": null,
-   "modis_convertido": 3996,
+   "modis_convertido": 4092,
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
-   "anomalia_pct": 31.1,
+   "dias_fracos_viirs": null,
+   "anomalia_pct": 42.8,
    "classe": "acima do normal",
-   "posicao_no_mes": 5,
-   "faixa_inferior": 2044,
-   "faixa_superior": 3996,
+   "posicao_no_mes": 4,
+   "faixa_inferior": 2069,
+   "faixa_superior": 4092,
    "leituras": {
-    "t1_aqua": 3996,
-    "fatores_aqua": 3356,
-    "t1_terra": 2044
+    "t1_aqua": 4092,
+    "fatores_aqua": 3332,
+    "t1_terra": 2069
    }
   },
   {
@@ -103,6 +106,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 170.2,
    "classe": "acima do normal",
    "posicao_no_mes": 1,
@@ -110,7 +114,7 @@
    "faixa_superior": 5309,
    "leituras": {
     "t1_aqua": 5309,
-    "fatores_aqua": 3342,
+    "fatores_aqua": 3340,
     "t1_terra": 2313
    }
   },
@@ -127,6 +131,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 0.4,
    "classe": "normal",
    "posicao_no_mes": 13,
@@ -151,6 +156,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 52.0,
    "classe": "acima do normal",
    "posicao_no_mes": 6,
@@ -158,7 +164,7 @@
    "faixa_superior": 5620,
    "leituras": {
     "t1_aqua": 5620,
-    "fatores_aqua": 4730,
+    "fatores_aqua": 4722,
     "t1_terra": 3624
    }
   },
@@ -175,6 +181,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 63.3,
    "classe": "acima do normal",
    "posicao_no_mes": 5,
@@ -182,7 +189,7 @@
    "faixa_superior": 9314,
    "leituras": {
     "t1_aqua": 9314,
-    "fatores_aqua": 8146,
+    "fatores_aqua": 8134,
     "t1_terra": 6597
    }
   },
@@ -199,6 +206,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 32.3,
    "classe": "normal",
    "posicao_no_mes": 11,
@@ -206,7 +214,7 @@
    "faixa_superior": 14745,
    "leituras": {
     "t1_aqua": 14745,
-    "fatores_aqua": 12677,
+    "fatores_aqua": 12693,
     "t1_terra": 10379
    }
   },
@@ -223,6 +231,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 228.6,
    "classe": "acima do normal",
    "posicao_no_mes": 2,
@@ -247,6 +256,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 64.1,
    "classe": "acima do normal",
    "posicao_no_mes": 7,
@@ -254,7 +264,7 @@
    "faixa_superior": 60833,
    "leituras": {
     "t1_aqua": 60833,
-    "fatores_aqua": 55944,
+    "fatores_aqua": 55843,
     "t1_terra": 36268
    }
   },
@@ -271,6 +281,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 43.9,
    "classe": "normal",
    "posicao_no_mes": 11,
@@ -278,7 +289,7 @@
    "faixa_superior": 8122,
    "leituras": {
     "t1_aqua": 8122,
-    "fatores_aqua": 7697,
+    "fatores_aqua": 7688,
     "t1_terra": 5854
    }
   },
@@ -295,6 +306,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 220.7,
    "classe": "acima do normal",
    "posicao_no_mes": 4,
@@ -302,7 +314,7 @@
    "faixa_superior": 9002,
    "leituras": {
     "t1_aqua": 9002,
-    "fatores_aqua": 6827,
+    "fatores_aqua": 6820,
     "t1_terra": 3834
    }
   },
@@ -319,6 +331,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": -10.1,
    "classe": "normal",
    "posicao_no_mes": 17,
@@ -326,7 +339,7 @@
    "faixa_superior": 2269,
    "leituras": {
     "t1_aqua": 2269,
-    "fatores_aqua": 1815,
+    "fatores_aqua": 1821,
     "t1_terra": 900
    }
   },
@@ -343,6 +356,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": -1.1,
    "classe": "normal",
    "posicao_no_mes": 16,
@@ -358,24 +372,25 @@
    "mes": "2004-03",
    "ano": 2004,
    "mes_num": 3,
-   "focos": 1811,
+   "focos": 1855,
    "origem": "MODIS convertido",
    "qualidade": "completo",
    "modis_bruto": 242,
    "viirs_real": null,
-   "modis_convertido": 1811,
+   "modis_convertido": 1855,
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
-   "anomalia_pct": -40.6,
+   "dias_fracos_viirs": null,
+   "anomalia_pct": -35.3,
    "classe": "abaixo do normal",
    "posicao_no_mes": 20,
-   "faixa_inferior": 913,
-   "faixa_superior": 1876,
+   "faixa_inferior": 924,
+   "faixa_superior": 1864,
    "leituras": {
-    "t1_aqua": 1811,
-    "fatores_aqua": 1876,
-    "t1_terra": 913
+    "t1_aqua": 1855,
+    "fatores_aqua": 1864,
+    "t1_terra": 924
    }
   },
   {
@@ -391,6 +406,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 20.5,
    "classe": "normal",
    "posicao_no_mes": 9,
@@ -415,14 +431,15 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 12.7,
    "classe": "normal",
    "posicao_no_mes": 9,
-   "faixa_inferior": 2416,
+   "faixa_inferior": 2417,
    "faixa_superior": 3139,
    "leituras": {
     "t1_aqua": 3139,
-    "fatores_aqua": 2416,
+    "fatores_aqua": 2417,
     "t1_terra": 2477
    }
   },
@@ -439,14 +456,15 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 8.4,
    "classe": "normal",
    "posicao_no_mes": 12,
-   "faixa_inferior": 3288,
+   "faixa_inferior": 3284,
    "faixa_superior": 4007,
    "leituras": {
     "t1_aqua": 4007,
-    "fatores_aqua": 3288,
+    "fatores_aqua": 3284,
     "t1_terra": 3406
    }
   },
@@ -463,14 +481,15 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 16.2,
    "classe": "normal",
    "posicao_no_mes": 12,
-   "faixa_inferior": 5542,
+   "faixa_inferior": 5539,
    "faixa_superior": 6629,
    "leituras": {
     "t1_aqua": 6629,
-    "fatores_aqua": 5542,
+    "fatores_aqua": 5539,
     "t1_terra": 5642
    }
   },
@@ -487,6 +506,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 63.4,
    "classe": "acima do normal",
    "posicao_no_mes": 6,
@@ -494,7 +514,7 @@
    "faixa_superior": 18220,
    "leituras": {
     "t1_aqua": 18220,
-    "fatores_aqua": 15918,
+    "fatores_aqua": 15907,
     "t1_terra": 13388
    }
   },
@@ -511,6 +531,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 150.8,
    "classe": "acima do normal",
    "posicao_no_mes": 6,
@@ -518,7 +539,7 @@
    "faixa_superior": 77129,
    "leituras": {
     "t1_aqua": 77129,
-    "fatores_aqua": 69998,
+    "fatores_aqua": 69866,
     "t1_terra": 39123
    }
   },
@@ -535,6 +556,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 57.9,
    "classe": "acima do normal",
    "posicao_no_mes": 8,
@@ -542,7 +564,7 @@
    "faixa_superior": 58533,
    "leituras": {
     "t1_aqua": 58533,
-    "fatores_aqua": 50344,
+    "fatores_aqua": 50351,
     "t1_terra": 29702
    }
   },
@@ -559,6 +581,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 319.9,
    "classe": "acima do normal",
    "posicao_no_mes": 3,
@@ -566,7 +589,7 @@
    "faixa_superior": 23700,
    "leituras": {
     "t1_aqua": 23700,
-    "fatores_aqua": 18607,
+    "fatores_aqua": 18599,
     "t1_terra": 13004
    }
   },
@@ -583,6 +606,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 194.3,
    "classe": "acima do normal",
    "posicao_no_mes": 5,
@@ -590,7 +614,7 @@
    "faixa_superior": 8260,
    "leituras": {
     "t1_aqua": 8260,
-    "fatores_aqua": 6310,
+    "fatores_aqua": 6301,
     "t1_terra": 4343
    }
   },
@@ -607,6 +631,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 93.4,
    "classe": "acima do normal",
    "posicao_no_mes": 5,
@@ -614,7 +639,7 @@
    "faixa_superior": 4882,
    "leituras": {
     "t1_aqua": 4882,
-    "fatores_aqua": 3522,
+    "fatores_aqua": 3520,
     "t1_terra": 2576
    }
   },
@@ -631,6 +656,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 35.6,
    "classe": "normal",
    "posicao_no_mes": 11,
@@ -638,7 +664,7 @@
    "faixa_superior": 2565,
    "leituras": {
     "t1_aqua": 2565,
-    "fatores_aqua": 2096,
+    "fatores_aqua": 2101,
     "t1_terra": 1346
    }
   },
@@ -646,24 +672,25 @@
    "mes": "2005-03",
    "ano": 2005,
    "mes_num": 3,
-   "focos": 2514,
+   "focos": 2575,
    "origem": "MODIS convertido",
    "qualidade": "completo",
    "modis_bruto": 336,
    "viirs_real": null,
-   "modis_convertido": 2514,
+   "modis_convertido": 2575,
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
-   "anomalia_pct": -17.5,
+   "dias_fracos_viirs": null,
+   "anomalia_pct": -10.1,
    "classe": "normal",
    "posicao_no_mes": 14,
-   "faixa_inferior": 1209,
-   "faixa_superior": 2514,
+   "faixa_inferior": 1224,
+   "faixa_superior": 2575,
    "leituras": {
-    "t1_aqua": 2514,
-    "fatores_aqua": 2300,
-    "t1_terra": 1209
+    "t1_aqua": 2575,
+    "fatores_aqua": 2288,
+    "t1_terra": 1224
    }
   },
   {
@@ -679,6 +706,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 13.1,
    "classe": "normal",
    "posicao_no_mes": 12,
@@ -686,7 +714,7 @@
    "faixa_superior": 2223,
    "leituras": {
     "t1_aqua": 2223,
-    "fatores_aqua": 1813,
+    "fatores_aqua": 1814,
     "t1_terra": 1304
    }
   },
@@ -703,6 +731,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": -27.9,
    "classe": "abaixo do normal",
    "posicao_no_mes": 20,
@@ -727,6 +756,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": -10.4,
    "classe": "normal",
    "posicao_no_mes": 17,
@@ -751,6 +781,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 28.6,
    "classe": "acima do normal",
    "posicao_no_mes": 9,
@@ -758,7 +789,7 @@
    "faixa_superior": 7337,
    "leituras": {
     "t1_aqua": 7337,
-    "fatores_aqua": 6448,
+    "fatores_aqua": 6442,
     "t1_terra": 4630
    }
   },
@@ -775,6 +806,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 40.2,
    "classe": "acima do normal",
    "posicao_no_mes": 10,
@@ -799,6 +831,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 56.1,
    "classe": "acima do normal",
    "posicao_no_mes": 9,
@@ -806,7 +839,7 @@
    "faixa_superior": 48017,
    "leituras": {
     "t1_aqua": 48017,
-    "fatores_aqua": 42874,
+    "fatores_aqua": 42906,
     "t1_terra": 30463
    }
   },
@@ -823,6 +856,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 194.6,
    "classe": "acima do normal",
    "posicao_no_mes": 1,
@@ -830,7 +864,7 @@
    "faixa_superior": 109195,
    "leituras": {
     "t1_aqua": 109195,
-    "fatores_aqua": 103227,
+    "fatores_aqua": 103172,
     "t1_terra": 65202
    }
   },
@@ -847,6 +881,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 250.0,
    "classe": "acima do normal",
    "posicao_no_mes": 5,
@@ -854,7 +889,7 @@
    "faixa_superior": 19752,
    "leituras": {
     "t1_aqua": 19752,
-    "fatores_aqua": 15409,
+    "fatores_aqua": 15402,
     "t1_terra": 11021
    }
   },
@@ -871,6 +906,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 66.4,
    "classe": "normal",
    "posicao_no_mes": 9,
@@ -878,7 +914,7 @@
    "faixa_superior": 4670,
    "leituras": {
     "t1_aqua": 4670,
-    "fatores_aqua": 3596,
+    "fatores_aqua": 3597,
     "t1_terra": 2593
    }
   },
@@ -895,6 +931,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 79.4,
    "classe": "acima do normal",
    "posicao_no_mes": 6,
@@ -902,7 +939,7 @@
    "faixa_superior": 4528,
    "leituras": {
     "t1_aqua": 4528,
-    "fatores_aqua": 3690,
+    "fatores_aqua": 3684,
     "t1_terra": 3370
    }
   },
@@ -919,6 +956,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 147.1,
    "classe": "acima do normal",
    "posicao_no_mes": 1,
@@ -926,7 +964,7 @@
    "faixa_superior": 4673,
    "leituras": {
     "t1_aqua": 4673,
-    "fatores_aqua": 3643,
+    "fatores_aqua": 3641,
     "t1_terra": 3137
    }
   },
@@ -934,24 +972,25 @@
    "mes": "2006-03",
    "ano": 2006,
    "mes_num": 3,
-   "focos": 2664,
+   "focos": 2728,
    "origem": "MODIS convertido",
    "qualidade": "completo",
    "modis_bruto": 356,
    "viirs_real": null,
-   "modis_convertido": 2664,
+   "modis_convertido": 2728,
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
-   "anomalia_pct": -12.6,
+   "dias_fracos_viirs": null,
+   "anomalia_pct": -4.8,
    "classe": "normal",
    "posicao_no_mes": 13,
-   "faixa_inferior": 1679,
-   "faixa_superior": 2664,
+   "faixa_inferior": 1699,
+   "faixa_superior": 2728,
    "leituras": {
-    "t1_aqua": 2664,
-    "fatores_aqua": 2354,
-    "t1_terra": 1679
+    "t1_aqua": 2728,
+    "fatores_aqua": 2341,
+    "t1_terra": 1699
    }
   },
   {
@@ -967,6 +1006,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": -36.2,
    "classe": "abaixo do normal",
    "posicao_no_mes": 20,
@@ -974,7 +1014,7 @@
    "faixa_superior": 1253,
    "leituras": {
     "t1_aqua": 1253,
-    "fatores_aqua": 1245,
+    "fatores_aqua": 1247,
     "t1_terra": 580
    }
   },
@@ -991,6 +1031,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": -5.0,
    "classe": "normal",
    "posicao_no_mes": 16,
@@ -998,7 +1039,7 @@
    "faixa_superior": 2646,
    "leituras": {
     "t1_aqua": 2646,
-    "fatores_aqua": 2194,
+    "fatores_aqua": 2191,
     "t1_terra": 886
    }
   },
@@ -1015,6 +1056,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": -13.4,
    "classe": "normal",
    "posicao_no_mes": 18,
@@ -1022,7 +1064,7 @@
    "faixa_superior": 3203,
    "leituras": {
     "t1_aqua": 3203,
-    "fatores_aqua": 2800,
+    "fatores_aqua": 2795,
     "t1_terra": 1549
    }
   },
@@ -1039,6 +1081,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 26.0,
    "classe": "normal",
    "posicao_no_mes": 10,
@@ -1046,7 +1089,7 @@
    "faixa_superior": 7189,
    "leituras": {
     "t1_aqua": 7189,
-    "fatores_aqua": 6195,
+    "fatores_aqua": 6186,
     "t1_terra": 3991
    }
   },
@@ -1063,6 +1106,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 53.9,
    "classe": "acima do normal",
    "posicao_no_mes": 7,
@@ -1087,6 +1131,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 19.5,
    "classe": "acima do normal",
    "posicao_no_mes": 11,
@@ -1094,7 +1139,7 @@
    "faixa_superior": 36737,
    "leituras": {
     "t1_aqua": 36737,
-    "fatores_aqua": 28661,
+    "fatores_aqua": 28691,
     "t1_terra": 23165
    }
   },
@@ -1111,6 +1156,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": -38.5,
    "classe": "abaixo do normal",
    "posicao_no_mes": 20,
@@ -1118,7 +1164,7 @@
    "faixa_superior": 22804,
    "leituras": {
     "t1_aqua": 22804,
-    "fatores_aqua": 17408,
+    "fatores_aqua": 17434,
     "t1_terra": 13655
    }
   },
@@ -1135,6 +1181,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 50.7,
    "classe": "acima do normal",
    "posicao_no_mes": 9,
@@ -1142,7 +1189,7 @@
    "faixa_superior": 8507,
    "leituras": {
     "t1_aqua": 8507,
-    "fatores_aqua": 6789,
+    "fatores_aqua": 6787,
     "t1_terra": 3289
    }
   },
@@ -1159,6 +1206,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 93.3,
    "classe": "acima do normal",
    "posicao_no_mes": 7,
@@ -1166,7 +1214,7 @@
    "faixa_superior": 5427,
    "leituras": {
     "t1_aqua": 5427,
-    "fatores_aqua": 4333,
+    "fatores_aqua": 4334,
     "t1_terra": 2056
    }
   },
@@ -1183,6 +1231,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 135.9,
    "classe": "acima do normal",
    "posicao_no_mes": 2,
@@ -1207,6 +1256,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": -8.2,
    "classe": "normal",
    "posicao_no_mes": 18,
@@ -1214,7 +1264,7 @@
    "faixa_superior": 1736,
    "leituras": {
     "t1_aqua": 1736,
-    "fatores_aqua": 1626,
+    "fatores_aqua": 1630,
     "t1_terra": 850
    }
   },
@@ -1222,24 +1272,25 @@
    "mes": "2007-03",
    "ano": 2007,
    "mes_num": 3,
-   "focos": 3135,
+   "focos": 3211,
    "origem": "MODIS convertido",
    "qualidade": "completo",
    "modis_bruto": 419,
    "viirs_real": null,
-   "modis_convertido": 3135,
+   "modis_convertido": 3211,
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
-   "anomalia_pct": 2.9,
+   "dias_fracos_viirs": null,
+   "anomalia_pct": 12.1,
    "classe": "normal",
    "posicao_no_mes": 10,
-   "faixa_inferior": 2114,
-   "faixa_superior": 3135,
+   "faixa_inferior": 2139,
+   "faixa_superior": 3211,
    "leituras": {
-    "t1_aqua": 3135,
-    "fatores_aqua": 2790,
-    "t1_terra": 2114
+    "t1_aqua": 3211,
+    "fatores_aqua": 2770,
+    "t1_terra": 2139
    }
   },
   {
@@ -1255,6 +1306,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 30.1,
    "classe": "normal",
    "posicao_no_mes": 6,
@@ -1279,6 +1331,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 98.1,
    "classe": "acima do normal",
    "posicao_no_mes": 1,
@@ -1286,7 +1339,7 @@
    "faixa_superior": 5516,
    "leituras": {
     "t1_aqua": 5516,
-    "fatores_aqua": 4080,
+    "fatores_aqua": 4078,
     "t1_terra": 2556
    }
   },
@@ -1303,6 +1356,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 151.6,
    "classe": "acima do normal",
    "posicao_no_mes": 1,
@@ -1310,7 +1364,7 @@
    "faixa_superior": 9303,
    "leituras": {
     "t1_aqua": 9303,
-    "fatores_aqua": 7359,
+    "fatores_aqua": 7345,
     "t1_terra": 4313
    }
   },
@@ -1327,6 +1381,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 210.2,
    "classe": "acima do normal",
    "posicao_no_mes": 1,
@@ -1334,7 +1389,7 @@
    "faixa_superior": 17692,
    "leituras": {
     "t1_aqua": 17692,
-    "fatores_aqua": 14602,
+    "fatores_aqua": 14597,
     "t1_terra": 10595
    }
   },
@@ -1351,6 +1406,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 345.9,
    "classe": "acima do normal",
    "posicao_no_mes": 1,
@@ -1358,7 +1414,7 @@
    "faixa_superior": 49712,
    "leituras": {
     "t1_aqua": 49712,
-    "fatores_aqua": 42138,
+    "fatores_aqua": 42065,
     "t1_terra": 33547
    }
   },
@@ -1375,6 +1431,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 259.7,
    "classe": "acima do normal",
    "posicao_no_mes": 1,
@@ -1382,7 +1439,7 @@
    "faixa_superior": 110619,
    "leituras": {
     "t1_aqua": 110619,
-    "fatores_aqua": 100408,
+    "fatores_aqua": 100249,
     "t1_terra": 75255
    }
   },
@@ -1399,6 +1456,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 140.5,
    "classe": "acima do normal",
    "posicao_no_mes": 2,
@@ -1406,7 +1464,7 @@
    "faixa_superior": 89145,
    "leituras": {
     "t1_aqua": 89145,
-    "fatores_aqua": 85984,
+    "fatores_aqua": 85867,
     "t1_terra": 68805
    }
   },
@@ -1423,6 +1481,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 719.3,
    "classe": "acima do normal",
    "posicao_no_mes": 2,
@@ -1430,7 +1489,7 @@
    "faixa_superior": 46243,
    "leituras": {
     "t1_aqua": 46243,
-    "fatores_aqua": 37916,
+    "fatores_aqua": 37904,
     "t1_terra": 35694
    }
   },
@@ -1447,6 +1506,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 250.0,
    "classe": "acima do normal",
    "posicao_no_mes": 3,
@@ -1454,7 +1514,7 @@
    "faixa_superior": 9825,
    "leituras": {
     "t1_aqua": 9825,
-    "fatores_aqua": 6763,
+    "fatores_aqua": 6761,
     "t1_terra": 4741
    }
   },
@@ -1471,6 +1531,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 110.9,
    "classe": "acima do normal",
    "posicao_no_mes": 3,
@@ -1478,7 +1539,7 @@
    "faixa_superior": 5322,
    "leituras": {
     "t1_aqua": 5322,
-    "fatores_aqua": 4028,
+    "fatores_aqua": 4021,
     "t1_terra": 2488
    }
   },
@@ -1495,6 +1556,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 67.0,
    "classe": "normal",
    "posicao_no_mes": 9,
@@ -1502,7 +1564,7 @@
    "faixa_superior": 3158,
    "leituras": {
     "t1_aqua": 3158,
-    "fatores_aqua": 2654,
+    "fatores_aqua": 2655,
     "t1_terra": 1751
    }
   },
@@ -1510,24 +1572,25 @@
    "mes": "2008-03",
    "ano": 2008,
    "mes_num": 3,
-   "focos": 2125,
+   "focos": 2176,
    "origem": "MODIS convertido",
    "qualidade": "completo",
    "modis_bruto": 284,
    "viirs_real": null,
-   "modis_convertido": 2125,
+   "modis_convertido": 2176,
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
-   "anomalia_pct": -30.3,
+   "dias_fracos_viirs": null,
+   "anomalia_pct": -24.0,
    "classe": "normal",
    "posicao_no_mes": 16,
-   "faixa_inferior": 1009,
-   "faixa_superior": 2125,
+   "faixa_inferior": 1021,
+   "faixa_superior": 2176,
    "leituras": {
-    "t1_aqua": 2125,
-    "fatores_aqua": 2122,
-    "t1_terra": 1009
+    "t1_aqua": 2176,
+    "fatores_aqua": 2109,
+    "t1_terra": 1021
    }
   },
   {
@@ -1543,6 +1606,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 29.4,
    "classe": "normal",
    "posicao_no_mes": 7,
@@ -1550,7 +1614,7 @@
    "faixa_superior": 2542,
    "leituras": {
     "t1_aqua": 2542,
-    "fatores_aqua": 1917,
+    "fatores_aqua": 1919,
     "t1_terra": 995
    }
   },
@@ -1567,6 +1631,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": -0.3,
    "classe": "normal",
    "posicao_no_mes": 14,
@@ -1574,7 +1639,7 @@
    "faixa_superior": 2777,
    "leituras": {
     "t1_aqua": 2777,
-    "fatores_aqua": 2436,
+    "fatores_aqua": 2432,
     "t1_terra": 1542
    }
   },
@@ -1591,6 +1656,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": -3.8,
    "classe": "normal",
    "posicao_no_mes": 14,
@@ -1598,7 +1664,7 @@
    "faixa_superior": 3556,
    "leituras": {
     "t1_aqua": 3556,
-    "fatores_aqua": 3360,
+    "fatores_aqua": 3354,
     "t1_terra": 2819
    }
   },
@@ -1615,6 +1681,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 15.4,
    "classe": "normal",
    "posicao_no_mes": 13,
@@ -1622,7 +1689,7 @@
    "faixa_superior": 6583,
    "leituras": {
     "t1_aqua": 6583,
-    "fatores_aqua": 6096,
+    "fatores_aqua": 6083,
     "t1_terra": 4995
    }
   },
@@ -1639,6 +1706,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 12.9,
    "classe": "normal",
    "posicao_no_mes": 14,
@@ -1646,7 +1714,7 @@
    "faixa_superior": 12588,
    "leituras": {
     "t1_aqua": 12588,
-    "fatores_aqua": 12100,
+    "fatores_aqua": 12094,
     "t1_terra": 11341
    }
   },
@@ -1663,6 +1731,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 51.1,
    "classe": "acima do normal",
    "posicao_no_mes": 10,
@@ -1670,7 +1739,7 @@
    "faixa_superior": 46458,
    "leituras": {
     "t1_aqua": 46458,
-    "fatores_aqua": 41600,
+    "fatores_aqua": 41605,
     "t1_terra": 26358
    }
   },
@@ -1687,6 +1756,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 131.6,
    "classe": "acima do normal",
    "posicao_no_mes": 3,
@@ -1694,7 +1764,7 @@
    "faixa_superior": 85841,
    "leituras": {
     "t1_aqua": 85841,
-    "fatores_aqua": 83430,
+    "fatores_aqua": 83335,
     "t1_terra": 55819
    }
   },
@@ -1711,6 +1781,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 781.2,
    "classe": "acima do normal",
    "posicao_no_mes": 1,
@@ -1718,7 +1789,7 @@
    "faixa_superior": 49737,
    "leituras": {
     "t1_aqua": 49737,
-    "fatores_aqua": 35183,
+    "fatores_aqua": 35205,
     "t1_terra": 32310
    }
   },
@@ -1735,6 +1806,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": -12.3,
    "classe": "normal",
    "posicao_no_mes": 16,
@@ -1742,7 +1814,7 @@
    "faixa_superior": 2462,
    "leituras": {
     "t1_aqua": 2462,
-    "fatores_aqua": 2453,
+    "fatores_aqua": 2455,
     "t1_terra": 1472
    }
   },
@@ -1759,6 +1831,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 32.4,
    "classe": "acima do normal",
    "posicao_no_mes": 9,
@@ -1766,7 +1839,7 @@
    "faixa_superior": 3341,
    "leituras": {
     "t1_aqua": 3341,
-    "fatores_aqua": 2626,
+    "fatores_aqua": 2627,
     "t1_terra": 1782
    }
   },
@@ -1783,6 +1856,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 27.6,
    "classe": "normal",
    "posicao_no_mes": 13,
@@ -1798,24 +1872,25 @@
    "mes": "2009-03",
    "ano": 2009,
    "mes_num": 3,
-   "focos": 3397,
+   "focos": 3479,
    "origem": "MODIS convertido",
    "qualidade": "completo",
    "modis_bruto": 454,
    "viirs_real": null,
-   "modis_convertido": 3397,
+   "modis_convertido": 3479,
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
-   "anomalia_pct": 11.5,
+   "dias_fracos_viirs": null,
+   "anomalia_pct": 21.4,
    "classe": "normal",
    "posicao_no_mes": 7,
-   "faixa_inferior": 2366,
-   "faixa_superior": 3397,
+   "faixa_inferior": 2395,
+   "faixa_superior": 3479,
    "leituras": {
-    "t1_aqua": 3397,
-    "fatores_aqua": 3115,
-    "t1_terra": 2366
+    "t1_aqua": 3479,
+    "fatores_aqua": 3095,
+    "t1_terra": 2395
    }
   },
   {
@@ -1831,14 +1906,15 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": -65.3,
    "classe": "abaixo do normal",
    "posicao_no_mes": 24,
    "faixa_inferior": 625,
-   "faixa_superior": 1035,
+   "faixa_superior": 1037,
    "leituras": {
     "t1_aqua": 681,
-    "fatores_aqua": 1035,
+    "fatores_aqua": 1037,
     "t1_terra": 625
    }
   },
@@ -1855,6 +1931,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": -64.2,
    "classe": "abaixo do normal",
    "posicao_no_mes": 24,
@@ -1879,6 +1956,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": -51.7,
    "classe": "abaixo do normal",
    "posicao_no_mes": 24,
@@ -1903,6 +1981,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": -13.7,
    "classe": "normal",
    "posicao_no_mes": 20,
@@ -1910,7 +1989,7 @@
    "faixa_superior": 4920,
    "leituras": {
     "t1_aqua": 4920,
-    "fatores_aqua": 4608,
+    "fatores_aqua": 4612,
     "t1_terra": 3920
    }
   },
@@ -1927,6 +2006,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": -36.1,
    "classe": "abaixo do normal",
    "posicao_no_mes": 23,
@@ -1934,7 +2014,7 @@
    "faixa_superior": 7337,
    "leituras": {
     "t1_aqua": 7121,
-    "fatores_aqua": 7153,
+    "fatores_aqua": 7160,
     "t1_terra": 7337
    }
   },
@@ -1951,6 +2031,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 9.2,
    "classe": "normal",
    "posicao_no_mes": 14,
@@ -1958,7 +2039,7 @@
    "faixa_superior": 33572,
    "leituras": {
     "t1_aqua": 33572,
-    "fatores_aqua": 29540,
+    "fatores_aqua": 29586,
     "t1_terra": 26082
    }
   },
@@ -1975,6 +2056,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": -27.9,
    "classe": "normal",
    "posicao_no_mes": 16,
@@ -1982,7 +2064,7 @@
    "faixa_superior": 26714,
    "leituras": {
     "t1_aqua": 26714,
-    "fatores_aqua": 19371,
+    "fatores_aqua": 19432,
     "t1_terra": 13104
    }
   },
@@ -1999,6 +2081,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 34.2,
    "classe": "normal",
    "posicao_no_mes": 12,
@@ -2006,7 +2089,7 @@
    "faixa_superior": 7577,
    "leituras": {
     "t1_aqua": 7577,
-    "fatores_aqua": 7476,
+    "fatores_aqua": 7459,
     "t1_terra": 5787
    }
   },
@@ -2023,6 +2106,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 43.5,
    "classe": "normal",
    "posicao_no_mes": 12,
@@ -2030,7 +2114,7 @@
    "faixa_superior": 4027,
    "leituras": {
     "t1_aqua": 4027,
-    "fatores_aqua": 3619,
+    "fatores_aqua": 3615,
     "t1_terra": 2500
    }
   },
@@ -2047,6 +2131,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 105.5,
    "classe": "acima do normal",
    "posicao_no_mes": 4,
@@ -2054,7 +2139,7 @@
    "faixa_superior": 5188,
    "leituras": {
     "t1_aqua": 5188,
-    "fatores_aqua": 3845,
+    "fatores_aqua": 3839,
     "t1_terra": 2867
    }
   },
@@ -2071,6 +2156,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 97.5,
    "classe": "acima do normal",
    "posicao_no_mes": 5,
@@ -2078,7 +2164,7 @@
    "faixa_superior": 3734,
    "leituras": {
     "t1_aqua": 3734,
-    "fatores_aqua": 3222,
+    "fatores_aqua": 3223,
     "t1_terra": 3006
    }
   },
@@ -2086,24 +2172,25 @@
    "mes": "2010-03",
    "ano": 2010,
    "mes_num": 3,
-   "focos": 2162,
+   "focos": 2215,
    "origem": "MODIS convertido",
    "qualidade": "completo",
    "modis_bruto": 289,
    "viirs_real": null,
-   "modis_convertido": 2162,
+   "modis_convertido": 2215,
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
-   "anomalia_pct": -29.0,
+   "dias_fracos_viirs": null,
+   "anomalia_pct": -22.7,
    "classe": "normal",
    "posicao_no_mes": 15,
-   "faixa_inferior": 1366,
-   "faixa_superior": 2162,
+   "faixa_inferior": 1382,
+   "faixa_superior": 2215,
    "leituras": {
-    "t1_aqua": 2162,
-    "fatores_aqua": 2138,
-    "t1_terra": 1366
+    "t1_aqua": 2215,
+    "fatores_aqua": 2129,
+    "t1_terra": 1382
    }
   },
   {
@@ -2119,6 +2206,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 6.5,
    "classe": "normal",
    "posicao_no_mes": 15,
@@ -2126,7 +2214,7 @@
    "faixa_superior": 2093,
    "leituras": {
     "t1_aqua": 2093,
-    "fatores_aqua": 1777,
+    "fatores_aqua": 1778,
     "t1_terra": 1364
    }
   },
@@ -2143,6 +2231,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 12.7,
    "classe": "normal",
    "posicao_no_mes": 9,
@@ -2150,7 +2239,7 @@
    "faixa_superior": 3139,
    "leituras": {
     "t1_aqua": 3139,
-    "fatores_aqua": 2713,
+    "fatores_aqua": 2717,
     "t1_terra": 1682
    }
   },
@@ -2167,6 +2256,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 97.3,
    "classe": "acima do normal",
    "posicao_no_mes": 2,
@@ -2174,7 +2264,7 @@
    "faixa_superior": 7296,
    "leituras": {
     "t1_aqua": 7296,
-    "fatores_aqua": 5958,
+    "fatores_aqua": 5953,
     "t1_terra": 3847
    }
   },
@@ -2191,6 +2281,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 97.6,
    "classe": "acima do normal",
    "posicao_no_mes": 3,
@@ -2198,7 +2289,7 @@
    "faixa_superior": 11269,
    "leituras": {
     "t1_aqua": 11269,
-    "fatores_aqua": 9499,
+    "fatores_aqua": 9501,
     "t1_terra": 7250
    }
   },
@@ -2215,6 +2306,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 226.7,
    "classe": "acima do normal",
    "posicao_no_mes": 2,
@@ -2222,7 +2314,7 @@
    "faixa_superior": 36417,
    "leituras": {
     "t1_aqua": 36417,
-    "fatores_aqua": 32534,
+    "fatores_aqua": 32485,
     "t1_terra": 25805
    }
   },
@@ -2239,6 +2331,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 153.1,
    "classe": "acima do normal",
    "posicao_no_mes": 5,
@@ -2246,7 +2339,7 @@
    "faixa_superior": 77829,
    "leituras": {
     "t1_aqua": 77829,
-    "fatores_aqua": 73838,
+    "fatores_aqua": 73756,
     "t1_terra": 63420
    }
   },
@@ -2263,6 +2356,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 73.4,
    "classe": "acima do normal",
    "posicao_no_mes": 6,
@@ -2270,7 +2364,7 @@
    "faixa_superior": 64284,
    "leituras": {
     "t1_aqua": 64284,
-    "fatores_aqua": 54642,
+    "fatores_aqua": 54730,
     "t1_terra": 48116
    }
   },
@@ -2287,6 +2381,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 48.6,
    "classe": "acima do normal",
    "posicao_no_mes": 10,
@@ -2294,7 +2389,7 @@
    "faixa_superior": 8386,
    "leituras": {
     "t1_aqua": 8386,
-    "fatores_aqua": 8019,
+    "fatores_aqua": 8010,
     "t1_terra": 5348
    }
   },
@@ -2311,6 +2406,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 15.0,
    "classe": "normal",
    "posicao_no_mes": 15,
@@ -2318,7 +2414,7 @@
    "faixa_superior": 3228,
    "leituras": {
     "t1_aqua": 3228,
-    "fatores_aqua": 2918,
+    "fatores_aqua": 2921,
     "t1_terra": 2343
    }
   },
@@ -2335,6 +2431,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": -5.9,
    "classe": "normal",
    "posicao_no_mes": 16,
@@ -2342,7 +2439,7 @@
    "faixa_superior": 2374,
    "leituras": {
     "t1_aqua": 2374,
-    "fatores_aqua": 2226,
+    "fatores_aqua": 2225,
     "t1_terra": 1129
    }
   },
@@ -2359,6 +2456,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 28.9,
    "classe": "normal",
    "posicao_no_mes": 12,
@@ -2366,7 +2464,7 @@
    "faixa_superior": 2438,
    "leituras": {
     "t1_aqua": 2438,
-    "fatores_aqua": 2423,
+    "fatores_aqua": 2422,
     "t1_terra": 1943
    }
   },
@@ -2374,24 +2472,25 @@
    "mes": "2011-03",
    "ano": 2011,
    "mes_num": 3,
-   "focos": 1796,
+   "focos": 1839,
    "origem": "MODIS convertido",
    "qualidade": "completo",
    "modis_bruto": 240,
    "viirs_real": null,
-   "modis_convertido": 1796,
+   "modis_convertido": 1839,
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
-   "anomalia_pct": -41.1,
+   "dias_fracos_viirs": null,
+   "anomalia_pct": -35.8,
    "classe": "abaixo do normal",
    "posicao_no_mes": 21,
-   "faixa_inferior": 1087,
-   "faixa_superior": 1919,
+   "faixa_inferior": 1100,
+   "faixa_superior": 1909,
    "leituras": {
-    "t1_aqua": 1796,
-    "fatores_aqua": 1919,
-    "t1_terra": 1087
+    "t1_aqua": 1839,
+    "fatores_aqua": 1909,
+    "t1_terra": 1100
    }
   },
   {
@@ -2407,6 +2506,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 8.3,
    "classe": "normal",
    "posicao_no_mes": 14,
@@ -2414,7 +2514,7 @@
    "faixa_superior": 2129,
    "leituras": {
     "t1_aqua": 2129,
-    "fatores_aqua": 1782,
+    "fatores_aqua": 1783,
     "t1_terra": 1424
    }
   },
@@ -2431,14 +2531,15 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 1.4,
    "classe": "normal",
    "posicao_no_mes": 12,
-   "faixa_inferior": 2440,
+   "faixa_inferior": 2439,
    "faixa_superior": 2823,
    "leituras": {
     "t1_aqua": 2823,
-    "fatores_aqua": 2440,
+    "fatores_aqua": 2439,
     "t1_terra": 2653
    }
   },
@@ -2455,6 +2556,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 52.4,
    "classe": "acima do normal",
    "posicao_no_mes": 5,
@@ -2462,7 +2564,7 @@
    "faixa_superior": 5637,
    "leituras": {
     "t1_aqua": 5637,
-    "fatores_aqua": 4714,
+    "fatores_aqua": 4712,
     "t1_terra": 4525
    }
   },
@@ -2479,6 +2581,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 49.7,
    "classe": "acima do normal",
    "posicao_no_mes": 6,
@@ -2486,7 +2589,7 @@
    "faixa_superior": 8537,
    "leituras": {
     "t1_aqua": 8537,
-    "fatores_aqua": 7508,
+    "fatores_aqua": 7503,
     "t1_terra": 7138
    }
   },
@@ -2503,6 +2606,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 105.0,
    "classe": "acima do normal",
    "posicao_no_mes": 4,
@@ -2510,7 +2614,7 @@
    "faixa_superior": 22848,
    "leituras": {
     "t1_aqua": 22848,
-    "fatores_aqua": 20913,
+    "fatores_aqua": 20917,
     "t1_terra": 20232
    }
   },
@@ -2527,6 +2631,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 163.4,
    "classe": "acima do normal",
    "posicao_no_mes": 3,
@@ -2534,7 +2639,7 @@
    "faixa_superior": 80994,
    "leituras": {
     "t1_aqua": 80994,
-    "fatores_aqua": 79798,
+    "fatores_aqua": 79591,
     "t1_terra": 63236
    }
   },
@@ -2551,6 +2656,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": -33.0,
    "classe": "normal",
    "posicao_no_mes": 18,
@@ -2558,7 +2664,7 @@
    "faixa_superior": 24829,
    "leituras": {
     "t1_aqua": 24829,
-    "fatores_aqua": 20681,
+    "fatores_aqua": 20693,
     "t1_terra": 20337
    }
   },
@@ -2575,14 +2681,15 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": -54.3,
    "classe": "abaixo do normal",
    "posicao_no_mes": 23,
    "faixa_inferior": 2383,
-   "faixa_superior": 3301,
+   "faixa_superior": 3295,
    "leituras": {
     "t1_aqua": 2579,
-    "fatores_aqua": 3301,
+    "fatores_aqua": 3295,
     "t1_terra": 2383
    }
   },
@@ -2599,6 +2706,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 18.8,
    "classe": "normal",
    "posicao_no_mes": 14,
@@ -2606,7 +2714,7 @@
    "faixa_superior": 3335,
    "leituras": {
     "t1_aqua": 3335,
-    "fatores_aqua": 3250,
+    "fatores_aqua": 3249,
     "t1_terra": 2676
    }
   },
@@ -2623,6 +2731,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": null,
+   "dias_fracos_viirs": null,
    "anomalia_pct": 24.8,
    "classe": "acima do normal",
    "posicao_no_mes": 10,
@@ -2630,7 +2739,7 @@
    "faixa_superior": 3149,
    "leituras": {
     "t1_aqua": 3149,
-    "fatores_aqua": 2754,
+    "fatores_aqua": 2750,
     "t1_terra": 1941
    }
   },
@@ -2647,6 +2756,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 102.7,
    "classe": "acima do normal",
    "posicao_no_mes": 3,
@@ -2657,18 +2767,19 @@
    "mes": "2012-03",
    "ano": 2012,
    "mes_num": 3,
-   "focos": 4798,
-   "origem": "VIIRS",
-   "qualidade": "completo",
+   "focos": 5518,
+   "origem": "MODIS convertido (VIIRS incompleto)",
+   "qualidade": "corrigido",
    "modis_bruto": 720,
    "viirs_real": 4798,
-   "modis_convertido": 5387,
+   "modis_convertido": 5518,
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 1,
-   "anomalia_pct": 57.5,
+   "dias_fracos_viirs": 2,
+   "anomalia_pct": 92.6,
    "classe": "acima do normal",
-   "posicao_no_mes": 2,
+   "posicao_no_mes": 1,
    "faixa_inferior": null,
    "faixa_superior": null
   },
@@ -2685,6 +2796,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 120.8,
    "classe": "acima do normal",
    "posicao_no_mes": 2,
@@ -2704,6 +2816,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 43.3,
    "classe": "acima do normal",
    "posicao_no_mes": 5,
@@ -2723,6 +2836,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 50.2,
    "classe": "acima do normal",
    "posicao_no_mes": 7,
@@ -2742,6 +2856,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 108.1,
    "classe": "acima do normal",
    "posicao_no_mes": 2,
@@ -2761,6 +2876,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 105.1,
    "classe": "acima do normal",
    "posicao_no_mes": 3,
@@ -2780,6 +2896,7 @@
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 1,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 146.8,
    "classe": "acima do normal",
    "posicao_no_mes": 7,
@@ -2799,6 +2916,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 81.1,
    "classe": "acima do normal",
    "posicao_no_mes": 4,
@@ -2818,6 +2936,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -35.7,
    "classe": "normal",
    "posicao_no_mes": 18,
@@ -2837,6 +2956,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 139.2,
    "classe": "acima do normal",
    "posicao_no_mes": 6,
@@ -2856,6 +2976,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 13.6,
    "classe": "normal",
    "posicao_no_mes": 12,
@@ -2875,6 +2996,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 72.3,
    "classe": "normal",
    "posicao_no_mes": 8,
@@ -2890,11 +3012,12 @@
    "qualidade": "completo",
    "modis_bruto": 606,
    "viirs_real": 4264,
-   "modis_convertido": 4534,
+   "modis_convertido": 4644,
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
-   "anomalia_pct": 39.9,
+   "dias_fracos_viirs": 0,
+   "anomalia_pct": 48.8,
    "classe": "acima do normal",
    "posicao_no_mes": 3,
    "faixa_inferior": null,
@@ -2913,6 +3036,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -12.2,
    "classe": "normal",
    "posicao_no_mes": 17,
@@ -2932,6 +3056,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -7.4,
    "classe": "normal",
    "posicao_no_mes": 17,
@@ -2951,6 +3076,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -4.5,
    "classe": "normal",
    "posicao_no_mes": 15,
@@ -2970,6 +3096,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 0.5,
    "classe": "normal",
    "posicao_no_mes": 15,
@@ -2989,6 +3116,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -9.6,
    "classe": "abaixo do normal",
    "posicao_no_mes": 20,
@@ -3008,6 +3136,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -9.5,
    "classe": "abaixo do normal",
    "posicao_no_mes": 20,
@@ -3027,6 +3156,7 @@
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 1,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -38.6,
    "classe": "abaixo do normal",
    "posicao_no_mes": 21,
@@ -3046,6 +3176,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -1.8,
    "classe": "normal",
    "posicao_no_mes": 16,
@@ -3065,6 +3196,7 @@
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 1,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -52.1,
    "classe": "abaixo do normal",
    "posicao_no_mes": 22,
@@ -3084,6 +3216,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 0.0,
    "classe": "normal",
    "posicao_no_mes": 15,
@@ -3103,6 +3236,7 @@
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 1,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -13.4,
    "classe": "normal",
    "posicao_no_mes": 20,
@@ -3118,12 +3252,13 @@
    "qualidade": "completo",
    "modis_bruto": 259,
    "viirs_real": 2020,
-   "modis_convertido": 1938,
+   "modis_convertido": 1985,
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 1,
    "dias_sem_dado_viirs": 0,
-   "anomalia_pct": -33.7,
-   "classe": "abaixo do normal",
+   "dias_fracos_viirs": 0,
+   "anomalia_pct": -29.5,
+   "classe": "normal",
    "posicao_no_mes": 18,
    "faixa_inferior": null,
    "faixa_superior": null
@@ -3141,6 +3276,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 13.6,
    "classe": "normal",
    "posicao_no_mes": 11,
@@ -3160,6 +3296,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -3.1,
    "classe": "normal",
    "posicao_no_mes": 15,
@@ -3179,6 +3316,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -8.0,
    "classe": "normal",
    "posicao_no_mes": 16,
@@ -3198,6 +3336,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -10.0,
    "classe": "normal",
    "posicao_no_mes": 18,
@@ -3217,6 +3356,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 1,
    "anomalia_pct": 1.8,
    "classe": "normal",
    "posicao_no_mes": 16,
@@ -3236,6 +3376,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 1,
    "anomalia_pct": 1.5,
    "classe": "normal",
    "posicao_no_mes": 16,
@@ -3255,6 +3396,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -3.5,
    "classe": "normal",
    "posicao_no_mes": 15,
@@ -3274,6 +3416,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 1.8,
    "classe": "normal",
    "posicao_no_mes": 15,
@@ -3293,6 +3436,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -28.9,
    "classe": "normal",
    "posicao_no_mes": 18,
@@ -3312,6 +3456,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 52.1,
    "classe": "acima do normal",
    "posicao_no_mes": 7,
@@ -3331,6 +3476,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -1.9,
    "classe": "normal",
    "posicao_no_mes": 17,
@@ -3346,11 +3492,12 @@
    "qualidade": "completo",
    "modis_bruto": 243,
    "viirs_real": 1962,
-   "modis_convertido": 1818,
+   "modis_convertido": 1862,
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
-   "anomalia_pct": -35.6,
+   "dias_fracos_viirs": 1,
+   "anomalia_pct": -31.5,
    "classe": "abaixo do normal",
    "posicao_no_mes": 19,
    "faixa_inferior": null,
@@ -3369,6 +3516,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -10.5,
    "classe": "normal",
    "posicao_no_mes": 16,
@@ -3388,6 +3536,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -34.4,
    "classe": "abaixo do normal",
    "posicao_no_mes": 21,
@@ -3407,6 +3556,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -20.2,
    "classe": "abaixo do normal",
    "posicao_no_mes": 21,
@@ -3426,6 +3576,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -19.9,
    "classe": "abaixo do normal",
    "posicao_no_mes": 21,
@@ -3445,6 +3596,7 @@
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 1,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -8.1,
    "classe": "normal",
    "posicao_no_mes": 19,
@@ -3464,6 +3616,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 142.5,
    "classe": "acima do normal",
    "posicao_no_mes": 8,
@@ -3483,6 +3636,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 75.0,
    "classe": "acima do normal",
    "posicao_no_mes": 5,
@@ -3502,6 +3656,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 271.4,
    "classe": "acima do normal",
    "posicao_no_mes": 4,
@@ -3521,6 +3676,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 345.9,
    "classe": "acima do normal",
    "posicao_no_mes": 1,
@@ -3540,6 +3696,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -17.0,
    "classe": "abaixo do normal",
    "posicao_no_mes": 22,
@@ -3559,6 +3716,7 @@
    "dias_sem_dado_aqua": 2,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 100.3,
    "classe": "acima do normal",
    "posicao_no_mes": 4,
@@ -3574,11 +3732,12 @@
    "qualidade": "completo",
    "modis_bruto": 341,
    "viirs_real": 3229,
-   "modis_convertido": 2551,
+   "modis_convertido": 2613,
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 1,
    "dias_sem_dado_viirs": 0,
-   "anomalia_pct": 6.0,
+   "dias_fracos_viirs": 0,
+   "anomalia_pct": 12.7,
    "classe": "normal",
    "posicao_no_mes": 8,
    "faixa_inferior": null,
@@ -3597,6 +3756,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 43.9,
    "classe": "acima do normal",
    "posicao_no_mes": 5,
@@ -3616,6 +3776,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 3.1,
    "classe": "normal",
    "posicao_no_mes": 11,
@@ -3635,6 +3796,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 15.8,
    "classe": "normal",
    "posicao_no_mes": 11,
@@ -3654,6 +3816,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -0.5,
    "classe": "normal",
    "posicao_no_mes": 16,
@@ -3673,6 +3836,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 8.6,
    "classe": "normal",
    "posicao_no_mes": 15,
@@ -3692,6 +3856,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -39.6,
    "classe": "abaixo do normal",
    "posicao_no_mes": 23,
@@ -3711,6 +3876,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -52.2,
    "classe": "abaixo do normal",
    "posicao_no_mes": 24,
@@ -3730,6 +3896,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 12.0,
    "classe": "normal",
    "posicao_no_mes": 13,
@@ -3749,6 +3916,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -21.5,
    "classe": "normal",
    "posicao_no_mes": 17,
@@ -3768,6 +3936,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 7.3,
    "classe": "normal",
    "posicao_no_mes": 14,
@@ -3787,6 +3956,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -39.6,
    "classe": "abaixo do normal",
    "posicao_no_mes": 23,
@@ -3802,11 +3972,12 @@
    "qualidade": "completo",
    "modis_bruto": 255,
    "viirs_real": 2084,
-   "modis_convertido": 1908,
+   "modis_convertido": 1954,
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 1,
    "dias_sem_dado_viirs": 0,
-   "anomalia_pct": -31.6,
+   "dias_fracos_viirs": 0,
+   "anomalia_pct": -27.3,
    "classe": "normal",
    "posicao_no_mes": 17,
    "faixa_inferior": null,
@@ -3825,6 +3996,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -34.5,
    "classe": "abaixo do normal",
    "posicao_no_mes": 19,
@@ -3844,6 +4016,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -20.2,
    "classe": "normal",
    "posicao_no_mes": 18,
@@ -3863,6 +4036,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -20.4,
    "classe": "abaixo do normal",
    "posicao_no_mes": 22,
@@ -3882,6 +4056,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -44.9,
    "classe": "abaixo do normal",
    "posicao_no_mes": 24,
@@ -3901,6 +4076,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -12.7,
    "classe": "abaixo do normal",
    "posicao_no_mes": 21,
@@ -3920,6 +4096,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -45.4,
    "classe": "abaixo do normal",
    "posicao_no_mes": 24,
@@ -3939,6 +4116,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 0.9,
    "classe": "normal",
    "posicao_no_mes": 12,
@@ -3958,6 +4136,7 @@
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 1,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -38.0,
    "classe": "abaixo do normal",
    "posicao_no_mes": 19,
@@ -3977,6 +4156,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -45.0,
    "classe": "abaixo do normal",
    "posicao_no_mes": 21,
@@ -3996,6 +4176,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -38.7,
    "classe": "abaixo do normal",
    "posicao_no_mes": 24,
@@ -4015,6 +4196,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -49.0,
    "classe": "abaixo do normal",
    "posicao_no_mes": 24,
@@ -4030,11 +4212,12 @@
    "qualidade": "completo",
    "modis_bruto": 190,
    "viirs_real": 1330,
-   "modis_convertido": 1422,
+   "modis_convertido": 1456,
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
-   "anomalia_pct": -56.4,
+   "dias_fracos_viirs": 0,
+   "anomalia_pct": -53.6,
    "classe": "abaixo do normal",
    "posicao_no_mes": 23,
    "faixa_inferior": null,
@@ -4053,6 +4236,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -56.7,
    "classe": "abaixo do normal",
    "posicao_no_mes": 23,
@@ -4072,6 +4256,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -35.0,
    "classe": "abaixo do normal",
    "posicao_no_mes": 22,
@@ -4091,6 +4276,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -15.8,
    "classe": "normal",
    "posicao_no_mes": 19,
@@ -4110,6 +4296,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -29.2,
    "classe": "abaixo do normal",
    "posicao_no_mes": 23,
@@ -4129,6 +4316,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -27.7,
    "classe": "abaixo do normal",
    "posicao_no_mes": 22,
@@ -4148,6 +4336,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -8.0,
    "classe": "normal",
    "posicao_no_mes": 18,
@@ -4167,6 +4356,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -44.9,
    "classe": "abaixo do normal",
    "posicao_no_mes": 23,
@@ -4186,6 +4376,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -46.8,
    "classe": "abaixo do normal",
    "posicao_no_mes": 20,
@@ -4205,6 +4396,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -40.4,
    "classe": "abaixo do normal",
    "posicao_no_mes": 20,
@@ -4224,6 +4416,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 14.9,
    "classe": "acima do normal",
    "posicao_no_mes": 11,
@@ -4243,6 +4436,7 @@
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 1,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 120.8,
    "classe": "acima do normal",
    "posicao_no_mes": 2,
@@ -4258,13 +4452,14 @@
    "qualidade": "completo",
    "modis_bruto": 552,
    "viirs_real": 4090,
-   "modis_convertido": 4130,
+   "modis_convertido": 4230,
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
-   "anomalia_pct": 34.2,
+   "dias_fracos_viirs": 1,
+   "anomalia_pct": 42.8,
    "classe": "acima do normal",
-   "posicao_no_mes": 4,
+   "posicao_no_mes": 5,
    "faixa_inferior": null,
    "faixa_superior": null
   },
@@ -4281,6 +4476,7 @@
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 1,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -43.7,
    "classe": "abaixo do normal",
    "posicao_no_mes": 21,
@@ -4300,6 +4496,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -22.6,
    "classe": "abaixo do normal",
    "posicao_no_mes": 19,
@@ -4319,6 +4516,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -27.7,
    "classe": "abaixo do normal",
    "posicao_no_mes": 23,
@@ -4338,6 +4536,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -10.4,
    "classe": "normal",
    "posicao_no_mes": 19,
@@ -4357,6 +4556,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -3.9,
    "classe": "normal",
    "posicao_no_mes": 18,
@@ -4376,6 +4576,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -8.4,
    "classe": "normal",
    "posicao_no_mes": 19,
@@ -4395,6 +4596,7 @@
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 1,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -28.1,
    "classe": "normal",
    "posicao_no_mes": 17,
@@ -4414,6 +4616,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 183.3,
    "classe": "acima do normal",
    "posicao_no_mes": 7,
@@ -4433,6 +4636,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 72.1,
    "classe": "acima do normal",
    "posicao_no_mes": 8,
@@ -4452,6 +4656,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -12.5,
    "classe": "normal",
    "posicao_no_mes": 20,
@@ -4471,6 +4676,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -16.8,
    "classe": "abaixo do normal",
    "posicao_no_mes": 21,
@@ -4486,11 +4692,12 @@
    "qualidade": "completo",
    "modis_bruto": 122,
    "viirs_real": 788,
-   "modis_convertido": 913,
+   "modis_convertido": 935,
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
-   "anomalia_pct": -74.1,
+   "dias_fracos_viirs": 0,
+   "anomalia_pct": -72.5,
    "classe": "abaixo do normal",
    "posicao_no_mes": 24,
    "faixa_inferior": null,
@@ -4509,6 +4716,7 @@
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 1,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -54.1,
    "classe": "abaixo do normal",
    "posicao_no_mes": 22,
@@ -4528,6 +4736,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -48.0,
    "classe": "abaixo do normal",
    "posicao_no_mes": 23,
@@ -4547,6 +4756,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -19.4,
    "classe": "abaixo do normal",
    "posicao_no_mes": 20,
@@ -4566,6 +4776,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -22.1,
    "classe": "abaixo do normal",
    "posicao_no_mes": 22,
@@ -4585,6 +4796,7 @@
    "dias_sem_dado_aqua": 6,
    "dias_degradados_aqua": 5,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -39.2,
    "classe": "abaixo do normal",
    "posicao_no_mes": 24,
@@ -4604,6 +4816,7 @@
    "dias_sem_dado_aqua": 2,
    "dias_degradados_aqua": 2,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -16.7,
    "classe": "abaixo do normal",
    "posicao_no_mes": 21,
@@ -4623,6 +4836,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 10.0,
    "classe": "normal",
    "posicao_no_mes": 11,
@@ -4642,6 +4856,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 2.9,
    "classe": "normal",
    "posicao_no_mes": 14,
@@ -4661,6 +4876,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 64.2,
    "classe": "normal",
    "posicao_no_mes": 10,
@@ -4680,6 +4896,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 35.5,
    "classe": "acima do normal",
    "posicao_no_mes": 8,
@@ -4699,6 +4916,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -13.3,
    "classe": "normal",
    "posicao_no_mes": 19,
@@ -4714,13 +4932,14 @@
    "qualidade": "completo",
    "modis_bruto": 683,
    "viirs_real": 5147,
-   "modis_convertido": 5110,
+   "modis_convertido": 5234,
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
-   "anomalia_pct": 68.9,
+   "dias_fracos_viirs": 0,
+   "anomalia_pct": 79.7,
    "classe": "acima do normal",
-   "posicao_no_mes": 1,
+   "posicao_no_mes": 2,
    "faixa_inferior": null,
    "faixa_superior": null
   },
@@ -4737,6 +4956,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 10.5,
    "classe": "normal",
    "posicao_no_mes": 13,
@@ -4756,6 +4976,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 66.7,
    "classe": "acima do normal",
    "posicao_no_mes": 4,
@@ -4775,6 +4996,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 32.6,
    "classe": "normal",
    "posicao_no_mes": 9,
@@ -4794,6 +5016,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 74.0,
    "classe": "acima do normal",
    "posicao_no_mes": 4,
@@ -4813,6 +5036,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 1,
    "anomalia_pct": 69.6,
    "classe": "acima do normal",
    "posicao_no_mes": 5,
@@ -4832,6 +5056,7 @@
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 156.7,
    "classe": "acima do normal",
    "posicao_no_mes": 4,
@@ -4851,6 +5076,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 20.2,
    "classe": "acima do normal",
    "posicao_no_mes": 10,
@@ -4870,6 +5096,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -48.0,
    "classe": "abaixo do normal",
    "posicao_no_mes": 22,
@@ -4889,6 +5116,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -67.5,
    "classe": "abaixo do normal",
    "posicao_no_mes": 23,
@@ -4908,6 +5136,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -16.9,
    "classe": "normal",
    "posicao_no_mes": 21,
@@ -4927,6 +5156,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 1.9,
    "classe": "normal",
    "posicao_no_mes": 15,
@@ -4942,11 +5172,12 @@
    "qualidade": "completo",
    "modis_bruto": 331,
    "viirs_real": 2865,
-   "modis_convertido": 2477,
+   "modis_convertido": 2537,
    "dias_sem_dado_aqua": 2,
    "dias_degradados_aqua": 2,
    "dias_sem_dado_viirs": 0,
-   "anomalia_pct": -6.0,
+   "dias_fracos_viirs": 0,
+   "anomalia_pct": 0.0,
    "classe": "normal",
    "posicao_no_mes": 11,
    "faixa_inferior": null,
@@ -4965,6 +5196,7 @@
    "dias_sem_dado_aqua": 16,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 92.6,
    "classe": "acima do normal",
    "posicao_no_mes": 3,
@@ -4984,6 +5216,7 @@
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 1,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 70.6,
    "classe": "acima do normal",
    "posicao_no_mes": 3,
@@ -5003,6 +5236,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 1,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 64.0,
    "classe": "acima do normal",
    "posicao_no_mes": 4,
@@ -5013,7 +5247,7 @@
    "mes": "2022-07",
    "ano": 2022,
    "mes_num": 7,
-   "focos": 7749,
+   "focos": 7770,
    "origem": "VIIRS NOAA-20 ajustado",
    "qualidade": "corrigido",
    "modis_bruto": 1352,
@@ -5022,7 +5256,8 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 5,
-   "anomalia_pct": 35.9,
+   "dias_fracos_viirs": 0,
+   "anomalia_pct": 36.2,
    "classe": "acima do normal",
    "posicao_no_mes": 7,
    "faixa_inferior": null,
@@ -5032,7 +5267,7 @@
    "mes": "2022-08",
    "ano": 2022,
    "mes_num": 8,
-   "focos": 16659,
+   "focos": 16704,
    "origem": "VIIRS NOAA-20 ajustado",
    "qualidade": "corrigido",
    "modis_bruto": 2579,
@@ -5041,7 +5276,8 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 10,
-   "anomalia_pct": 49.4,
+   "dias_fracos_viirs": 0,
+   "anomalia_pct": 49.8,
    "classe": "acima do normal",
    "posicao_no_mes": 8,
    "faixa_inferior": null,
@@ -5060,6 +5296,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 5.8,
    "classe": "normal",
    "posicao_no_mes": 15,
@@ -5079,6 +5316,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 34.5,
    "classe": "acima do normal",
    "posicao_no_mes": 9,
@@ -5098,6 +5336,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -47.0,
    "classe": "abaixo do normal",
    "posicao_no_mes": 21,
@@ -5117,6 +5356,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -36.6,
    "classe": "normal",
    "posicao_no_mes": 19,
@@ -5136,6 +5376,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -24.2,
    "classe": "abaixo do normal",
    "posicao_no_mes": 23,
@@ -5155,6 +5396,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 92.5,
    "classe": "acima do normal",
    "posicao_no_mes": 7,
@@ -5170,11 +5412,12 @@
    "qualidade": "completo",
    "modis_bruto": 342,
    "viirs_real": 2762,
-   "modis_convertido": 2559,
+   "modis_convertido": 2621,
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 1,
    "dias_sem_dado_viirs": 0,
-   "anomalia_pct": -9.4,
+   "dias_fracos_viirs": 0,
+   "anomalia_pct": -3.6,
    "classe": "normal",
    "posicao_no_mes": 12,
    "faixa_inferior": null,
@@ -5193,6 +5436,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 44.4,
    "classe": "acima do normal",
    "posicao_no_mes": 4,
@@ -5212,6 +5456,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 74.8,
    "classe": "acima do normal",
    "posicao_no_mes": 2,
@@ -5231,6 +5476,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 66.5,
    "classe": "acima do normal",
    "posicao_no_mes": 3,
@@ -5250,6 +5496,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 2,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 31.5,
    "classe": "acima do normal",
    "posicao_no_mes": 8,
@@ -5269,6 +5516,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -1.8,
    "classe": "normal",
    "posicao_no_mes": 17,
@@ -5288,6 +5536,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 12.5,
    "classe": "normal",
    "posicao_no_mes": 13,
@@ -5307,6 +5556,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -0.6,
    "classe": "normal",
    "posicao_no_mes": 14,
@@ -5326,6 +5576,7 @@
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 1,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 192.1,
    "classe": "acima do normal",
    "posicao_no_mes": 6,
@@ -5345,6 +5596,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 253.5,
    "classe": "acima do normal",
    "posicao_no_mes": 2,
@@ -5364,6 +5616,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 8.1,
    "classe": "normal",
    "posicao_no_mes": 13,
@@ -5383,6 +5636,7 @@
    "dias_sem_dado_aqua": 2,
    "dias_degradados_aqua": 2,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -23.2,
    "classe": "abaixo do normal",
    "posicao_no_mes": 22,
@@ -5398,11 +5652,12 @@
    "qualidade": "completo",
    "modis_bruto": 571,
    "viirs_real": 3229,
-   "modis_convertido": 4272,
+   "modis_convertido": 4376,
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 1,
    "dias_sem_dado_viirs": 0,
-   "anomalia_pct": 6.0,
+   "dias_fracos_viirs": 1,
+   "anomalia_pct": 12.7,
    "classe": "normal",
    "posicao_no_mes": 8,
    "faixa_inferior": null,
@@ -5421,6 +5676,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -24.0,
    "classe": "normal",
    "posicao_no_mes": 18,
@@ -5440,6 +5696,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 2,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 30.3,
    "classe": "normal",
    "posicao_no_mes": 7,
@@ -5450,7 +5707,7 @@
    "mes": "2024-06",
    "ano": 2024,
    "mes_num": 6,
-   "focos": 5262,
+   "focos": 5276,
    "origem": "VIIRS NOAA-20 ajustado",
    "qualidade": "corrigido",
    "modis_bruto": 956,
@@ -5459,7 +5716,8 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 3,
-   "anomalia_pct": 42.3,
+   "dias_fracos_viirs": 0,
+   "anomalia_pct": 42.7,
    "classe": "acima do normal",
    "posicao_no_mes": 8,
    "faixa_inferior": null,
@@ -5469,7 +5727,7 @@
    "mes": "2024-07",
    "ano": 2024,
    "mes_num": 7,
-   "focos": 6775,
+   "focos": 6794,
    "origem": "VIIRS NOAA-20 ajustado",
    "qualidade": "corrigido",
    "modis_bruto": 1393,
@@ -5478,7 +5736,8 @@
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 1,
    "dias_sem_dado_viirs": 10,
-   "anomalia_pct": 18.8,
+   "dias_fracos_viirs": 1,
+   "anomalia_pct": 19.1,
    "classe": "normal",
    "posicao_no_mes": 11,
    "faixa_inferior": null,
@@ -5497,6 +5756,7 @@
    "dias_sem_dado_aqua": 3,
    "dias_degradados_aqua": 3,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 13.8,
    "classe": "normal",
    "posicao_no_mes": 13,
@@ -5516,6 +5776,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 1,
+   "dias_fracos_viirs": 1,
    "anomalia_pct": -1.5,
    "classe": "normal",
    "posicao_no_mes": 17,
@@ -5535,6 +5796,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -42.2,
    "classe": "abaixo do normal",
    "posicao_no_mes": 22,
@@ -5545,7 +5807,7 @@
    "mes": "2024-11",
    "ano": 2024,
    "mes_num": 11,
-   "focos": 5073,
+   "focos": 5087,
    "origem": "VIIRS NOAA-20 ajustado",
    "qualidade": "corrigido",
    "modis_bruto": 644,
@@ -5554,7 +5816,8 @@
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 1,
    "dias_sem_dado_viirs": 3,
-   "anomalia_pct": -10.1,
+   "dias_fracos_viirs": 1,
+   "anomalia_pct": -9.9,
    "classe": "normal",
    "posicao_no_mes": 17,
    "faixa_inferior": null,
@@ -5573,6 +5836,7 @@
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 1,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 54.7,
    "classe": "normal",
    "posicao_no_mes": 11,
@@ -5592,6 +5856,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": -10.7,
    "classe": "normal",
    "posicao_no_mes": 18,
@@ -5611,6 +5876,7 @@
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 1,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 50.6,
    "classe": "normal",
    "posicao_no_mes": 10,
@@ -5626,11 +5892,12 @@
    "qualidade": "completo",
    "modis_bruto": 492,
    "viirs_real": 3623,
-   "modis_convertido": 3681,
+   "modis_convertido": 3770,
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
-   "anomalia_pct": 18.9,
+   "dias_fracos_viirs": 0,
+   "anomalia_pct": 26.5,
    "classe": "normal",
    "posicao_no_mes": 6,
    "faixa_inferior": null,
@@ -5649,6 +5916,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 24.4,
    "classe": "normal",
    "posicao_no_mes": 8,
@@ -5668,6 +5936,7 @@
    "dias_sem_dado_aqua": 2,
    "dias_degradados_aqua": 2,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 20.3,
    "classe": "normal",
    "posicao_no_mes": 8,
@@ -5687,6 +5956,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 4.5,
    "classe": "normal",
    "posicao_no_mes": 13,
@@ -5706,6 +5976,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 1,
    "anomalia_pct": 14.8,
    "classe": "normal",
    "posicao_no_mes": 14,
@@ -5725,6 +5996,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 43.5,
    "classe": "acima do normal",
    "posicao_no_mes": 9,
@@ -5744,6 +6016,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 14.2,
    "classe": "acima do normal",
    "posicao_no_mes": 12,
@@ -5763,6 +6036,7 @@
    "dias_sem_dado_aqua": 0,
    "dias_degradados_aqua": 0,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 0.6,
    "classe": "normal",
    "posicao_no_mes": 13,
@@ -5782,6 +6056,7 @@
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 1,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 2,
    "anomalia_pct": 55.4,
    "classe": "acima do normal",
    "posicao_no_mes": 8,
@@ -5801,6 +6076,7 @@
    "dias_sem_dado_aqua": 1,
    "dias_degradados_aqua": 1,
    "dias_sem_dado_viirs": 0,
+   "dias_fracos_viirs": 0,
    "anomalia_pct": 21.5,
    "classe": "normal",
    "posicao_no_mes": 13,
@@ -5849,7 +6125,7 @@
    "mes": "2026-03",
    "ano": 2026,
    "mes_num": 3,
-   "focos": 1766,
+   "focos": 1770,
    "origem": "VIIRS NOAA-20 ajustado",
    "qualidade": "corrigido",
    "modis_bruto": null,
@@ -5858,7 +6134,7 @@
    "dias_sem_dado_aqua": null,
    "dias_degradados_aqua": null,
    "dias_sem_dado_viirs": 4,
-   "anomalia_pct": -42.0,
+   "anomalia_pct": -38.2,
    "classe": "abaixo do normal",
    "faixa_inferior": null,
    "faixa_superior": null,
@@ -5868,7 +6144,7 @@
    "mes": "2026-04",
    "ano": 2026,
    "mes_num": 4,
-   "focos": 2303,
+   "focos": 2310,
    "origem": "VIIRS NOAA-20 ajustado",
    "qualidade": "corrigido",
    "modis_bruto": null,
@@ -5877,7 +6153,7 @@
    "dias_sem_dado_aqua": null,
    "dias_degradados_aqua": null,
    "dias_sem_dado_viirs": 3,
-   "anomalia_pct": 17.2,
+   "anomalia_pct": 17.6,
    "classe": "normal",
    "faixa_inferior": null,
    "faixa_superior": null,
@@ -5925,7 +6201,7 @@
    "mes": "2026-07",
    "ano": 2026,
    "mes_num": 7,
-   "focos": 5185,
+   "focos": 5199,
    "origem": "VIIRS NOAA-20 ajustado",
    "qualidade": "corrigido",
    "modis_bruto": null,
@@ -5934,7 +6210,7 @@
    "dias_sem_dado_aqua": null,
    "dias_degradados_aqua": null,
    "dias_sem_dado_viirs": 6,
-   "anomalia_pct": -9.1,
+   "anomalia_pct": -8.9,
    "classe": "normal",
    "faixa_inferior": null,
    "faixa_superior": null,
@@ -6001,7 +6277,6 @@
  "normal_por_mes": {
   "mediana": {
    "02": 1891,
-   "03": 3047,
    "04": 1965,
    "05": 2785,
    "06": 3698,
@@ -6011,25 +6286,25 @@
    "10": 37066,
    "11": 5644,
    "12": 2807,
-   "01": 2524
+   "01": 2524,
+   "03": 2865
   },
   "media": {
    "02": 2409,
-   "03": 3014,
    "04": 2126,
    "05": 3060,
-   "06": 4120,
-   "07": 6301,
-   "08": 12652,
+   "06": 4121,
+   "07": 6304,
+   "08": 12655,
    "09": 38464,
    "10": 37387,
-   "11": 7625,
+   "11": 7626,
    "12": 4129,
-   "01": 2546
+   "01": 2546,
+   "03": 2876
   },
   "p25": {
    "02": 1589,
-   "03": 2036,
    "04": 1339,
    "05": 2172,
    "06": 3014,
@@ -6039,104 +6314,105 @@
    "10": 23734,
    "11": 3532,
    "12": 1700,
-   "01": 2097
+   "01": 2097,
+   "03": 2020
   },
   "p75": {
    "02": 3544,
-   "03": 3973,
    "04": 2732,
    "05": 3901,
-   "06": 5173,
-   "07": 7319,
+   "06": 5183,
+   "07": 7324,
    "08": 15171,
    "09": 34987,
    "10": 43614,
    "11": 8156,
    "12": 4775,
-   "01": 2868
+   "01": 2868,
+   "03": 3623
   },
   "anos_usados": "2012 a 2025, anos medidos pelo VIIRS (os anos convertidos do MODIS ficam fora do normal)"
  },
  "totais_por_ano": [
   {
    "ano": 2003,
-   "focos": 231047,
+   "focos": 231143,
    "meses": 12,
    "mes_pico": "2003-09",
-   "faixa_inferior": 122761,
-   "faixa_superior": 231047
+   "faixa_inferior": 122786,
+   "faixa_superior": 231143
   },
   {
    "ano": 2004,
-   "focos": 207936,
+   "focos": 207980,
    "meses": 12,
    "mes_pico": "2004-09",
-   "faixa_inferior": 114855,
-   "faixa_superior": 208001
+   "faixa_inferior": 114860,
+   "faixa_superior": 207989
   },
   {
    "ano": 2005,
-   "focos": 222101,
+   "focos": 222162,
    "meses": 12,
    "mes_pico": "2005-10",
-   "faixa_inferior": 134535,
-   "faixa_superior": 222101
+   "faixa_inferior": 134550,
+   "faixa_superior": 222162
   },
   {
    "ano": 2006,
-   "focos": 116790,
+   "focos": 116854,
    "meses": 12,
    "mes_pico": "2006-09",
-   "faixa_inferior": 68723,
-   "faixa_superior": 116790
+   "faixa_inferior": 68743,
+   "faixa_superior": 116854
   },
   {
    "ano": 2007,
-   "focos": 351437,
+   "focos": 351513,
    "meses": 12,
    "mes_pico": "2007-09",
-   "faixa_inferior": 241941,
-   "faixa_superior": 351437
+   "faixa_inferior": 241966,
+   "faixa_superior": 351513
   },
   {
    "ano": 2008,
-   "focos": 223149,
+   "focos": 223200,
    "meses": 12,
    "mes_pico": "2008-10",
-   "faixa_inferior": 142899,
-   "faixa_superior": 223149
+   "faixa_inferior": 142911,
+   "faixa_superior": 223200
   },
   {
    "ano": 2009,
-   "focos": 96548,
+   "focos": 96630,
    "meses": 12,
    "mes_pico": "2009-09",
-   "faixa_inferior": 66914,
-   "faixa_superior": 97508
+   "faixa_inferior": 66943,
+   "faixa_superior": 97592
   },
   {
    "ano": 2010,
-   "focos": 225025,
+   "focos": 225078,
    "meses": 12,
    "mes_pico": "2010-09",
-   "faixa_inferior": 166414,
-   "faixa_superior": 225025
+   "faixa_inferior": 166430,
+   "faixa_superior": 225078
   },
   {
    "ano": 2011,
-   "focos": 160319,
+   "focos": 160362,
    "meses": 12,
    "mes_pico": "2011-09",
-   "faixa_inferior": 128550,
-   "faixa_superior": 161164
+   "faixa_inferior": 128562,
+   "faixa_superior": 161148
   },
   {
    "ano": 2012,
-   "focos": 213761,
+   "focos": 214481,
    "meses": 12,
    "mes_pico": "2012-09",
-   "faixa_inferior": 212553,
-   "faixa_superior": 213761
+   "faixa_inferior": 213273,
+   "faixa_superior": 214481
   },
   {
    "ano": 2013,
@@ -6212,7 +6488,7 @@
   },
   {
    "ano": 2022,
-   "focos": 133064,
+   "focos": 133130,
    "meses": 12,
    "mes_pico": "2022-10",
    "faixa_inferior": null,
@@ -6228,7 +6504,7 @@
   },
   {
    "ano": 2024,
-   "focos": 98393,
+   "focos": 98440,
    "meses": 12,
    "mes_pico": "2024-09",
    "faixa_inferior": null,
@@ -6244,7 +6520,7 @@
   },
   {
    "ano": 2026,
-   "focos": 83157,
+   "focos": 83182,
    "meses": 10,
    "mes_pico": "2026-09",
    "faixa_inferior": null,
@@ -6309,7 +6585,7 @@
   "taxa_por_mes": {
    "01": 9.572,
    "02": 8.466,
-   "03": 7.482,
+   "03": 7.663,
    "04": 7.243,
    "05": 6.566,
    "06": 5.782,
@@ -6323,7 +6599,7 @@
   "meses_usados_por_mes": {
    "01": 9,
    "02": 10,
-   "03": 10,
+   "03": 9,
    "04": 10,
    "05": 10,
    "06": 10,
@@ -6339,6 +6615,7 @@
    "2021-12"
   ],
   "meses_excluidos_da_calibracao": [
+   "2012-03",
    "2020-08"
   ],
   "meses_fora_da_calibracao": [
@@ -6461,19 +6738,10 @@
    "2019-03": 1,
    "2021-08": 1
   },
-  "efeito_regra_dias_fracos_snpp": {
-   "meses_que_sairiam": [
-    "2012-03"
-   ],
-   "taxas": [
-    {
-     "mes_do_ano": "03",
-     "taxa_publicada": 7.482,
-     "taxa_com_a_regra": 7.663
-    }
-   ]
-  },
-  "razao_snpp_noaa20": 1.0547,
+  "meses_fora_da_calibracao_por_dias_fracos_snpp": [
+   "2012-03"
+  ],
+  "razao_snpp_noaa20": 1.0575,
   "filtros": [
    "type = 0 (fogo em vegetação)",
    "MODIS com confiança 30 ou mais",
@@ -6484,15 +6752,15 @@
    "desenho": "Taxas aprendidas com 2012-02 a 2019-12 e testadas em 2020 a 2023, anos que o modelo não viu (44 meses válidos, sem os meses com falha de satélite)",
    "erro_mensal_wape_pct": 7.2,
    "erro_mensal_48_meses_pct": 8.7,
-   "vies_pct": 0.2,
-   "spearman": 0.988,
-   "acerto_acima_abaixo_da_mediana_pct": 93.2,
+   "vies_pct": 0.3,
+   "spearman": 0.989,
+   "acerto_acima_abaixo_da_mediana_pct": 97.7,
    "acerto_tres_faixas_pct": 77.3,
    "erro_total_anual_pct": {
     "2020": 5.4,
-    "2021": -5.1,
-    "2022": -0.5,
-    "2023": 4.3
+    "2021": -5.0,
+    "2022": -0.4,
+    "2023": 4.4
    },
    "taxas_publicadas": "As taxas do teste foram aprendidas só com 2012-2019. As taxas publicadas foram refeitas depois, com o mesmo método, usando 2012-02 a 2021-12.",
    "erro_por_area": [
@@ -6527,55 +6795,55 @@
    "pesos": [
     {
      "fator": "intensidade do fogo (FRP médio, log)",
-     "multiplica_razao_por_1_desvio": 0.978,
-     "desvio": 0.798,
+     "multiplica_razao_por_1_desvio": 0.977,
+     "desvio": 0.799,
      "ic95_peso": [
-      -0.046,
+      -0.047,
       -0.005
      ]
     },
     {
      "fator": "fração de focos noturnos",
-     "multiplica_razao_por_1_desvio": 1.152,
-     "desvio": 0.195,
+     "multiplica_razao_por_1_desvio": 1.153,
+     "desvio": 0.196,
      "ic95_peso": [
-      0.129,
+      0.13,
       0.157
      ]
     },
     {
      "fator": "chuva (mm/dia)",
-     "multiplica_razao_por_1_desvio": 0.962,
-     "desvio": 2.35,
+     "multiplica_razao_por_1_desvio": 0.964,
+     "desvio": 2.358,
      "ic95_peso": [
-      -0.068,
-      -0.01
+      -0.069,
+      -0.009
      ]
     },
     {
      "fator": "umidade relativa (%)",
-     "multiplica_razao_por_1_desvio": 0.808,
-     "desvio": 13.112,
+     "multiplica_razao_por_1_desvio": 0.81,
+     "desvio": 13.134,
      "ic95_peso": [
-      -0.351,
+      -0.342,
       -0.099
      ]
     },
     {
      "fator": "temperatura (°C)",
-     "multiplica_razao_por_1_desvio": 0.943,
-     "desvio": 2.351,
+     "multiplica_razao_por_1_desvio": 0.947,
+     "desvio": 2.354,
      "ic95_peso": [
-      -0.179,
+      -0.167,
       0.044
      ]
     },
     {
      "fator": "altitude (m)",
-     "multiplica_razao_por_1_desvio": 0.902,
+     "multiplica_razao_por_1_desvio": 0.907,
      "desvio": 223.812,
      "ic95_peso": [
-      -0.167,
+      -0.156,
       -0.049
      ]
     }
@@ -6583,7 +6851,7 @@
    "triagem": [
     {
      "fator": "intensidade do fogo (FRP médio, log)",
-     "efeito_pct": 13.2,
+     "efeito_pct": 13.5,
      "mantido": true,
      "sinal": "contrário à hipótese"
     },
@@ -6595,13 +6863,13 @@
     },
     {
      "fator": "tamanho do pixel (scan)",
-     "efeito_pct": 7.6,
+     "efeito_pct": 5.5,
      "mantido": false,
      "sinal": "esperado"
     },
     {
      "fator": "hora de passagem diurna",
-     "efeito_pct": 4.0,
+     "efeito_pct": 4.3,
      "mantido": false,
      "sinal": "contrário à hipótese"
     },
@@ -6619,19 +6887,19 @@
     },
     {
      "fator": "umidade relativa (%)",
-     "efeito_pct": -29.0,
+     "efeito_pct": -28.5,
      "mantido": true,
      "sinal": "contrário à hipótese"
     },
     {
      "fator": "temperatura (°C)",
-     "efeito_pct": 35.3,
+     "efeito_pct": 35.5,
      "mantido": true,
      "sinal": "contrário à hipótese"
     },
     {
      "fator": "altitude (m)",
-     "efeito_pct": -21.6,
+     "efeito_pct": -20.9,
      "mantido": true,
      "sinal": "sem efeito direto esperado"
     }
@@ -6640,7 +6908,7 @@
     "T1": {
      "erro_mensal_pct": 7.2,
      "erro_48_meses_pct": 8.7,
-     "erro_deriva_2024_2025_pct": 13.5
+     "erro_deriva_2024_2025_pct": 13.6
     },
     "modelo_v2": {
      "erro_mensal_pct": 7.9,
@@ -6650,9 +6918,9 @@
    },
    "cobertura_faixa_95": "42 de 44",
    "media_anual_2003_2011": {
-    "t1_aqua": 203817,
-    "fatores_aqua": 179218,
-    "t1_terra": 132033
+    "t1_aqua": 203880,
+    "fatores_aqua": 179101,
+    "t1_terra": 132052
    },
    "viirs_real_media_anual_2012_2021": 123674,
    "descoberta": "Antes de 2012 os dois MODIS discordam: o Terra via 0,47 foco por foco do Aqua em 2003-2011 e 0,72 de 2012 em diante (dia e noite juntos). Pelo Aqua, o passado teve mais fogo; pelo Terra, o nível foi parecido com o de hoje. Por isso 2003-2011 aparece como faixa. A razão também sobe aos poucos dentro do período (0,38 em 2003, 0,57 em 2011), então não dá para garantir que a relação entre os sensores ficou parada de 2003 a 2011.",
@@ -6691,7 +6959,7 @@
    "Os 7,2% de erro valem para a Bahia inteira. Em áreas menores o erro cresce: no teste de 2020-2023 foi de 26,0% em blocos de cerca de 110 x 135 km e de 37,2% numa célula de cerca de 55 x 68 km. Antes de 2012 não há VIIRS para medir; o erro de 2020-2023 é a melhor referência.",
    "Em 22 meses de 2003 a 2011 o Aqua contou mais focos que em qualquer mês igual da calibração (o caso mais longe: agosto de 2007, 8.712 focos contra no máximo 4.267). Nesses meses, que incluem 5 dos 10 recordes, a taxa é usada fora da faixa que foi vista.",
    "A regra de dias degradados do Aqua foi criada depois que agosto de 2020, um mês do teste, mostrou o problema. Contando os 48 meses do teste, o erro é de 8,7%.",
-   "Os dias fracos do S-NPP não passam pela mesma checagem: 6 meses da calibração têm 1 ou 2 dias assim. Aplicar a mesma regra tiraria março de 2012 da calibração e mudaria a taxa desse mês do ano de 7,48 para 7,66.",
+   "Dias em que o S-NPP veio muito abaixo do Aqua contam como falha, como os dias degradados do Aqua: 6 meses da calibração têm dias assim, e março de 2012 saiu da calibração por causa deles.",
    "A partir de 2022 a órbita do satélite Aqua mudou (passa mais tarde), por isso a calibração vai só até 2021.",
    "Área é um retângulo, não o contorno oficial da Bahia.",
    "Dias degradados só são detectados de 2012 em diante, quando há o VIIRS para comparar.",

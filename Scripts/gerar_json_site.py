@@ -115,6 +115,14 @@ def dias_fracos_snpp():
     return saida
 
 
+def dias_falha_snpp(meses):
+    """{mes: dias sem dado do S-NPP + dias fracos}, a mesma regra do Aqua (dias sem dado + degradados).
+    Mes com 3 ou mais fica fora da calibracao e, na serie, troca o S-NPP pelo NOAA-20 ajustado (ou pelo MODIS)."""
+    sem = comum.dias_sem_dado("viirs-snpp", "N", meses)
+    fracos = dias_fracos_snpp()
+    return {m: (sem[m] + fracos.get(m, 0)) if sem[m] is not None else None for m in meses}
+
+
 def razao_terra_aqua_por_ano():
     """Focos Terra / focos Aqua por ano (dia e noite), pela tabela por celula do modelo com fatores."""
     arq = os.path.join(RAIZ, "Dados", "harmonizado", "fatores", "tabela_celula_mes.csv")
@@ -162,6 +170,7 @@ def main():
     n20 = focos_noaa20_por_mes()
     sem_n20 = comum.dias_sem_dado("viirs-jpss1", "N20", meses)
     degr = dias_degradados_aqua()
+    fracos_snpp = dias_fracos_snpp()
 
     def num(x):
         return float(x) if x not in ("", None) else None
@@ -170,10 +179,10 @@ def main():
     for m in meses:
         r = t1[m]
         sem_a = int(r["dias_sem_dado_aqua"] or 0) + degr.get(m, 0)
-        sem_v = int(r["dias_sem_dado_viirs"]) if r["dias_sem_dado_viirs"] not in ("", None) else None
+        sem_v = int(r["dias_sem_dado_viirs"]) + fracos_snpp.get(m, 0) if r["dias_sem_dado_viirs"] not in ("", None) else None
         dados[m] = {
             "aqua": num(r["aqua_bruto"]), "snpp": num(r["viirs_real"]),
-            "sem_aqua": sem_a, "degradados_aqua": degr.get(m, 0), "sem_snpp": sem_v,
+            "sem_aqua": sem_a, "degradados_aqua": degr.get(m, 0), "sem_snpp": sem_v, "fracos_snpp": fracos_snpp.get(m, 0),
             "n20": n20.get(m), "sem_n20": sem_n20.get(m),
         }
 
@@ -222,7 +231,8 @@ def main():
             "viirs_real": None if d["snpp"] is None else int(d["snpp"]),
             "modis_convertido": round(convertido),
             "dias_sem_dado_aqua": d["sem_aqua"], "dias_degradados_aqua": d["degradados_aqua"],
-            "dias_sem_dado_viirs": d["sem_snpp"],
+            "dias_sem_dado_viirs": None if d["sem_snpp"] is None else d["sem_snpp"] - d["fracos_snpp"],
+            "dias_fracos_viirs": d["fracos_snpp"] if d["sem_snpp"] is not None else None,
         })
 
     # normal de cada mes: so os anos medidos pelo VIIRS (2012-02 em diante). Os anos convertidos do
@@ -294,16 +304,11 @@ def main():
     recordes_fora = sum(1 for s in ranking if s["mes"] in meses_fora)
     maior_fora = max(fora_calib, key=lambda x: x["aqua"] / x["maximo_na_calibracao"]) if fora_calib else None
 
-    # dias fracos do S-NPP: quanto mudaria a taxa se a regra do Aqua valesse tambem para ele
-    fracos = dias_fracos_snpp()
+    # dias fracos do S-NPP: contam como falha, como os degradados do Aqua
     calib_ok = [m for m in comum.lista_meses(CALIB_INI, CALIB_FIM) if m not in excluidos]
-    sairiam = [m for m in calib_ok if (dados[m]["sem_snpp"] or 0) + fracos.get(m, 0) >= LIMITE]
-    efeito_snpp = []
-    for k in sorted({int(m[5:7]) for m in sairiam}):
-        ms = [m for m in calib_ok if int(m[5:7]) == k and m not in sairiam]
-        nova = sum(dados[m]["snpp"] for m in ms) / sum(dados[m]["aqua"] for m in ms)
-        efeito_snpp.append({"mes_do_ano": chave(k), "taxa_publicada": round(razao[k], 3), "taxa_com_a_regra": round(nova, 3)})
-    meses_fracos_calib = {m: n for m, n in sorted(fracos.items()) if m in calib_ok}
+    meses_fracos_calib = {m: n for m, n in sorted(fracos_snpp.items()) if comum.PRIMEIRO_MES_VIIRS <= m <= CALIB_FIM}
+    sairam_por_fracos = [m for m in excluidos if dados[m]["fracos_snpp"] and (dados[m]["sem_snpp"] - dados[m]["fracos_snpp"]) < LIMITE
+                         and dados[m]["sem_aqua"] < LIMITE]
 
     res = json.load(open(ARQ_RESULTADOS, encoding="utf-8"))
     t1r = res["tecnicas"]["T1_fator_sazonal"]
@@ -406,7 +411,7 @@ def main():
             "meses_excluidos_da_calibracao": excluidos,
             "meses_fora_da_calibracao": fora_calib,
             "dias_fracos_snpp_na_calibracao": meses_fracos_calib,
-            "efeito_regra_dias_fracos_snpp": {"meses_que_sairiam": sairiam, "taxas": efeito_snpp},
+            "meses_fora_da_calibracao_por_dias_fracos_snpp": sairam_por_fracos,
             "razao_snpp_noaa20": round(razao_snpp_n20, 4),
             "filtros": ["type = 0 (fogo em vegetação)", "MODIS com confiança 30 ou mais", "VIIRS sem confiança baixa", "par MODIS Aqua x VIIRS Suomi NPP (mesmo horário de passagem)"],
             "validacao": validacao,
@@ -424,11 +429,10 @@ def main():
                 if fora_calib else "Nenhum mês de 2003 a 2011 passa do maior mês igual da calibração.",
                 ("A regra de dias degradados do Aqua foi criada depois que agosto de 2020, um mês do teste, mostrou o problema. "
                  "Contando os 48 meses do teste, o erro é de %s%%." % fmt_pct(validacao.get("erro_mensal_48_meses_pct", validacao["erro_mensal_wape_pct"]))),
-                ("Os dias fracos do S-NPP não passam pela mesma checagem: %d meses da calibração têm 1 ou 2 dias assim. Aplicar a mesma regra "
-                 "tiraria %s da calibração e mudaria a taxa desse mês do ano de %s para %s." % (
-                     len(meses_fracos_calib), ", ".join(nome_mes(m) for m in sairiam), ", ".join(fmt_num(e["taxa_publicada"], 2) for e in efeito_snpp),
-                     ", ".join(fmt_num(e["taxa_com_a_regra"], 2) for e in efeito_snpp)))
-                if sairiam else "Os dias fracos do S-NPP não passam pela mesma checagem, mas aplicar a regra não tiraria nenhum mês da calibração.",
+                ("Dias em que o S-NPP veio muito abaixo do Aqua contam como falha, como os dias degradados do Aqua: %d meses da "
+                 "calibração têm dias assim, e %s %s da calibração por causa deles." % (
+                     len(meses_fracos_calib), ", ".join(nome_mes(m) for m in sairam_por_fracos) or "nenhum",
+                     "saiu" if len(sairam_por_fracos) == 1 else "saíram")),
                 "A série fecha em dezembro de 2025; 2026 aparece só no painel dos últimos dias.",
                 "A partir de 2022 a órbita do satélite Aqua mudou (passa mais tarde), por isso a calibração vai só até 2021.",
                 "Área é um retângulo, não o contorno oficial da Bahia.",
@@ -441,7 +445,7 @@ def main():
     with open(os.path.join(SAIDA, "calendario_bahia.json"), "w", encoding="utf-8") as f:
         json.dump(saida, f, ensure_ascii=False, indent=1)
     campos = ["mes", "ano", "mes_num", "focos", "faixa_inferior", "faixa_superior", "origem", "qualidade", "anomalia_pct", "classe", "posicao_no_mes",
-              "modis_bruto", "viirs_real", "modis_convertido", "dias_sem_dado_aqua", "dias_degradados_aqua", "dias_sem_dado_viirs"]
+              "modis_bruto", "viirs_real", "modis_convertido", "dias_sem_dado_aqua", "dias_degradados_aqua", "dias_sem_dado_viirs", "dias_fracos_viirs"]
     with open(os.path.join(SAIDA, "calendario_bahia.csv"), "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=campos, extrasaction="ignore")
         w.writeheader()

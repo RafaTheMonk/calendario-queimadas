@@ -105,7 +105,7 @@ def sinalizar_global(todos):
     """Mesma sinalizacao da Bahia: dias sem dado (Brasil inteiro) e dias degradados do Aqua."""
     degr = gerar_json_site.dias_degradados_aqua()
     sem_aqua = comum.dias_sem_dado("modis", "Aqua", todos)
-    sem_snpp = comum.dias_sem_dado("viirs-snpp", "N", todos)
+    sem_snpp = gerar_json_site.dias_falha_snpp(todos)  # sem dado + dias fracos (Brasil)
     return comum.sinalizar({m: (sem_aqua[m] or 0) + degr.get(m, 0) for m in todos}, sem_snpp, todos)
 
 

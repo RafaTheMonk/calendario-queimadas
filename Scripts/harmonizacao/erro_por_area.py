@@ -53,7 +53,7 @@ def main():
     degr = gerar_json_site.dias_degradados_aqua()
     sem_aqua = comum.dias_sem_dado("modis", "Aqua", meses)
     sem_aqua_tot = {m: (sem_aqua[m] or 0) + degr.get(m, 0) for m in meses}
-    sem_snpp = comum.dias_sem_dado("viirs-snpp", "N", meses)
+    sem_snpp = gerar_json_site.dias_falha_snpp(meses)  # sem dado + dias fracos
     sinal = comum.sinalizar(sem_aqua_tot, sem_snpp, meses)
     calib = [m for m in comum.MESES_CALIB if not sinal[m]]
     teste = [m for m in comum.MESES_TESTE if not sinal[m]]

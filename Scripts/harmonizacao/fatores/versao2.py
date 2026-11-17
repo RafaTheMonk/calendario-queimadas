@@ -157,7 +157,7 @@ def main():
     degr = gerar_json_site.dias_degradados_aqua()
     sem_aqua = comum.dias_sem_dado("modis", "Aqua", MESES)
     sem_aqua_tot = {m: (sem_aqua[m] or 0) + degr.get(m, 0) for m in MESES}
-    sem_snpp = comum.dias_sem_dado("viirs-snpp", "N", MESES)
+    sem_snpp = gerar_json_site.dias_falha_snpp(MESES)  # sem dado + dias fracos
     sem_terra = comum.dias_sem_dado("modis", "Terra", MESES)
     sinal_av = comum.sinalizar(sem_aqua_tot, sem_snpp, MESES)
     sinal_t = comum.sinalizar(sem_terra, sem_snpp, MESES)
