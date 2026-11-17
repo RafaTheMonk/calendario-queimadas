@@ -100,6 +100,19 @@ function dentroDaBahia(lat, lon) {
   return lat > a.lat_min && lat < a.lat_max && lon > a.lon_min && lon < a.lon_max;
 }
 
+// Erro medido no teste de 2020-2023 para a escala mais parecida com a área (Scripts/harmonizacao/erro_por_area.py).
+const TAMANHO_AREA = { celula: 'uma célula da grade (cerca de 55 x 68 km)', bloco_2x2: 'áreas de cerca de 110 x 135 km', bloco_4x4: 'áreas de cerca de 220 x 270 km' };
+function erroDaArea(nCelulas) {
+  const escalas = (OFICIAL.metodo.validacao.erro_por_area || []).filter((e) => e.escala !== 'bahia');
+  if (!escalas.length || !nCelulas) return null;
+  const dist = (e) => Math.abs(Math.log(e.celulas_por_area / nCelulas));
+  return escalas.reduce((m, e) => (dist(e) < dist(m) ? e : m));
+}
+function erroEscala(chave) {
+  const e = (OFICIAL.metodo.validacao.erro_por_area || []).find((x) => x.escala === chave);
+  return e ? e.erro_mensal_wape_pct : null;
+}
+
 function quantil(v, q) {
   const s = [...v].sort((a, b) => a - b);
   const k = (s.length - 1) * q;
@@ -216,10 +229,12 @@ async function definirArea(nova, mensagem) {
       return;
     }
     estado.area = nova;
+    estado.nCelulas = cels.length;
     DADOS = montarDadosArea(cels);
+    const eaAviso = erroDaArea(cels.length);
     const mediaAnual = DADOS.totais_por_ano.reduce((t, x) => t + x.focos, 0) / DADOS.totais_por_ano.length;
     const extra = (pequena ? ' A área desenhada é menor que uma célula da grade, então entra a célula mais próxima (cerca de 55 x 68 km).' : '')
-      + ' Antes de 2012 a conversão usa a taxa da Bahia inteira: em áreas de 100 km o erro típico medido é de cerca de 25%.'
+      + (eaAviso ? ` Antes de 2012 a conversão usa a taxa da Bahia inteira: no teste de 2020 a 2023, o erro por mês em ${TAMANHO_AREA[eaAviso.escala]} foi de cerca de ${Math.round(eaAviso.erro_mensal_wape_pct)}%.` : '')
       + (mediaAnual < 3000 ? ' Área com poucos focos: os números variam mais.' : '');
     aviso.textContent = (mensagem || `Mostrando ${nomeArea().toLowerCase()}: ${cels.length} células da grade (cerca de 55 x 68 km cada).`) + extra;
     msgJanela.textContent = `${cels.length} ${cels.length === 1 ? 'célula' : 'células'} da grade ${nova.tipo === 'poligono' ? 'dentro do contorno' : 'dentro do raio'} (em azul no mapa).` + extra;
@@ -409,6 +424,7 @@ function cartoes() {
   const mediaViirs = anosViirs.reduce((s, a) => s + a.focos, 0) / anosViirs.length;
   const difAno = (ultimoAno.focos - mediaViirs) / mediaViirs * 100;
   const val = OFICIAL.metodo.validacao;
+  const ea = estado.area.tipo === 'bahia' ? null : erroDaArea(estado.nCelulas);
   document.getElementById('cartoes').innerHTML = [
     `<article class="cartao principal">
       <p class="rotulo">Último mês da série: ${MESES_LONGO[ultimo.mes_num - 1]} de ${ultimo.ano}${ultimo.qualidade === 'provisorio' ? ' (provisório)' : ''}</p>
@@ -433,8 +449,8 @@ function cartoes() {
     </article>`
       : `<article class="cartao">
       <p class="rotulo">Precisão nesta escala</p>
-      <p class="valor">cerca de 25%</p>
-      <p class="detalhe">de erro típico antes de 2012 em áreas de 100 km. Na Bahia inteira o erro é de ${val.erro_mensal_wape_pct.toLocaleString('pt-BR')}%. De 2012 em diante a área usa o VIIRS medido.</p>
+      <p class="valor">${ea ? `cerca de ${Math.round(ea.erro_mensal_wape_pct)}%` : 'menor'}</p>
+      <p class="detalhe">${ea ? `de erro por mês medido em 2020 a 2023 em ${TAMANHO_AREA[ea.escala]}` : 'áreas menores têm erro maior'}; é a melhor referência para os anos convertidos antes de 2012. Na Bahia inteira o erro é de ${val.erro_mensal_wape_pct.toLocaleString('pt-BR')}%. De 2012 em diante a área usa o VIIRS medido.</p>
     </article>`,
   ].join('');
 }
@@ -992,7 +1008,7 @@ async function comparacaoInpe() {
     <h3>O que a comparação mostra</h3>
     <ul>
       <li><strong>O salto de 2012 some.</strong> Sem harmonizar, a nossa contagem passa de ${num1(r.razao_sem_harmonizar_2011)} para ${num1(r.razao_sem_harmonizar_2012)} focos para cada foco do INPE de 2011 para 2012, um salto de ${num1(r.salto_sem_harmonizar_vezes)} vezes só pela troca de satélite. Harmonizada, fica em ${num1(r.razao_media_2003_2011)} de 2003 a 2011 e ${num1(r.razao_media_2012_2021)} de 2012 a 2021: sobra uma diferença de ${num1(r.diferenca_entre_periodos_pct)}%.</li>
-      <li><strong>Os anos sobem e descem juntos.</strong> Correlação de ${num3(r.correlacao_anual)} ano a ano e ${num3(r.correlacao_mensal)} mês a mês. Sem harmonizar, a correlação ano a ano cai para ${num2(r.correlacao_anual_sem_harmonizar)}: a série crua nem aponta na mesma direção.</li>
+      <li><strong>Os anos sobem e descem juntos, mas isso sozinho não prova nada.</strong> Correlação de ${num3(r.correlacao_anual)} ano a ano e ${num3(r.correlacao_mensal)} mês a mês. O MODIS Aqua cru, sem conversão nenhuma, já chega a ${num3(r.correlacao_anual_aqua_sem_conversao)}, porque o satélite de referência do INPE é o próprio Aqua. O que a comparação mostra de fato é o item acima: o salto de 2012 some. Emendando MODIS até 2011 e VIIRS depois, sem harmonizar, a correlação cai para ${num2(r.correlacao_anual_sem_harmonizar)}.</li>
       <li><strong>Os piores anos coincidem.</strong> Cinco anos com mais fogo no INPE: ${r.top5_inpe.join(', ')}. Na Régua de Fogo: ${r.top5_nossa.join(', ')}.</li>
       ${depois.length ? `<li><strong>A mudança de órbita do Aqua aparece no INPE também.</strong> A hora mais comum das passagens era ${h[0].hora_utc_mais_comum_inpe}h UTC até ${ultimoAntes.ano} e passa a ${depois[0].hora_utc_mais_comum_inpe}h UTC em ${depois.map((a) => a.ano).join(' e ')}. É a mesma deriva que encontramos nos dados da NASA, confirmada por outra fonte.</li>` : ''}
     </ul>
@@ -1110,6 +1126,9 @@ async function metodologia() {
   const unica = METODOS.metodos.taxa_unica;
   const ri = INPE.resumo;
   const rep = REPLICACAO;
+  const outros = rep.regioes.filter((r) => !r.regiao.startsWith('Bahia'));
+  const outrosGanham = outros.filter((r) => r.teste_erro_pct < r.teste_erro_taxa_unica_pct).length;
+  const outrosUmAnoFora = outros.filter((r) => r.um_ano_fora_erro_pct < r.um_ano_fora_erro_taxa_unica_pct).length;
   const janelas = CONFERENCIA.janelas;
   const api = (prod) => {
     const js = janelas.filter((x) => x.produto === prod);
@@ -1149,10 +1168,10 @@ async function metodologia() {
       ${card('Anos não vistos', 'Aprendendo só com 2012 a 2019, quanto ele acerta 2020 a 2023?', `<strong>${num1(t1.teste_erro_pct)}%</strong>de erro por mês em ${t1.teste_n_meses} meses, desvio total de ${pct(t1.teste_vies_pct)}.`, true, null)}
       ${card('Escondendo um ano de cada vez', '2020 a 2023 foi só um período de sorte?', `<strong>${num1(t1.um_ano_fora_erro_pct)}%</strong>de erro escondendo cada ano de 2013 a 2023 (${t1.um_ano_fora_n_meses} meses). Taxa única: ${num1(unica.um_ano_fora_erro_pct)}%.`, true, null)}
       ${card('7 métodos, mesma prova', 'A taxa por mês é mesmo a melhor escolha?', `<strong>${num1(t1.teste_erro_pct)}%</strong>o menor erro entre os métodos usados sozinhos. A posição no ranking decorou os dados (${num1(METODOS.metodos.ranking.anos_que_viu_erro_pct)}% nos anos vistos, ${num1(METODOS.metodos.ranking.teste_erro_pct)}% nos novos).`, true, 'metodos')}
-      ${card('Conferência independente: INPE', 'A série harmonizada bate com uma fonte que nunca passou pela nossa conversão?', `<strong>${num3(ri.correlacao_anual)}</strong>de correlação ano a ano (sem harmonizar: ${num2b(ri.correlacao_anual_sem_harmonizar)}). O salto de ${num1(ri.salto_sem_harmonizar_vezes)} vezes em 2012 cai para ${num1(ri.diferenca_entre_periodos_pct)}%.`, true, 'inpe')}
+      ${card('Conferência com o INPE', 'O salto de 2012 some em outro processamento do mesmo satélite?', `<strong>${num1(ri.diferenca_entre_periodos_pct)}%</strong>de diferença na razão nossa/INPE antes e depois de 2012, contra um salto de ${num1(ri.salto_sem_harmonizar_vezes)} vezes sem harmonizar. A correlação ano a ano é ${num3(ri.correlacao_anual)}, mas o Aqua cru já chega a ${num3(ri.correlacao_anual_aqua_sem_conversao)}: o satélite de referência do INPE é o Aqua.`, true, 'inpe')}
       ${card('Conferência dos dados: API do FIRMS', 'Os arquivos que baixamos são iguais aos da API oficial da NASA?', `<strong>${viirsApi.iguais} de ${viirsApi.n}</strong>janelas do VIIRS batem exatamente. O MODIS difere em ${pct(Math.round(modisApi.dif * 100) / 100)} (versão de processamento mais nova nos arquivos anuais).`, true, null)}
       ${card('Completude dos dados', 'Há buracos no registro dos satélites?', `<strong>&gt;99%</strong>dos dias com dado: ${COMPLETUDE.map(([n, p]) => `${n} ${p.toLocaleString('pt-BR')}%`).join(', ')}. Meses com falha são sinalizados.`, true, null)}
-      ${card('Outras regiões', 'O método só funciona na Bahia?', `<strong>${rep.taxa_por_mes_ganha_da_taxa_unica_no_teste} de ${rep.n_regioes}</strong>lugares em que a taxa por mês ganha da taxa única em anos não vistos (${rep.taxa_por_mes_ganha_da_taxa_unica_um_ano_fora} de ${rep.n_regioes} escondendo um ano de cada vez). Sofre com pouco fogo (Portugal) e com anos recordes (Canadá 2023).`, false, null)}
+      ${card('Outras regiões', 'O método só funciona na Bahia?', `<strong>${outrosGanham} de ${outros.length}</strong>outros países em que a taxa por mês ganha da taxa única em anos não vistos (${outrosUmAnoFora} de ${outros.length} escondendo um ano de cada vez). Sofre com pouco fogo (Portugal) e com anos recordes (Canadá 2023).`, false, null)}
       ${card('Modelo com fatores (pesos da mentoria)', 'Fatores de clima e de fogo melhoram a conversão?', `<strong>${num1(METODOS.metodos.formula_pesos.teste_erro_pct)}%</strong>de erro, não melhor que a taxa por mês, mas explica por que a taxa muda (focos noturnos, umidade) e a faixa de 95% cobriu ${f.cobertura_faixa_95} meses de teste.`, false, 'metodo')}
       ${card('Detectados x relatados', 'Como a detecção por satélite se compara aos incêndios registrados em solo?', `<strong>${fmt(RELATADOS.focos_por_ocorrencia)}</strong>focos para cada incêndio registrado pelas brigadas do IBAMA; só ${RELATADOS.detectados_por_satelite} de ${fmt(RELATADOS.total_ocorrencias)} registros foram achados por satélite.`, true, 'relatados')}
       ${card('Correlação não é prova', 'Uma correlação alta basta para confiar no método?', `<strong>${num3(METODOS.correlacao_ordem_dos_meses.aqua_sem_conversao)}</strong>o Aqua cru já chega a isso, sem conversão nenhuma, porque as estações mandam no ano. Por isso medimos pelo erro em focos, não pela correlação.`, false, null)}
@@ -1170,7 +1189,7 @@ async function metodologia() {
     <h3>4. Incerteza e limites</h3>
     <ul>
       <li>Antes de 2012 não há VIIRS para conferir, e os dois MODIS discordam: esses anos aparecem com faixa.</li>
-      <li>Os ${num1(v.erro_mensal_wape_pct)}% de erro valem para a Bahia inteira; em áreas de 100 km, antes de 2012, ficam perto de 25%.</li>
+      <li>Os ${num1(v.erro_mensal_wape_pct)}% de erro valem para a Bahia inteira; em áreas menores o erro cresce (teste de 2020 a 2023: ${num1(erroEscala('bloco_2x2'))}% em cerca de 110 x 135 km, ${num1(erroEscala('celula'))}% numa célula da grade).</li>
       <li>Só a Bahia está processada no site; o método foi testado em outros ${rep.n_regioes - 1} países.</li>
       <li>Os meses recentes de 2026 são provisórios (quase tempo real).</li>
     </ul>
@@ -1239,7 +1258,7 @@ function metodo() {
     <p>${me.como_funciona}</p>
     <ul>${me.filtros.map((x) => `<li>${x}</li>`).join('')}</ul>
     <h3>Quão bem funciona</h3>
-    <p>${v.desenho}.</p>
+    <p>${v.desenho}.${v.taxas_publicadas ? ' ' + v.taxas_publicadas : ''}</p>
     <div class="metricas">
       <div><strong>${v.erro_mensal_wape_pct.toLocaleString('pt-BR')}%</strong><span>erro por mês (WAPE), meses válidos</span></div>
       ${v.erro_mensal_48_meses_pct ? `<div><strong>${v.erro_mensal_48_meses_pct.toLocaleString('pt-BR')}%</strong><span>erro por mês contando os 48 meses</span></div>` : ''}
@@ -1256,11 +1275,11 @@ function metodo() {
     <p>${f.descoberta}</p>
     <p class="nota">Média anual de 2003 a 2011, em focos equivalentes VIIRS: ${fmt(f.media_anual_2003_2011.t1_terra)} pelo Terra, ${fmt(f.media_anual_2003_2011.fatores_aqua)} pelo modelo com fatores e ${fmt(f.media_anual_2003_2011.t1_aqua)} pela taxa por mês do Aqua. VIIRS real de 2012 a 2021: ${fmt(f.viirs_real_media_anual_2012_2021)} por ano.</p>` : ''}
     <h3>Conferência com o INPE</h3>
-    <p>Comparamos a série harmonizada com a do satélite de referência do INPE, uma fonte independente: o desenho dos anos bate e o salto de 2012 desaparece. <a href="#inpe" data-janela="inpe">Ver a comparação</a>.</p>
+    <p>Comparamos a série harmonizada com a do satélite de referência do INPE. Esse satélite é o MODIS Aqua, o mesmo que convertemos, então uma correlação alta sozinha prova pouco: o Aqua cru correlaciona quase igual. A prova é que a razão entre a nossa série e a do INPE fica quase a mesma antes e depois de 2012, enquanto sem harmonizar ela salta em 2012. <a href="#inpe" data-janela="inpe">Ver a comparação</a>.</p>
     <h3>O método funciona em outros lugares</h3>
-    <p>Os scripts recalculam as taxas para qualquer país do arquivo do FIRMS. Rodamos a mesma prova em 10 países com fogo muito diferente (Argentina, Austrália, Bolívia, Canadá, Chile, Indonésia, México, Portugal, África do Sul e Estados Unidos). Em anos não vistos (2020 a 2023), a taxa por mês ganhou da taxa única em 9 dos 11 lugares, contando a Bahia, e em 10 de 11 escondendo um ano de cada vez. O erro ficou entre 6,6% e 10,6% no México, África do Sul, Austrália, Argentina, Bolívia e Estados Unidos. O método sofre onde há pouco fogo (Portugal, mediana de 99 focos VIIRS por mês) e com anos recordes fora da calibração (Canadá 2023). As taxas mudam muito entre regiões (julho: de 4,0 na Argentina a 14,5 no Canadá), por isso precisam ser recalculadas em cada região, nunca copiadas.</p>
+    <p>Os scripts recalculam as taxas para qualquer país do arquivo do FIRMS. Rodamos a mesma prova em 10 países com fogo muito diferente (Argentina, Austrália, Bolívia, Canadá, Chile, Indonésia, México, Portugal, África do Sul e Estados Unidos). Em anos não vistos (2020 a 2023), a taxa por mês ganhou da taxa única em 8 dos 10 países (além da Bahia) e em 9 de 10 escondendo um ano de cada vez. O erro ficou entre 6,6% e 10,6% no México, África do Sul, Austrália, Argentina, Bolívia e Estados Unidos. O método sofre onde há pouco fogo (Portugal, mediana de 99 focos VIIRS por mês) e com anos recordes fora da calibração (Canadá 2023). As taxas mudam muito entre regiões (julho: de 4,0 na Argentina a 14,5 no Canadá), por isso precisam ser recalculadas em cada região, nunca copiadas.</p>
     <h3>Áreas menores</h3>
-    <p>Ao escolher um ponto, o site soma as células da grade NASA POWER (cerca de 55 x 68 km) dentro do raio, usando as mesmas taxas calibradas para a Bahia. A precisão medida (${v.erro_mensal_wape_pct.toLocaleString('pt-BR')}%) vale para a Bahia inteira; em áreas pequenas, com poucos focos, os números variam mais.</p>
+    <p>Ao escolher um ponto, o site soma as células da grade NASA POWER (cerca de 55 x 68 km) dentro do raio, usando as mesmas taxas calibradas para a Bahia. Os ${v.erro_mensal_wape_pct.toLocaleString('pt-BR')}% de erro valem para a Bahia inteira; no teste de 2020 a 2023 o erro foi de ${num1(erroEscala('bloco_4x4'))}% em áreas de cerca de 220 x 270 km, ${num1(erroEscala('bloco_2x2'))}% em cerca de 110 x 135 km e ${num1(erroEscala('celula'))}% numa célula da grade.</p>
     <h3>Limitações</h3>
     <ul>${me.limitacoes.map((x) => `<li>${x}</li>`).join('')}</ul>`;
 }

@@ -83,7 +83,7 @@
         <li class="passo-historia">
           <span class="passo-num" aria-hidden="true">1</span>
           <h3>O salto que não existiu</h3>
-          <p>Em 2012, os focos na Bahia saltaram de <strong>26.477</strong> para <strong>210.941</strong>. Não foi mais fogo: o satélite novo (VIIRS) enxerga fogo menor e conta umas <strong>6 vezes mais</strong> que o antigo (MODIS).</p>
+          <p>Em 2012, os focos na Bahia saltaram de <strong>26.477</strong> para <strong>210.941</strong>. Quase todo esse salto não foi fogo a mais: o satélite novo (VIIRS) enxerga fogo menor e conta umas <strong>6 vezes mais</strong> que o antigo (MODIS).</p>
           <button type="button" class="link-passo" onclick="document.getElementById('cta-salto').click()">Ver o salto de 2012 →</button>
         </li>
         <li class="passo-historia">
@@ -101,7 +101,7 @@
         <li class="passo-historia">
           <span class="passo-num" aria-hidden="true">4</span>
           <h3>Por que confiar</h3>
-          <p>Em anos que o método nunca viu, o erro mensal é de <strong>7,2%</strong>. Contra a série independente do INPE, a correlação é <strong>0,985</strong> (sem a conversão, ela é negativa).</p>
+          <p>Aprendendo só com 2012 a 2019, o erro mensal em 2020 a 2023 é de <strong>7,2%</strong>. Contra o INPE, o salto de 2012 some: a razão entre as duas séries muda só <strong>11%</strong> entre antes e depois de 2012, contra um salto de 6,2 vezes sem a conversão.</p>
           <button type="button" class="link-passo" data-janela="metodologia">Metodologia e testes →</button>
         </li>
       </ol>
@@ -163,7 +163,7 @@
         <button type="button" class="bloco-abrir bloco-largo" data-janela="inpe">
           <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 16l5-6 4 3 8-8"/><path d="M3 20l5-5 4 3 8-8" stroke-dasharray="2.5 2.5"/></svg></span>
           <span class="bloco-titulo">Conferência com o INPE</span>
-          <span class="bloco-texto">Nossa série contra a do satélite de referência do INPE, uma fonte independente: mesmo desenho, sem o salto de 2012.</span>
+          <span class="bloco-texto">Nossa série contra a do satélite de referência do INPE (outro processamento do MODIS Aqua): mesmo desenho, sem o salto de 2012.</span>
         </button>
         <button type="button" class="bloco-abrir bloco-largo" data-janela="relatados">
           <span class="bloco-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 21V4h11l-1.5 4L15 12H4"/><path d="M17 15l2 2 3-4"/></svg></span>
@@ -211,7 +211,7 @@
       <div class="periodo"><label>De <select class="sel-ano-ini" aria-label="Ano inicial"></select></label><label>até <select class="sel-ano-fim" aria-label="Ano final"></select></label></div>
       </div>
       <div id="graf-serie" class="grafico" role="img" aria-label="Total de focos por ano"></div>
-      <p class="nota" id="nota-brutos" hidden>Sem harmonizar, a contagem salta em 2012, quando o VIIRS entra. Não houve mais fogo: o VIIRS enxerga fogo menor e conta cerca de 6 vezes mais focos.</p>
+      <p class="nota" id="nota-brutos" hidden>Sem harmonizar, a contagem salta em 2012, quando o VIIRS entra. Quase todo esse salto não é fogo a mais: o VIIRS enxerga fogo menor e conta cerca de 6 vezes mais focos.</p>
     </div>
   </dialog>
 

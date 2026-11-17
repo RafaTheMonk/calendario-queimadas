@@ -106,6 +106,19 @@ function dentroDaBahia(lat, lon) {
   return lat > a.lat_min && lat < a.lat_max && lon > a.lon_min && lon < a.lon_max;
 }
 
+// Erro medido no teste de 2020-2023 para a escala mais parecida com a área (Scripts/harmonizacao/erro_por_area.py).
+const TAMANHO_AREA = { celula: 'one grid cell (about 55 x 68 km)', bloco_2x2: 'areas of about 110 x 135 km', bloco_4x4: 'areas of about 220 x 270 km' };
+function erroDaArea(nCelulas) {
+  const escalas = (OFICIAL.metodo.validacao.erro_por_area || []).filter((e) => e.escala !== 'bahia');
+  if (!escalas.length || !nCelulas) return null;
+  const dist = (e) => Math.abs(Math.log(e.celulas_por_area / nCelulas));
+  return escalas.reduce((m, e) => (dist(e) < dist(m) ? e : m));
+}
+function erroEscala(chave) {
+  const e = (OFICIAL.metodo.validacao.erro_por_area || []).find((x) => x.escala === chave);
+  return e ? e.erro_mensal_wape_pct : null;
+}
+
 function quantil(v, q) {
   const s = [...v].sort((a, b) => a - b);
   const k = (s.length - 1) * q;
@@ -222,10 +235,12 @@ async function definirArea(nova, mensagem) {
       return;
     }
     estado.area = nova;
+    estado.nCelulas = cels.length;
     DADOS = montarDadosArea(cels);
+    const eaAviso = erroDaArea(cels.length);
     const mediaAnual = DADOS.totais_por_ano.reduce((t, x) => t + x.focos, 0) / DADOS.totais_por_ano.length;
     const extra = (pequena ? ' The drawn area is smaller than one grid cell, so the nearest cell is used (about 55 x 68 km).' : '')
-      + ' Before 2012 the conversion uses the rates of the whole of Bahia: for 100 km areas the typical measured error is about 25%.'
+      + (eaAviso ? ` Before 2012 the conversion uses the rates of the whole of Bahia: in the 2020 to 2023 test, the monthly error for ${TAMANHO_AREA[eaAviso.escala]} was about ${Math.round(eaAviso.erro_mensal_wape_pct)}%.` : '')
       + (mediaAnual < 3000 ? ' Area with few hotspots: the numbers vary more.' : '');
     aviso.textContent = (mensagem || `Showing ${nomeArea().toLowerCase()}: ${cels.length} grid cells (about 55 x 68 km each).`) + extra;
     msgJanela.textContent = `${cels.length} grid ${cels.length === 1 ? 'cell' : 'cells'} ${nova.tipo === 'poligono' ? 'inside the outline' : 'inside the radius'} (blue on the map).` + extra;
@@ -415,6 +430,7 @@ function cartoes() {
   const mediaViirs = anosViirs.reduce((s, a) => s + a.focos, 0) / anosViirs.length;
   const difAno = (ultimoAno.focos - mediaViirs) / mediaViirs * 100;
   const val = OFICIAL.metodo.validacao;
+  const ea = estado.area.tipo === 'bahia' ? null : erroDaArea(estado.nCelulas);
   document.getElementById('cartoes').innerHTML = [
     `<article class="cartao principal">
       <p class="rotulo">Last month in the series: ${MESES_LONGO[ultimo.mes_num - 1]} ${ultimo.ano}${ultimo.qualidade === 'provisorio' ? ' (provisional)' : ''}</p>
@@ -439,8 +455,8 @@ function cartoes() {
     </article>`
       : `<article class="cartao">
       <p class="rotulo">Accuracy at this scale</p>
-      <p class="valor">about 25%</p>
-      <p class="detalhe">typical error before 2012 for 100 km areas. For the whole of Bahia the error is ${val.erro_mensal_wape_pct.toLocaleString('en-US')}%. From 2012 on the area uses measured VIIRS.</p>
+      <p class="valor">${ea ? `about ${Math.round(ea.erro_mensal_wape_pct)}%` : 'lower'}</p>
+      <p class="detalhe">${ea ? `monthly error measured in 2020 to 2023 for ${TAMANHO_AREA[ea.escala]}` : 'smaller areas have larger errors'}; the best reference for the converted years before 2012. For the whole of Bahia the error is ${val.erro_mensal_wape_pct.toLocaleString('en-US')}%. From 2012 on the area uses measured VIIRS.</p>
     </article>`,
   ].join('');
 }
@@ -1004,7 +1020,7 @@ async function comparacaoInpe() {
     <h3>What the comparison shows</h3>
     <ul>
       <li><strong>The 2012 jump disappears.</strong> Without harmonization, our count goes from ${num1(r.razao_sem_harmonizar_2011)} to ${num1(r.razao_sem_harmonizar_2012)} hotspots for each INPE hotspot from 2011 to 2012, a ${num1(r.salto_sem_harmonizar_vezes)}-fold jump caused only by the satellite change. Harmonized, it stays at ${num1(r.razao_media_2003_2011)} from 2003 to 2011 and ${num1(r.razao_media_2012_2021)} from 2012 to 2021: a remaining difference of ${num1(r.diferenca_entre_periodos_pct)}%.</li>
-      <li><strong>The years rise and fall together.</strong> Correlation of ${num3(r.correlacao_anual)} year to year and ${num3(r.correlacao_mensal)} month to month. Without harmonization, the year-to-year correlation drops to ${num2(r.correlacao_anual_sem_harmonizar)}: the raw series does not even point in the same direction.</li>
+      <li><strong>The years rise and fall together, but that alone is not proof.</strong> Correlation of ${num3(r.correlacao_anual)} year to year and ${num3(r.correlacao_mensal)} month to month. Raw MODIS Aqua, with no conversion at all, already reaches ${num3(r.correlacao_anual_aqua_sem_conversao)}, because INPE's reference satellite is Aqua itself. What the comparison does show is the item above: the 2012 jump disappears. Joining MODIS until 2011 and VIIRS after without harmonization, the correlation drops to ${num2(r.correlacao_anual_sem_harmonizar)}.</li>
       <li><strong>The worst years match.</strong> Five years with the most fire at INPE: ${r.top5_inpe.join(', ')}. In Régua de Fogo: ${r.top5_nossa.join(', ')}.</li>
       ${depois.length ? `<li><strong>The Aqua orbit change shows up at INPE too.</strong> The most common overpass hour was ${h[0].hora_utc_mais_comum_inpe}:00 UTC until ${ultimoAntes.ano} and becomes ${depois[0].hora_utc_mais_comum_inpe}:00 UTC in ${depois.map((a) => a.ano).join(' and ')}. It is the same drift we found in the NASA data, confirmed by another source.</li>` : ''}
     </ul>
@@ -1132,6 +1148,9 @@ async function metodologia() {
   const unica = METODOS.metodos.taxa_unica;
   const ri = INPE.resumo;
   const rep = REPLICACAO;
+  const outros = rep.regioes.filter((r) => !r.regiao.startsWith('Bahia'));
+  const outrosGanham = outros.filter((r) => r.teste_erro_pct < r.teste_erro_taxa_unica_pct).length;
+  const outrosUmAnoFora = outros.filter((r) => r.um_ano_fora_erro_pct < r.um_ano_fora_erro_taxa_unica_pct).length;
   const janelas = CONFERENCIA.janelas;
   const api = (prod) => {
     const js = janelas.filter((x) => x.produto === prod);
@@ -1168,10 +1187,10 @@ async function metodologia() {
       ${card('Unseen years', 'Learning only from 2012 to 2019, how well does it predict 2020 to 2023?', `<strong>${num1(t1.teste_erro_pct)}%</strong>monthly error over ${t1.teste_n_meses} months, total bias ${pct(t1.teste_vies_pct)}.`, true, null)}
       ${card('Leave one year out', 'Was 2020 to 2023 just a lucky period?', `<strong>${num1(t1.um_ano_fora_erro_pct)}%</strong>error hiding each year from 2013 to 2023 (${t1.um_ano_fora_n_meses} months). Single ratio: ${num1(unica.um_ano_fora_erro_pct)}%.`, true, null)}
       ${card('7 methods, same test', 'Is the monthly ratio really the best choice?', `<strong>${num1(t1.teste_erro_pct)}%</strong>the lowest error among methods used alone. Quantile mapping memorized the data (${num1(METODOS.metodos.ranking.anos_que_viu_erro_pct)}% on seen years, ${num1(METODOS.metodos.ranking.teste_erro_pct)}% on new ones).`, true, 'metodos')}
-      ${card('Independent check: INPE', 'Does the harmonized series match a source that never went through our conversion?', `<strong>${num3(ri.correlacao_anual)}</strong>year-to-year correlation (not harmonized: ${num2b(ri.correlacao_anual_sem_harmonizar)}). The ${num1(ri.salto_sem_harmonizar_vezes)}-fold 2012 jump shrinks to ${num1(ri.diferenca_entre_periodos_pct)}%.`, true, 'inpe')}
+      ${card('Check against INPE', 'Does the 2012 jump disappear in another processing of the same satellite?', `<strong>${num1(ri.diferenca_entre_periodos_pct)}%</strong>difference in our/INPE ratio before and after 2012, against a ${num1(ri.salto_sem_harmonizar_vezes)}-fold jump without harmonization. Year-to-year correlation is ${num3(ri.correlacao_anual)}, but raw Aqua already reaches ${num3(ri.correlacao_anual_aqua_sem_conversao)}: INPE's reference satellite is Aqua.`, true, 'inpe')}
       ${card('Data check: FIRMS API', 'Are the files we downloaded the same as NASA\'s official API?', `<strong>${viirsApi.iguais} of ${viirsApi.n}</strong>VIIRS windows match exactly. MODIS differs by ${pct(Math.round(modisApi.dif * 100) / 100)} (newer processing version in the annual files).`, true, null)}
       ${card('Data completeness', 'Are there holes in the satellite record?', `<strong>&gt;99%</strong>of days with data: ${COMPLETUDE.map(([n, p]) => `${n} ${p}%`).join(', ')}. Months with gaps are flagged.`, true, null)}
-      ${card('Other regions', 'Does the method only work in Bahia?', `<strong>${rep.taxa_por_mes_ganha_da_taxa_unica_no_teste} of ${rep.n_regioes}</strong>places where the monthly ratio beats a single ratio on unseen years (${rep.taxa_por_mes_ganha_da_taxa_unica_um_ano_fora} of ${rep.n_regioes} leaving one year out). Struggles with little fire (Portugal) and record years (Canada 2023).`, false, null)}
+      ${card('Other regions', 'Does the method only work in Bahia?', `<strong>${outrosGanham} of ${outros.length}</strong>other countries where the monthly ratio beats a single ratio on unseen years (${outrosUmAnoFora} of ${outros.length} leaving one year out). Struggles with little fire (Portugal) and record years (Canada 2023).`, false, null)}
       ${card('Factor model (mentors\' weights)', 'Do weather and fire factors improve the conversion?', `<strong>${num1(METODOS.metodos.formula_pesos.teste_erro_pct)}%</strong>error, no better than the monthly ratio, but it explains why the ratio changes (night-time share, humidity) and its 95% band covered ${f.cobertura_faixa_95.replace(' de ', ' of ')} test months.`, false, 'metodo')}
       ${card('Detected vs reported', 'How does satellite detection compare with fires registered on the ground?', `<strong>${fmt(RELATADOS.focos_por_ocorrencia)}</strong>hotspots for each fire registered by IBAMA brigades; only ${RELATADOS.detectados_por_satelite} of ${fmt(RELATADOS.total_ocorrencias)} records were found by satellite.`, true, 'relatados')}
       ${card('Correlation is not proof', 'Is a high correlation enough to trust the method?', `<strong>${num3(METODOS.correlacao_ordem_dos_meses.aqua_sem_conversao)}</strong>raw Aqua already reaches this, with no conversion, because seasons rule the year. So we judge by error in hotspots, not correlation.`, false, null)}
@@ -1189,7 +1208,7 @@ async function metodologia() {
     <h3>4. Uncertainty and limits</h3>
     <ul>
       <li>Before 2012 there is no VIIRS to check against, and the two MODIS disagree: those years are shown with a band.</li>
-      <li>The ${num1(v.erro_mensal_wape_pct)}% error is for the whole of Bahia; for 100 km areas, before 2012, it is about 25%.</li>
+      <li>The ${num1(v.erro_mensal_wape_pct)}% error is for the whole of Bahia; in smaller areas it grows (2020 to 2023 test: ${num1(erroEscala('bloco_2x2'))}% for about 110 x 135 km, ${num1(erroEscala('celula'))}% for one grid cell).</li>
       <li>Only Bahia is processed in the app; the method was tested in ${rep.n_regioes - 1} other countries.</li>
       <li>Recent months of 2026 are provisional near real time data.</li>
     </ul>
@@ -1274,7 +1293,7 @@ function metodo() {
       <li>MODIS Aqua and VIIRS Suomi NPP pair (similar afternoon overpass time)</li>
     </ul>
     <h3>How well it works</h3>
-    <p>Ratios learned from February 2012 to December 2019 and tested on 2020 to 2023, years the model never saw (${v.erro_mensal_48_meses_pct ? '44 valid months, without the months with satellite failures' : 'valid months'}).</p>
+    <p>Ratios learned from February 2012 to December 2019 and tested on 2020 to 2023, years the model never saw (${v.erro_mensal_48_meses_pct ? '44 valid months, without the months with satellite failures' : 'valid months'}). After the test, the published ratios were refit with the same method on February 2012 to December 2021.</p>
     <div class="metricas">
       <div><strong>${v.erro_mensal_wape_pct.toLocaleString('en-US')}%</strong><span>monthly error (WAPE), valid months</span></div>
       ${v.erro_mensal_48_meses_pct ? `<div><strong>${v.erro_mensal_48_meses_pct.toLocaleString('en-US')}%</strong><span>monthly error counting all 48 months</span></div>` : ''}
@@ -1288,20 +1307,21 @@ function metodo() {
     <ul>${pesos}</ul>
     <p class="nota">Tested and discarded because they do not change the relation: ${descartados}. Test comparison: monthly ratio ${comp.T1.erro_mensal_pct.toLocaleString('en-US')}% error, factor model ${comp.modelo_v2.erro_mensal_pct.toLocaleString('en-US')}%. The main number uses the monthly ratio. <a href="#metodos" data-janela="metodos">See the comparison of the 7 methods tested</a>.</p>
     <h3>What we found before 2012</h3>
-    <p>Before 2012 the two MODIS satellites disagree: Terra saw 0.47 hotspots for each Aqua hotspot in 2003 to 2011 and 0.72 from 2012 on (daytime only). According to Aqua, the past had more fire; according to Terra, the level was close to today's. That is why 2003 to 2011 is shown as a band.</p>
+    <p>Before 2012 the two MODIS satellites disagree: Terra saw 0.47 hotspots for each Aqua hotspot in 2003 to 2011 and 0.72 from 2012 on (day and night together). According to Aqua, the past had more fire; according to Terra, the level was close to today's. That is why 2003 to 2011 is shown as a band.</p>
     <p class="nota">Mean per year from 2003 to 2011, in VIIRS-equivalent hotspots: ${fmt(media.t1_terra)} from Terra, ${fmt(media.fatores_aqua)} from the factor model and ${fmt(media.t1_aqua)} from the Aqua monthly ratio. Real VIIRS from 2012 to 2021: ${fmt(f.viirs_real_media_anual_2012_2021)} per year.</p>` : ''}
     <h3>Check against INPE</h3>
-    <p>We compared the harmonized series with INPE's reference satellite series, an independent source: the shape of the years matches and the 2012 jump disappears. <a href="#inpe" data-janela="inpe">See the comparison</a>.</p>
+    <p>We compared the harmonized series with INPE's reference satellite series. That satellite is MODIS Aqua, the one we convert, so a high correlation alone proves little: raw Aqua correlates almost as well. The evidence is that the ratio between our series and INPE's stays about the same before and after 2012, while without harmonization it jumps in 2012. <a href="#inpe" data-janela="inpe">See the comparison</a>.</p>
     <h3>Smaller areas</h3>
-    <p>When you choose a point or draw an area, the app adds up the NASA POWER grid cells (about 55 x 68 km) inside it, using the same rates calibrated for Bahia. The measured accuracy (${v.erro_mensal_wape_pct.toLocaleString('en-US')}%) is for the whole of Bahia; in small areas, with few hotspots, the numbers vary more.</p>
+    <p>When you choose a point or draw an area, the app adds up the NASA POWER grid cells (about 55 x 68 km) inside it, using the same rates calibrated for Bahia. The ${v.erro_mensal_wape_pct.toLocaleString('en-US')}% error is for the whole of Bahia; in the 2020 to 2023 test it was ${num1(erroEscala('bloco_4x4'))}% for areas of about 220 x 270 km, ${num1(erroEscala('bloco_2x2'))}% for about 110 x 135 km and ${num1(erroEscala('celula'))}% for one grid cell.</p>
     <h3>The method works elsewhere</h3>
-    <p>The scripts recalibrate the rates for any country in the FIRMS archive. We ran the same test in 10 countries with very different fire regimes (Argentina, Australia, Bolivia, Canada, Chile, Indonesia, Mexico, Portugal, South Africa and the United States). On unseen years (2020 to 2023), the monthly ratio beat a single ratio in 9 of the 11 places, including Bahia, and in 10 of 11 when leaving one year out at a time. The error stayed between 6.6% and 10.6% in Mexico, South Africa, Australia, Argentina, Bolivia and the United States. It struggles where there is little fire (Portugal, a median of 99 VIIRS hotspots per month) and with record years outside the calibration (Canada 2023). The rates change a lot between regions (July: from 4.0 in Argentina to 14.5 in Canada), so they must be recalculated for each region, never copied.</p>
+    <p>The scripts recalibrate the rates for any country in the FIRMS archive. We ran the same test in 10 countries with very different fire regimes (Argentina, Australia, Bolivia, Canada, Chile, Indonesia, Mexico, Portugal, South Africa and the United States). On unseen years (2020 to 2023), the monthly ratio beat a single ratio in 8 of the 10 countries (plus Bahia) and in 9 of 10 when leaving one year out at a time. The error stayed between 6.6% and 10.6% in Mexico, South Africa, Australia, Argentina, Bolivia and the United States. It struggles where there is little fire (Portugal, a median of 99 VIIRS hotspots per month) and with record years outside the calibration (Canada 2023). The rates change a lot between regions (July: from 4.0 in Argentina to 14.5 in Canada), so they must be recalculated for each region, never copied.</p>
     <h3>Limitations</h3>
     <ul>
-      <li>The main number is the calendar-month conversion, which had the lowest error on the test. The factor model explains the variation and gives the 2003 to 2011 band, but it was not more accurate on the test.</li>
+      <li>The main number is the monthly ratio, which had the lowest error among the simple methods on the test. The blend with the factor model erred a little less, but the difference may be chance. The factor model explains the variation and helps give the 2003 to 2011 band.</li>
+      <li>From 2003 to 2011 the main number is the Aqua reading, almost always at the top of the band; the Terra reading gives less fire. Records and rankings from that period depend on this choice.</li>
       <li>From 2003 to 2011 there is no VIIRS to check against: the values for that period are estimates, so they come with a band.</li>
       <li>The normal for each month (median and the range between the 25th and 75th percentiles) uses the years measured by VIIRS, 2012 to 2025.</li>
-      <li>The ${v.erro_mensal_wape_pct.toLocaleString('en-US')}% error is for the whole of Bahia. For 100 km areas, before 2012, the typical measured error is about 25%.</li>
+      <li>The ${v.erro_mensal_wape_pct.toLocaleString('en-US')}% error is for the whole of Bahia. In smaller areas the error grows: in the 2020 to 2023 test it was ${num1(erroEscala('bloco_2x2'))}% for about 110 x 135 km and ${num1(erroEscala('celula'))}% for one grid cell. Before 2012 there is no VIIRS to measure it; the 2020 to 2023 error is the best reference.</li>
       <li>From 2022 on, the orbit of the Aqua satellite changed (it passes later), so the calibration only goes to 2021.</li>
       <li>The area is a rectangle, not the official border of Bahia. Only Bahia is processed in this version.</li>
       <li>Degraded days are only detected from 2012 on, when VIIRS exists to compare.</li>
