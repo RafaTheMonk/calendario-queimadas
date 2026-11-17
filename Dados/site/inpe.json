@@ -10,6 +10,8 @@
   "correlacao_anual_ranking": 0.963,
   "correlacao_mensal": 0.992,
   "correlacao_anual_sem_harmonizar": -0.129,
+  "correlacao_anual_aqua_sem_conversao": 0.984,
+  "nota_referencia": "O satélite de referência do INPE é o MODIS Aqua (mesmo sensor da entrada da conversão), então a correlação alta não prova a taxa antes de 2012. O que a comparação mostra é que a razão entre a nossa série e a do INPE fica estável antes e depois de 2012.",
   "mes_pico_igual": 21,
   "n_anos": 23,
   "top5_inpe": [

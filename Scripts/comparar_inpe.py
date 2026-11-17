@@ -68,6 +68,9 @@ def main():
     # mesma serie "sem harmonizar" do site: MODIS cru ate 2011, VIIRS de 2012 em diante
     crua_mes = {m["mes"]: (m["viirs_real"] if m.get("viirs_real") is not None else (m.get("modis_bruto") or 0))
                 for m in serie["meses"]}
+    # MODIS Aqua sem conversao nenhuma, em todos os anos: o satelite de referencia do INPE e o proprio Aqua,
+    # entao esta e a linha de base honesta para a correlacao
+    aqua_mes = {m["mes"]: (m.get("modis_bruto") or 0) for m in serie["meses"]}
 
     inpe_mes, hora_moda = {}, {}
     for ano in ANOS:
@@ -81,6 +84,7 @@ def main():
     inpe = {a: soma(inpe_mes, a) for a in ANOS}
     nossa = {a: soma(nossa_mes, a) for a in ANOS}
     crua = {a: soma(crua_mes, a) for a in ANOS}
+    aqua = {a: soma(aqua_mes, a) for a in ANOS}
 
     base = {k: media(d, *BASE_INDICE) for k, d in (("inpe", inpe), ("nossa", nossa), ("crua", crua))}
     anos_saida = []
@@ -109,6 +113,10 @@ def main():
         "correlacao_anual_ranking": round(corr(ranks(vi), ranks(vn)), 3),
         "correlacao_mensal": round(corr(vm_i, vm_n), 3),
         "correlacao_anual_sem_harmonizar": round(corr(vi, vc), 3),
+        "correlacao_anual_aqua_sem_conversao": round(corr(vi, [aqua[a] for a in ANOS]), 3),
+        "nota_referencia": ("O satélite de referência do INPE é o MODIS Aqua (mesmo sensor da entrada da conversão), "
+                            "então a correlação alta não prova a taxa antes de 2012. O que a comparação mostra é que a "
+                            "razão entre a nossa série e a do INPE fica estável antes e depois de 2012."),
         "mes_pico_igual": sum(1 for x in anos_saida if x["mes_pico_inpe"] == x["mes_pico_nossa"]),
         "n_anos": len(ANOS),
         "top5_inpe": top(inpe), "top5_nossa": top(nossa),
